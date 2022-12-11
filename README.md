@@ -8,5 +8,5 @@ MySQL
 
 Functionality:
 Tournament creation
-Track stats for individual players and teams
+Track stats for individual players and teams (use .replay file)
 Match finding
