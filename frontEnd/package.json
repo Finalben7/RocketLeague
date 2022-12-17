@@ -1,0 +1,23 @@
+{
+  "name": "rocketleague",
+  "version": "1.0.0",
+  "description": "RocketLeague stuff",
+  "main": "index.js",
+  "scripts": {
+    "build-css": "tailwindcss build src/styles.css -o public/styles.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Finalben7/RocketLeague.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Finalben7/RocketLeague/issues"
+  },
+  "homepage": "https://github.com/Finalben7/RocketLeague#readme",
+  "dependencies": {
+    "tailwindcss": "^3.2.4"
+  }
+}
