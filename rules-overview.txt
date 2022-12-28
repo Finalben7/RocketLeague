@@ -1,0 +1,22 @@
+1. Overview
+2. Account Requirements
+3. Team Requirements
+4. League Placement
+5. League Generation
+6. League Format
+7. Scheduling Matches
+8. Match Creation and Match Settings
+9. Score Submission
+10. Playoffs
+11. Promotion/Demotion
+
+1. Overview- The goal of Amatuer Gamer Series is to provide a new fair, fun and competetive season oriented format to the Rocket Leauge community. We do this by
+using the time tested, and proven, best of five series and the round robin bracket. Because these are our goals we want to warn you up front that alternate
+accounts, smurfs ect... will not be tolerated. 
+
+Once you create an account and form a team you are ready to join your placement league queue! Once the queue is filled with 8/8 teams the league will auto generate
+and you will have seven weeks to play the seven other teams in your division. There is a recommended order but you are free to play any team, any time! Each season
+match is a best of 5 and once all 49 matches are complete, a playoff bracket will generate. The top 6 teams, after tie-breakers, will compete in a single elimination
+playoff bracket to determine the champion. The champion is automatically moved up one division, to not only reward them but to give them a chance to prove themselves 
+at a higher level. Additionally, if the team that ends in last place records no series wins over the course of the season they will be moved down one division in 
+hopes to find a more competetive league for them.
