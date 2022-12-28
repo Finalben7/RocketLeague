@@ -1,65 +1,27 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
-<body class="text-gray-900">
-    
-    <div class="p-5 grid lg:grid-cols-3"><!--Content wrapper-->
-        <div class="lg:col-span-1">
-            <nav><!--Navigation bar and links-->
-                <div class="flex">
-                    <img src="../static/placeholder.png" alt="" class="h-10 w-10">
-                    <h1 class="text-2xl font-bold uppercase px-2">Casual Gamer Circuits</h1>
-                </div>
-                <ul class="py-5">
-                    <li>
-                        <a href="index.html">
-                            <span>Home</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="learnmore.html">
-                            <span>Learn More</span><!--(For future use-) "Made by your community, for your community!"-->
-                        </a>
-                    </li>
-                    <li>
-                        <a href="media.html">
-                            <span>Media</span><!--Youtube, twitch and social links-->
-                        </a>
-                    </li>
-                    <li>
-                        <a href="circuitrules.html">
-                            <span>Circuit Rules</span>
-                        </a>
-                    </li>
-                    <li>
-                            <span>Search</span><!--Search through ongoing tournaments to find a specific team or players page-->
-                    </li>
-                </ul>
-            </nav>
-        </div><!--End navigation-->
-        
-        <div class="py-10 px-10 bg-gray-700">
-            <form>
-                <label for="username" class="font-bold text-xl">Username</label>
-                <br>
-                <input type="text" id="username" name="username">
-                <br>
-                <label for="password" class="font-bold text-xl">Password</label>
-                <br>
-                <input type="text" id="password" name="password">
-                <div class="py-5">
-                    <a href="userloginsuccess/userprofile.html" class="button border-primary border-2">Submit</a>
-                    <a href="signup.html" class="button border-primary border-2 mx-5">Sign Up</a>
-                </div>
-            </form>
-        </div>
-
+{% extends "base.html" %} {% block title %}Login{% endblock %} {% block content %}
+<form method="POST">
+    <h3 align="center">Login</h3>
+    <div class="form-group">
+    <label for="email">Email Address</label>
+    <input
+        type="email"
+        class="form-control"
+        id="email"
+        name="email"
+        placeholder="Enter email"
+    />
     </div>
-    
-</body>
-</html>
+    <div class="form-group">
+    <label for="password">Password</label>
+    <input
+        type="password"
+        class="form-control"
+        id="password"
+        name="password"
+        placeholder="Enter password"
+    />
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>
+{% endblock %}

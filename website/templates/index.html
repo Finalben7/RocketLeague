@@ -1,93 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casual Gamer Circuits</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
-<body class="text-gray-900 bg-blue-400">
-    
-    <div class="p-5 grid lg:grid-cols-10"><!--Content wrapper-->
-        <div class="lg:col-span-1">
-            <nav><!--Navigation bar and links-->
-                <div class="flex">
-                    <img src="../static/placeholder.png" alt="" class="h-10 w-10 lg:h-20 lg:w-20">
-                    <h1 class="my-1 text-xl font-bold uppercase px-2 lg:my-0">Casual Gamer Circuits</h1>
-                </div>
-                <ul class="text-xl py-2 md:text-lg">
-                    <li class="py-2">
-                        <a href="index.html">
-                            <span>Home</span>
-                        </a>
-                    </li>
-                    <li class="py-2">
-                        <a href="learnmore.html">
-                            <span>Learn More</span><!--(For future use-) "Made by your community, for your community!"-->
-                        </a>
-                    </li>
-                    <li class="py-2">
-                        <a href="media.html">
-                            <span>Media</span><!--Youtube, twitch and social links-->
-                        </a>
-                    </li>
-                    <li class="py-2">
-                        <a href="circuitrules.html">
-                            <span>Circuit Rules</span>
-                        </a>
-                    </li>
-                    <li class="py-2">
-                            <span>Search</span><!--Search through ongoing tournaments to find a specific team or players page-->
-                    </li>
-                </ul>
-            </nav>
-        </div><!--End navigation-->
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
+<div class="p-5 grid lg:grid-cols-10"><!--Content wrapper-->
+    <main class="px-16 py-6 lg:col-span-9"><!-- TODO: Some sort of logic to determine if user is logged in, if they are display profile picture and log out button instead-->
 
-        <main class="px-16 py-6 lg:col-span-9"><!-- TODO: Some sort of logic to determine if user is logged in, if they are display profile picture and log out button instead-->
-            <div class="flex justify-center lg:justify-end">
-                <a href="login" class="button border-primary border-2">Log In</a>
-                <a href="signup" class="button border-primary border-2 mx-5">Sign Up</a><!--Account creation-->
+        <div class="text-3xl grid gap-8 lg:grid-cols-10 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4xl">
+            <div class="lg:col-span-4">
+                <header>
+                    <h2 class="flex justify-center py-8">Play like the pros</h2>
+                </header>
+                <img src="../static/placeholder.png" alt=""><!--Image of round robin bracket with text on top displaying features-->
             </div>
 
-            <div class="text-3xl grid gap-8 lg:grid-cols-10 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4xl">
-                <div class="lg:col-span-4">
-                    <header>
-                        <h2 class="flex justify-center py-8">Play like the pros</h2>
-                    </header>
-                    <img src="../static/placeholder.png" alt=""><!--Image of round robin bracket with text on top displaying features-->
-                </div>
-
-                <div class="lg:col-span-4">
-                    <header>
-                        <h2 class="flex justify-center py-8">At your own pace</h2>
-                    </header>
-                    <img src="../static/placeholder.png" alt=""><!--Image of tournament sign up page with text on top displaying features-->
-                </div>
-
-                <div class="lg:col-span-4">
-                    <header>
-                        <h2 class="flex justify-center py-8">Fair and competetive format</h2>
-                    </header>
-                    <img src="../static/placeholder.png" alt=""><!--Image of playoff bracket with text on top displaying features-->
-                </div>
-
-                <div class="lg:col-span-4">
-                    <header>
-                        <h2 class="flex justify-center py-8">No third party apps required</h2><!--Assuming we can pull this off-->
-                    </header>
-                    <img src="../static/placeholder.png" alt=""><!--Image of match page with message portal with text on top displaying features-->
-                </div>
-
-                <div class="lg:col-span-8">
-                    <header>
-                        <h2 class="flex justify-center py-8">See it in action!</h2>
-                    </header>
-                    <img src="../static/placeholder.png"><!--Video made from beta test walking through sign up, match scheduling and game highlights (with casters)-->
-                </div>
+            <div class="lg:col-span-4">
+                <header>
+                    <h2 class="flex justify-center py-8">At your own pace</h2>
+                </header>
+                <img src="../static/placeholder.png" alt=""><!--Image of tournament sign up page with text on top displaying features-->
             </div>
-        </main>
-    </div>
 
-</body>
-</html>
+            <div class="lg:col-span-4">
+                <header>
+                    <h2 class="flex justify-center py-8">Fair and competetive format</h2>
+                </header>
+                <img src="../static/placeholder.png" alt=""><!--Image of playoff bracket with text on top displaying features-->
+            </div>
+
+            <div class="lg:col-span-4">
+                <header>
+                    <h2 class="flex justify-center py-8">No third party apps required</h2><!--Assuming we can pull this off-->
+                </header>
+                <img src="../static/placeholder.png" alt=""><!--Image of match page with message portal with text on top displaying features-->
+            </div>
+
+            <div class="lg:col-span-8">
+                <header>
+                    <h2 class="flex justify-center py-8">See it in action!</h2>
+                </header>
+                <img src="../static/placeholder.png"><!--Video made from beta test walking through sign up, match scheduling and game highlights (with casters)-->
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

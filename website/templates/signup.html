@@ -1,70 +1,47 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
-<body class="text-gray-900">
-    
-    <div class="p-5 grid lg:grid-cols-3"><!--Content wrapper-->
-        <div class="lg:col-span-1">
-            <nav><!--Navigation bar and links-->
-                <div class="flex">
-                    <img src="../static/placeholder.png" alt="" class="h-10 w-10">
-                    <h1 class="text-2xl font-bold uppercase px-2">Casual Gamer Circuits</h1>
-                </div>
-                <ul class="py-5">
-                    <li>
-                        <a href="index.html">
-                            <span>Home</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="learnmore.html">
-                            <span>Learn More</span><!--(For future use-) "Made by your community, for your community!"-->
-                        </a>
-                    </li>
-                    <li>
-                        <a href="media.html">
-                            <span>Media</span><!--Youtube, twitch and social links-->
-                        </a>
-                    </li>
-                    <li>
-                        <a href="circuitrules.html">
-                            <span>Circuit Rules</span>
-                        </a>
-                    </li>
-                    <li>
-                            <span>Search</span><!--Search through ongoing tournaments to find a specific team or players page-->
-                    </li>
-                </ul>
-            </nav>
-        </div><!--End navigation-->
-
-        <div class="py-10 px-10 bg-gray-700">
-            <form method="POST">
-                <label for="username" class="font-bold text-xl">Username</label>
-                <br>
-                <input type="text" id="username" name="username">
-                <br>
-                <label for="email" class="font-bold text-xl">Email</label>
-                <br>
-                <input type="text" id="email" name="email">
-                <br>
-                <label for="password" class="font-bold text-xl">Password</label>
-                <br>
-                <input type="text" id="password" name="password">
-                <br>
-                <div class="py-5">
-                    <a href="#" class="button border-primary border-2">Submit</a>
-                    <a href="login.html" class="button border-primary border-2 mx-5">Log In</a>
-                </div>
-            </form>
-        </div>
-
+{% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block content %}
+<form method="POST">
+    <h3 align="center">Sign Up</h3>
+    <div class="form-group">
+    <label for="email">Email Address</label>
+    <input
+        type="email"
+        class="form-control"
+        id="email"
+        name="email"
+        placeholder="Enter email"
+    />
     </div>
-    
-</body>
-</html>
+    <div class="form-group">
+    <label for="firstName">First Name</label>
+    <input
+        type="text"
+        class="form-control"
+        id="firstName"
+        name="firstName"
+        placeholder="Enter first name"
+    />
+    </div>
+    <div class="form-group">
+    <label for="password1">Password</label>
+    <input
+        type="password"
+        class="form-control"
+        id="password1"
+        name="password1"
+        placeholder="Enter password"
+    />
+    </div>
+    <div class="form-group">
+    <label for="password2">Password (Confirm)</label>
+    <input
+        type="password"
+        class="form-control"
+        id="password2"
+        name="password2"
+        placeholder="Confirm password"
+    />
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}
