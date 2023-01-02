@@ -1,7 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@font-face {
+    font-family: "LemonMilk";
+    src: url("../fonts/lemonmilk.otf");
+}
 
 .button{
-    @apply text-blue-400 py-2 px-5 uppercase text-xs font-bold cursor-pointer tracking-wider;
+    @apply py-2 px-5 uppercase xs:text-xs font-bold cursor-pointer tracking-wider;
 }

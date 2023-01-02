@@ -513,10 +513,6 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
-.absolute {
-  position: absolute;
-}
-
 .relative {
   position: relative;
 }
@@ -536,21 +532,12 @@ video {
   margin-bottom: 0.25rem;
 }
 
-.mx-2 {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-}
-
-.ml-2 {
-  margin-left: 0.5rem;
+.ml-1 {
+  margin-left: 0.25rem;
 }
 
 .mr-5 {
   margin-right: 1.25rem;
-}
-
-.mr-2 {
-  margin-right: 0.5rem;
 }
 
 .inline-block {
@@ -585,6 +572,10 @@ video {
   height: 5rem;
 }
 
+.h-8 {
+  height: 2rem;
+}
+
 .w-10 {
   width: 2.5rem;
 }
@@ -597,8 +588,8 @@ video {
   width: 10rem;
 }
 
-.w-12 {
-  width: 3rem;
+.w-24 {
+  width: 6rem;
 }
 
 .min-w-full {
@@ -613,10 +604,6 @@ video {
   --tw-border-spacing-x: 0.5rem;
   --tw-border-spacing-y: 0.5rem;
   border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
-}
-
-.resize {
-  resize: both;
 }
 
 .flex-col {
@@ -728,16 +715,8 @@ video {
   background-image: url('../media/linkBG.png');
 }
 
-.bg-\[url\(\'\.\.\/media\/buttonBGleft\.png\'\)\] {
-  background-image: url('../media/buttonBGleft.png');
-}
-
-.bg-\[url\(\'\.\.\/media\/buttonBGleft\.pn\'\)\] {
-  background-image: url('../media/buttonBGleft.pn');
-}
-
-.bg-cover {
-  background-size: cover;
+.bg-\[url\(\'\.\.\/media\/buttonBG\.png\'\)\] {
+  background-image: url('../media/buttonBG.png');
 }
 
 .bg-contain {
@@ -805,8 +784,8 @@ video {
   text-align: center;
 }
 
-.font-mono {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+.font-LemonMilk {
+  font-family: LemonMilk, ui-monospace, SFMono-Regular, Menlo, "Courier New";
 }
 
 .text-2xl {
@@ -842,14 +821,20 @@ video {
   color: rgb(17 24 39 / var(--tw-text-opacity));
 }
 
+.text-eleventh-blue {
+  --tw-text-opacity: 1;
+  color: rgb(10 204 255 / var(--tw-text-opacity));
+}
+
 .text-zinc-800 {
   --tw-text-opacity: 1;
   color: rgb(39 39 42 / var(--tw-text-opacity));
 }
 
-.text-blue-400 {
-  --tw-text-opacity: 1;
-  color: rgb(96 165 250 / var(--tw-text-opacity));
+@font-face {
+  font-family: "LemonMilk";
+
+  src: url("../fonts/lemonmilk.otf");
 }
 
 .button {
@@ -858,13 +843,16 @@ video {
   padding-bottom: 0.5rem;
   padding-left: 1.25rem;
   padding-right: 1.25rem;
-  font-size: 0.75rem;
-  line-height: 1rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  --tw-text-opacity: 1;
-  color: rgb(96 165 250 / var(--tw-text-opacity));
+}
+
+@media (min-width: 414px) {
+  .button {
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
 }
 
 @media (min-width: 640px) {
@@ -880,6 +868,26 @@ video {
 }
 
 @media (min-width: 768px) {
+  .md\:col-span-1 {
+    grid-column: span 1 / span 1;
+  }
+
+  .md\:col-span-9 {
+    grid-column: span 9 / span 9;
+  }
+
+  .md\:list-item {
+    display: list-item;
+  }
+
+  .md\:hidden {
+    display: none;
+  }
+
+  .md\:grid-cols-10 {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
+  }
+
   .md\:justify-end {
     justify-content: flex-end;
   }
@@ -888,13 +896,14 @@ video {
     font-size: 1.125rem;
     line-height: 1.75rem;
   }
+
+  .md\:text-base {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
 }
 
 @media (min-width: 1024px) {
-  .lg\:visible {
-    visibility: visible;
-  }
-
   .lg\:col-span-1 {
     grid-column: span 1 / span 1;
   }
@@ -931,14 +940,6 @@ video {
   .lg\:-mx-8 {
     margin-left: -2rem;
     margin-right: -2rem;
-  }
-
-  .lg\:list-item {
-    display: list-item;
-  }
-
-  .lg\:hidden {
-    display: none;
   }
 
   .lg\:h-40 {

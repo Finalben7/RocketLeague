@@ -5,6 +5,7 @@ module.exports = {
   darkMode: 'media', // or 'class'
   theme: {
     screens: {
+      xs: '414px',
       sm: '640px',
       md: '768px',
       lg: '1024px',
@@ -40,6 +41,9 @@ module.exports = {
       fuchsia: colors.fuchsia,
       pink: colors.pink,
       rose: colors.rose,
+      'eleventh-blue': '#0ACCFF',
+      'eleventh-orange': '#F7AA4F',
+      'eleventh-grey': '#232323'
     }),
     columns: {
       auto: 'auto',
@@ -388,8 +392,10 @@ module.exports = {
         '"Courier New"',
         'monospace',
       ],
+      LemonMilk: ["LemonMilk", 'ui-monospace', 'SFMono-Regular', 'Menlo','"Courier New"']
     },
     fontSize: {
+      xxs: ['0.5rem', { lineHeight: '1rem' }],
       xs: ['0.75rem', { lineHeight: '1rem' }],
       sm: ['0.875rem', { lineHeight: '1.25rem' }],
       base: ['1rem', { lineHeight: '1.5rem' }],
