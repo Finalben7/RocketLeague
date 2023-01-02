@@ -15,3 +15,4 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     firstName = db.Column(db.String(150))
     notes = db.relationship('Note')
+    is_active = True
