@@ -1,0 +1,83 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Name VS Team Name</title><!-- TODO: Dynamically update to team names -->
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="text-zinc-800 font-bold">
+    
+    <div class="p-5 grid lg:grid-cols-10"><!--Content wrapper-->
+        <div class="lg:col-span-1">
+            <nav><!--Navigation bar and links-->
+                <div class="flex">
+                    <img src="../../media/placeholder.png" alt="" class="h-10 w-10 lg:h-20 lg:w-20">
+                    <h1 class="my-1 text-xl uppercase px-2 lg:my-0">Casual Gamer Circuits</h1>
+                </div>
+                <ul class="text-xl py-2 md:text-lg">
+                    <li class="py-2">
+                        <a href="index.html">
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li class="py-2">
+                        <a href="learnmore.html">
+                            <span>Learn More</span><!--(For future use-) "Made by your community, for your community!"-->
+                        </a>
+                    </li>
+                    <li class="py-2">
+                        <a href="media.html">
+                            <span>Media</span><!--Youtube, twitch and social links-->
+                        </a>
+                    </li>
+                    <li class="py-2">
+                        <a href="circuitrules.html">
+                            <span>Circuit Rules</span>
+                        </a>
+                    </li>
+                    <li class="py-2">
+                            <span>Search</span><!--Search through ongoing tournaments to find a specific team or players page-->
+                    </li>
+                </ul>
+            </nav>
+        </div><!--End navigation-->
+
+        <main class="py-6 lg:px-16 lg:col-span-9"><!-- TODO: Some sort of logic to determine if user is logged in, if they are display profile picture and log out button instead-->
+            <div class="flex justify-center lg:justify-end">
+                <a href="login.html" class="button border-primary border-2">Log Out</a>
+            </div>
+
+            <div class="bg-zinc-700 py-6 text-3xl justify-items-center grid gap-8 lg:grid-cols-10 lg:text-xl xl:text-2xl 2xl:text-4x">            
+                <div class="bg-orange-400 flex gap-5 lg:col-span-4 lg:justify-end">
+                    <h2>(W - L)</h2>
+                    <h1>Team Name</h1><!-- TODO: Dynamically update team name here -->
+                </div>
+
+                <div class="flex lg:col-span-1 justify-items-center">
+                    <h1>VS</h1>
+                </div>
+
+                <div class="bg-blue-400 flex gap-5 lg:col-span-5">
+                    <h2>(W - L)</h2>
+                    <h1>Team Name</h1><!-- TODO: Dynamically update team name here -->
+                </div>
+            </div>
+
+            <div class="bg-zinc-700 py-6 text-3xl justify-items-center grid gap-8 lg:grid-cols-10 lg:text-xl xl:text-2xl 2xl:text-4x"><!-- TODO: Message portal so teams can schedule matches -->
+                <div class="grid justify-items-center gap-8 lg:col-span-9">
+                    <h1>Messenger</h1>
+                    <canvas id="messageDisplay" width="500" height="500"  class="bg-white" style="border:1px solid #000000;"></canvas>
+                    <input type="text" id="messenger" value="Input Message Here" class="">
+                </div>
+            </div>
+
+            <div class="bg-zinc-700 py-6 text-3xl justify-items-center grid gap-8 lg:grid-cols-10 lg:text-xl xl:text-2xl 2xl:text-4x"><!-- TODO: Create calendat that show 7 weeks from league creation date and put's confirmed matches on-->
+                <div class="grid justify-items-center gap-8 lg:col-span-9">
+                    <h1>Calendar</h1>
+                    <canvas id="calendar" width="500" height="300"  class="bg-white" style="border:1px solid #000000;"></canvas>
+                </div>
+            </div>
+    </div>
+</body>
+</html>

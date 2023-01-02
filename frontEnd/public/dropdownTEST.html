@@ -1,0 +1,79 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Name</title><!-- Dynamically update to team name -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="text-zinc-800 font-mono">
+    
+    <div class="p-5 grid lg:grid-cols-10"><!--Content wrapper-->
+        <div class="relative lg:col-span-1">
+            <nav><!--Navigation bar and links-->
+                <div class="flex">
+                    <img src="../media/placeholder.png" alt="" class="h-20 w-20 lg:h-40 lg:w-40">
+                    <h1 class="self-center text-xl uppercase px-2 lg:my-0">Casual Gamer Circuits</h1>
+                </div>
+                
+                <ul class="py-2">
+                    <li class="lg:hidden">
+                        <a href="javascript:void(0);" style="font-size:25px;" onclick="openDropdown()"> <!-- TODO: Only works on second click for some reason.... -->
+                            <img src="../media/dropdown.png" alt="">
+                        </a>
+                    </li> 
+                </ul>
+
+                <ul class="hidden text-xl py-2 md:text-lg lg:list-item" id="nav">                   
+                    <li class="py-2 my-2 bg-no-repeat bg-[url('../media/linkBG.png')] h-10 w-40">
+                        <a href="index.html">
+                            <span class="text-blue-400 ml-2">Home</span>
+                        </a>
+                    </li>
+                    <li class="py-2 my-2 bg-no-repeat bg-[url('../media/linkBG.png')] h-10 w-40">
+                        <a href="media.html">
+                            <span class="text-blue-400 ml-2">Media</span><!--Youtube, twitch and social links-->
+                        </a>
+                    </li>
+                    <li class="py-2 my-2 bg-no-repeat bg-[url('../media/linkBG.png')] h-10 w-40">
+                        <a href="circuitrules.html">
+                            <span class="text-blue-400 ml-2">Rules</span>
+                        </a>
+                    </li>
+                    <li class="py-2 my-2 bg-no-repeat bg-[url('../media/linkBG.png')] h-10 w-40">
+                            <span class="text-blue-400 ml-2">Search</span><!--Search through ongoing tournaments to find a specific team or players page-->
+                    </li>
+                    <li class="py-2 my-2 bg-no-repeat bg-[url('../media/linkBG.png')] h-10 w-40">
+                        <a href="learnmore.html">
+                            <span class="text-blue-400 ml-2">Learn More</span><!--(For future use-) "Made by your community, for your community!"-->
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div><!--End navigation-->
+
+        <main class="px-16 py-6 lg:col-span-9"><!-- TODO: Some sort of logic to determine if user is logged in, if they are display profile picture and log out button instead-->
+            <div class="flex justify-center lg:justify-end" id="buttons">
+                <a href="login.html" class="button bg-no-repeat bg-[url('../media/buttonBGleft.png')]">Sign Up</a>
+                <a href="login.html" class="button mx-2 bg-cover bg-no-repeat bg-[url('../media/buttonBGleft.png')]">Log In</a>
+            </div>
+
+        </main>
+    </div>
+    <!-- JS for dropdown menu -->
+    <script>
+        function openDropdown() {
+            var nav = document.getElementById("nav");
+            var buttons = document.getElementById("buttons");
+            if (nav.className === "hidden text-xl py-2 md:text-lg lg:list-item") {
+                nav.className -= "overflow-hidden absolute list-item text-xl py-2 md:text-lg lg:list-item";
+                buttons.classList.add("hidden")
+            } else {
+                nav.className = "hidden text-xl py-2 md:text-lg lg:list-item";
+                buttons.classList.remove("hidden")
+            }
+        }
+    </script>
+
+</body>
+</html>
