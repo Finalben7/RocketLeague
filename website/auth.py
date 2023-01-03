@@ -39,6 +39,9 @@ def sign_up():
         firstName = request.form.get('firstName')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
+        username = request.form.get('username')
+        platform = request.form.get('platform')
+        region = request.form.get('region')
         user = User.query.filter_by(email=email).first()
         if user:
             flash('Email already exists.', category='error')
@@ -51,7 +54,7 @@ def sign_up():
         elif len(password1) < 6:
             flash("password must be greater than 6 characters.", category='error')
         else:
-            new_user = User(email=email, firstName=firstName, password=generate_password_hash(password1, method='sha256'))
+            new_user = User(email=email, firstName=firstName, password=generate_password_hash(password1, method='sha256'), username=username, platform=platform, region=region)
             db.session.add(new_user)
             db.session.commit()
             print(new_user)

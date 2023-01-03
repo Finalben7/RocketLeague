@@ -13,6 +13,9 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
+    username = db.Column(db.String(150), unique=True)
+    platform = db.Column(db.String(150))
+    region = db.Column(db.String(150))
     firstName = db.Column(db.String(150))
     notes = db.relationship('Note')
     is_active = True
