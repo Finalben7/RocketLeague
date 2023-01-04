@@ -9,8 +9,8 @@
 <body class="text-eleventh-blue font-LemonMilk bg-eleventh-grey">
     
     <div class="p-5 grid md:grid-cols-10"><!--Content wrapper-->
-        <div class="relative md:col-span-1">
-            <nav><!--Navigation bar and links-->
+        <div class="relative md:col-span-1"><!--Navigation bar and links-->
+            <nav>
                 <div class="flex">
                     <img src="../media/placeholder.png" alt="" class="h-20 w-20 lg:h-40 lg:w-40">
                     <h1 class="self-center text-xl uppercase px-2 lg:my-0">Casual Gamer Circuits</h1>
@@ -52,15 +52,18 @@
             </nav>
         </div><!--End navigation-->
 
-        <main class="px-16 py-6 md:col-span-9"><!-- TODO: Some sort of logic to determine if user is logged in, if they are display profile picture and log out button instead-->
-            <div class="flex justify-center md:justify-end" id="buttons">
+        <main class="px-16 py-6 md:col-span-9">
+            <div class="flex justify-center md:justify-end" id="buttons"><!-- Log in/Sign up buttons -->
                 <a href="signup.html" class="w-26 h-8 button bg-contain bg-no-repeat bg-[url('../media/buttonBG.png')]">Sign Up</a>
                 <a href="login.html" class="w-24 h-8 button bg-contain bg-no-repeat bg-[url('../media/buttonBG.png')]">Log In</a>
             </div>
 
+            <div class="grid gap-8 lg:grid-cols-10 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4xl"><!-- Main content goes inside this div -->
+                
+            </div>
         </main>
     </div>
-    <!-- JS for dropdown menu -->
+    <!-- JS logic for dropdown menu -->
     <script>
         function openDropdown() {
             var nav = document.getElementById("nav");

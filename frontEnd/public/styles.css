@@ -517,6 +517,10 @@ video {
   position: relative;
 }
 
+.col-span-10 {
+  grid-column: span 10 / span 10;
+}
+
 .mx-5 {
   margin-left: 1.25rem;
   margin-right: 1.25rem;

@@ -6,65 +6,147 @@
     <title>Sign Up</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body class="text-gray-900">
+<body class="text-eleventh-blue font-LemonMilk bg-eleventh-grey">
     
-    <div class="p-5 grid lg:grid-cols-3"><!--Content wrapper-->
-        <div class="lg:col-span-1">
-            <nav><!--Navigation bar and links-->
+    <div class="p-5 grid md:grid-cols-10"><!--Content wrapper-->
+        <div class="relative md:col-span-1"><!--Navigation bar and links-->
+            <nav>
                 <div class="flex">
-                    <img src="../media/placeholder.png" alt="" class="h-10 w-10">
-                    <h1 class="text-2xl font-bold uppercase px-2">Casual Gamer Circuits</h1>
+                    <img src="../media/placeholder.png" alt="" class="h-20 w-20 lg:h-40 lg:w-40">
+                    <h1 class="self-center text-xl uppercase px-2 lg:my-0">Casual Gamer Circuits</h1>
                 </div>
-                <ul class="py-5">
-                    <li>
+                
+                <ul class="py-2">
+                    <li class="md:hidden">
+                        <a href="javascript:void(0);" style="font-size:25px;" onclick="openDropdown()"> <!-- TODO: Only works on second click for some reason.... -->
+                            <img src="../media/dropdownBG.png" alt="">
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="hidden text-xl py-2 md:text-lg md:list-item" id="nav">                   
+                    <li class="navButtons bg-[url('../media/linkBG.png')]">
                         <a href="index.html">
-                            <span>Home</span>
+                            <span class="ml-6">Home</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="learnmore.html">
-                            <span>Learn More</span><!--(For future use-) "Made by your community, for your community!"-->
-                        </a>
-                    </li>
-                    <li>
+                    <li class="navButtons bg-[url('../media/linkBG.png')]">
                         <a href="media.html">
-                            <span>Media</span><!--Youtube, twitch and social links-->
+                            <span class="ml-6">Media</span><!--Youtube, twitch and social links-->
                         </a>
                     </li>
-                    <li>
+                    <li class="navButtons bg-[url('../media/linkBG.png')]">
                         <a href="circuitrules.html">
-                            <span>Circuit Rules</span>
+                            <span class="ml-6">Rules</span>
                         </a>
                     </li>
-                    <li>
-                            <span>Search</span><!--Search through ongoing tournaments to find a specific team or players page-->
+                    <li class="navButtons bg-[url('../media/linkBG.png')]">
+                            <span class="ml-6">Search</span><!--Search through ongoing tournaments to find a specific team or players page-->
+                    </li>
+                    <li class="navButtons bg-[url('../media/linkBG.png')]">
+                        <a href="learnmore.html">
+                            <span class="ml-6 md:text-base">Learn More</span><!--(For future use-) "Made by your community, for your community!"-->
+                        </a>
                     </li>
                 </ul>
             </nav>
         </div><!--End navigation-->
 
-        <div class="py-10 px-10 bg-gray-700">
-            <form>
-                <label for="username" class="font-bold text-xl">Username</label>
-                <br>
-                <input type="text" id="username" name="username">
-                <br>
-                <label for="email" class="font-bold text-xl">Email</label>
-                <br>
-                <input type="text" id="email" name="email">
-                <br>
-                <label for="password" class="font-bold text-xl">Password</label>
-                <br>
-                <input type="text" id="password" name="password">
-                <br>
-                <div class="py-5">
-                    <a href="#" class="button border-primary border-2">Submit</a>
-                    <a href="login.html" class="button border-primary border-2 mx-5">Log In</a>
-                </div>
-            </form>
-        </div>
+        <main class="px-16 py-6 md:col-span-9">
+            <div class="hidden flex justify-center md:justify-end" id="buttons"><!-- Log in/Sign up buttons -->
+                <a href="signup.html" class="w-26 h-8 button bg-contain bg-no-repeat bg-[url('../media/buttonBG.png')]">Sign Up</a>
+                <a href="login.html" class="w-24 h-8 button bg-contain bg-no-repeat bg-[url('../media/buttonBG.png')]">Log In</a>
+            </div>
 
+            <div class="grid gap-8 lg:grid-cols-10 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4xl"><!-- Main content goes inside this div -->
+                <form class="grid col-span-10 py-5" method="POST">
+                    <h3 class="flex justify-center py-5">Sign Up</h3>
+                    <div class="py-2">
+                    <label for="email">Email Address</label>
+                    <input
+                        type="email"
+                        class="form-control"
+                        id="email"
+                        name="email"
+                        placeholder="Enter email"
+                    />
+                    </div>
+                    <div class="py-2">
+                    <label for="username">Username</label>
+                    <input
+                        type="username"
+                        class="form-control"
+                        id="username"
+                        name="username"
+                        placeholder="Enter username"
+                    />
+                    </div>
+                    <div class="py-2">
+                    <label for="platform">Platform</label>
+                    <select
+                        type="platform"
+                        class="form-control"
+                        id="platform"
+                        name="platform">   
+                            <option value="steam">Steam</option>
+                            <option value="epic">Epic</option>
+                            <option value="xbox">Xbox</option>
+                            <option value="ps">Playstation</option>
+                    </select>
+                    </div>
+                    <div class="py-2">
+                        <label for="region">Region</label>
+                        <select
+                            type="region"
+                            class="form-control"
+                            id="region"
+                            name="region">   
+                                <option value="naE">NA East</option>
+                                <option value="naW">NA West</option>
+                                <option value="eu">Europe</option>
+                        </select>
+                        </div>
+                    <div class="py-2">
+                    <label for="password1">Password</label>
+                    <input
+                        type="password"
+                        class="form-control"
+                        id="password1"
+                        name="password1"
+                        placeholder="Enter password"
+                    />
+                    </div>
+                    <div class="py-2">
+                    <label for="password2">Password (Confirm)</label>
+                    <input
+                        type="password"
+                        class="form-control"
+                        id="password2"
+                        name="password2"
+                        placeholder="Confirm password"
+                    />
+                    </div>
+                    <br />
+                    <div class="flex justify-center justify-items-center">
+                    <button type="submit" class="w-26 h-8 button bg-contain bg-no-repeat bg-[url('../media/buttonBG.png')]">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </main>
     </div>
-    
+    <script>
+        function openDropdown() {
+            var nav = document.getElementById("nav");
+            var buttons = document.getElementById("buttons");
+            if (nav.className === "hidden text-xl py-2 md:text-lg md:list-item") {
+                nav.className -= "list-item text-xl py-2 md:text-lg md:list-item";
+                buttons.classList.add("hidden")
+          } else {
+                nav.className = "hidden text-xl py-2 md:text-lg md:list-item";
+                buttons.classList.remove("hidden")
+          }
+        }
+        </script>
+
 </body>
 </html>
