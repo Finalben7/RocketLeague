@@ -9,7 +9,7 @@
 <body class="text-eleventh-blue font-LemonMilk bg-eleventh-grey">
     
     <div class="p-5 grid md:grid-cols-10"><!--Content wrapper-->
-        <div class="relative md:col-span-1"><!--Navigation bar and links-->
+        <div class="md:col-span-1"><!--Navigation bar and links-->
             <nav>
                 <div class="flex">
                     <img src="../media/placeholder.png" alt="" class="h-20 w-20 lg:h-40 lg:w-40">
@@ -53,13 +53,13 @@
         </div><!--End navigation-->
 
         <main class="px-16 py-6 md:col-span-9">
-            <div class="hidden flex justify-center md:justify-end" id="buttons"><!-- Log in/Sign up buttons -->
+            <div class="hidden justify-center md:justify-end" id="buttons"><!-- Log in/Sign up buttons -->
                 <a href="signup.html" class="w-26 h-8 button bg-contain bg-no-repeat bg-[url('../media/buttonBG.png')]">Sign Up</a>
                 <a href="login.html" class="w-24 h-8 button bg-contain bg-no-repeat bg-[url('../media/buttonBG.png')]">Log In</a>
             </div>
 
             <div class="grid gap-8 lg:grid-cols-10 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4xl"><!-- Main content goes inside this div -->
-                <form class="grid col-span-10 py-5" method="POST">
+                <form class="lg:col-span-8 py-5" method="POST">
                     <h3 class="flex justify-center py-5">Sign Up</h3>
                     <div class="py-2">
                     <label for="email">Email Address</label>
@@ -140,10 +140,8 @@
             var buttons = document.getElementById("buttons");
             if (nav.className === "hidden text-xl py-2 md:text-lg md:list-item") {
                 nav.className -= "list-item text-xl py-2 md:text-lg md:list-item";
-                buttons.classList.add("hidden")
           } else {
                 nav.className = "hidden text-xl py-2 md:text-lg md:list-item";
-                buttons.classList.remove("hidden")
           }
         }
         </script>
