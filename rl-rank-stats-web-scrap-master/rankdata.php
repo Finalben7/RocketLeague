@@ -113,5 +113,4 @@
 
 	echo json_encode($rankData);
 
-
 ?>
