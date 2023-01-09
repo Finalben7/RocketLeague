@@ -13,3 +13,7 @@
 .navButtons{
     @apply py-1 my-2 bg-no-repeat bg-contain md:h-10 md:w-40;
 }
+
+.test{
+    @apply bg-red-400;
+}

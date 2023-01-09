@@ -4,7 +4,7 @@
   "description": "RocketLeague stuff",
   "main": "index.js",
   "scripts": {
-    "build-css": "tailwindcss build src/styles.css -o static/css/styles.css --watch -i ./static/css/styles.css"
+    "build-css": "tailwindcss build src/styles.css -o css/main.css --watch -i src/styles.css"
   },
   "repository": {
     "type": "git",
