@@ -36,7 +36,6 @@ def logout():
 def sign_up():
     if request.method == 'POST':
         email = request.form.get('email')
-        firstName = request.form.get('firstName')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
         username = request.form.get('username')
@@ -44,17 +43,15 @@ def sign_up():
         region = request.form.get('region')
         user = User.query.filter_by(email=email).first()
         if user:
-            flash('Email already exists.', category='error')
+            flash('Email already exists', category='error')
         elif len(email) < 6:
-            flash("Email must be greater than 6 characters.", category='error')
-        elif len(firstName) < 2:
-            flash("first name must be greater than 2 characters.", category='error')
+            flash("Email must be greater than 6 characters", category='error')
         elif password1 != password2:
-            flash("passwords must match.", category='error')
+            flash("Passwords must match", category='error')
         elif len(password1) < 6:
-            flash("password must be greater than 6 characters.", category='error')
+            flash("Password must be greater than 6 characters", category='error')
         else:
-            new_user = User(email=email, firstName=firstName, password=generate_password_hash(password1, method='sha256'), username=username, platform=platform, region=region)
+            new_user = User(email=email, password=generate_password_hash(password1, method='sha256'), username=username, platform=platform, region=region)
             db.session.add(new_user)
             db.session.commit()
             print(new_user)

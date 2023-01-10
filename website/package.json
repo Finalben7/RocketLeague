@@ -1,0 +1,20 @@
+{
+  "name": "rocketleague",
+  "scripts": {
+    "watch-css": "npx tailwindcss -i ./static/css/src/input.css -o ./static/css/dist/output.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.2.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ncotta/RocketLeague.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ncotta/RocketLeague/issues"
+  },
+  "homepage": "https://github.com/ncotta/RocketLeague#readme"
+}

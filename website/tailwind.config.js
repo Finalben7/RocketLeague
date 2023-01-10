@@ -1,9 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['../templates/**/*.{html,js}',],
+  mode: 'jit',
+  content: ["./templates/**/*.{html,js}"],
   presets: [],
   darkMode: 'media', // or 'class'
   theme: {
+    extend: {
+      colors: {
+      'eleventh-blue': '#0ACCFF',
+      'eleventh-orange': '#F7AA4F',
+      'eleventh-grey': '#232323'
+      }
+    },
     screens: {
       xs: '414px',
       sm: '640px',
@@ -41,9 +49,6 @@ module.exports = {
       fuchsia: colors.fuchsia,
       pink: colors.pink,
       rose: colors.rose,
-      'eleventh-blue': '#0ACCFF',
-      'eleventh-orange': '#F7AA4F',
-      'eleventh-grey': '#232323'
     }),
     columns: {
       auto: 'auto',

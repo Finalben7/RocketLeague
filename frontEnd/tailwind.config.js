@@ -4,6 +4,17 @@ module.exports = {
   presets: [],
   darkMode: 'media', // or 'class'
   theme: {
+    extend: {
+      colors: {
+      'eleventh-blue': '#0ACCFF',
+      'eleventh-orange': '#F7AA4F',
+      'eleventh-grey': '#232323'
+      },
+      backgroundImage: {
+        'linkBG': "url:('/media/linkBG.png')",
+        'buttonBG': "url:('/media/buttonBG.png')"
+      }
+    },
     screens: {
       xs: '414px',
       sm: '640px',
@@ -41,9 +52,6 @@ module.exports = {
       fuchsia: colors.fuchsia,
       pink: colors.pink,
       rose: colors.rose,
-      'eleventh-blue': '#0ACCFF',
-      'eleventh-orange': '#F7AA4F',
-      'eleventh-grey': '#232323'
     }),
     columns: {
       auto: 'auto',

@@ -631,6 +631,11 @@ video {
   padding-bottom: 2rem;
 }
 
+.py-5 {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
 .font-LemonMilk {
   font-family: LemonMilk, ui-monospace, SFMono-Regular, Menlo, "Courier New";
 }
@@ -657,7 +662,7 @@ video {
 @font-face {
   font-family: "LemonMilk";
 
-  src: url("../static/lemonmilk.otf");
+  src: url("../../lemonmilk.otf");
 }
 
 .button {
@@ -690,8 +695,7 @@ video {
 }
 
 .test {
-  --tw-bg-opacity: 1;
-  background-color: rgb(248 113 113 / var(--tw-bg-opacity));
+  background-image: url('../../linkBG.png');
 }
 
 @media (min-width: 768px) {

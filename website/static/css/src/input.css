@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@font-face {
+    font-family: "LemonMilk";
+    src: url("../../lemonmilk.otf");
+}
+
+.button{
+    @apply py-2 px-5 uppercase text-xs font-bold cursor-pointer tracking-wider;
+}
+
+.navButtons{
+    @apply py-1 my-2 md:h-10 md:w-40 ;
+}
+
+.success{
+    @apply flex justify-center items-center p-5 cursor-pointer hover:text-eleventh-grey bg-white
+}
+
+.error{
+    @apply flex justify-center items-center p-5 cursor-pointer hover:text-eleventh-grey bg-red-400
+}
+
+.navBG{
+    background-image: url('../../linkBG.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+
+}
+
+.buttonBG{
+    background-image: url('../../buttonBG.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
