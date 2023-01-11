@@ -1,43 +1,38 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
-<div class="p-5 grid lg:grid-cols-10"><!--Content wrapper-->
-    <main class="px-16 py-6 lg:col-span-9"><!-- TODO: Some sort of logic to determine if user is logged in, if they are display profile picture and log out button instead-->
+<div class="text-3xl grid gap-8 lg:grid-cols-10 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4xl">
+    <div class="lg:col-span-4">
+        <header>
+            <h2 class="flex justify-center py-8">Play like the pros</h2>
+        </header>
+        <img src="../static/placeholder.png" alt=""><!--Image of round robin bracket with text on top displaying features-->
+    </div>
 
-        <div class="text-3xl grid gap-8 lg:grid-cols-10 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4xl">
-            <div class="lg:col-span-4">
-                <header>
-                    <h2 class="flex justify-center py-8">Play like the pros</h2>
-                </header>
-                <img src="../static/placeholder.png" alt=""><!--Image of round robin bracket with text on top displaying features-->
-            </div>
+    <div class="lg:col-span-4">
+        <header>
+            <h2 class="flex justify-center py-8">At your own pace</h2>
+        </header>
+        <img src="../static/placeholder.png" alt=""><!--Image of tournament sign up page with text on top displaying features-->
+    </div>
 
-            <div class="lg:col-span-4">
-                <header>
-                    <h2 class="flex justify-center py-8">At your own pace</h2>
-                </header>
-                <img src="../static/placeholder.png" alt=""><!--Image of tournament sign up page with text on top displaying features-->
-            </div>
+    <div class="lg:col-span-4">
+        <header>
+            <h2 class="flex justify-center py-8">Fair and competetive format</h2>
+        </header>
+        <img src="../static/placeholder.png" alt=""><!--Image of playoff bracket with text on top displaying features-->
+    </div>
 
-            <div class="lg:col-span-4">
-                <header>
-                    <h2 class="flex justify-center py-8">Fair and competetive format</h2>
-                </header>
-                <img src="../static/placeholder.png" alt=""><!--Image of playoff bracket with text on top displaying features-->
-            </div>
+    <div class="lg:col-span-4">
+        <header>
+            <h2 class="flex justify-center py-8">No third party apps required</h2><!--Assuming we can pull this off-->
+        </header>
+        <img src="../static/placeholder.png" alt=""><!--Image of match page with message portal with text on top displaying features-->
+    </div>
 
-            <div class="lg:col-span-4">
-                <header>
-                    <h2 class="flex justify-center py-8">No third party apps required</h2><!--Assuming we can pull this off-->
-                </header>
-                <img src="../static/placeholder.png" alt=""><!--Image of match page with message portal with text on top displaying features-->
-            </div>
-
-            <div class="lg:col-span-8">
-                <header>
-                    <h2 class="flex justify-center py-8">See it in action!</h2>
-                </header>
-                <img src="../static/placeholder.png"><!--Video made from beta test walking through sign up, match scheduling and game highlights (with casters)-->
-            </div>
-        </div>
-    </main>
+    <div class="lg:col-span-8">
+        <header>
+            <h2 class="flex justify-center py-8">See it in action!</h2>
+        </header>
+        <img src="../static/placeholder.png"><!--Video made from beta test walking through sign up, match scheduling and game highlights (with casters)-->
+    </div>
 </div>
 {% endblock %}

@@ -7,19 +7,23 @@
 }
 
 .button{
-    @apply py-2 px-5 uppercase text-xs font-bold cursor-pointer tracking-wider;
+    @apply py-2 px-5 uppercase text-xs font-bold cursor-pointer tracking-wider h-10 hover:text-eleventh-grey;
 }
 
 .navButtons{
-    @apply py-1 my-2 md:h-10 md:w-40 ;
+    @apply py-1 my-2 md:h-10 md:w-40 hover:text-eleventh-grey;
+}
+
+.userNav{
+    @apply py-1 my-2 h-10 w-40 text-end hover:text-eleventh-grey;
 }
 
 .success{
-    @apply flex justify-center items-center p-5 cursor-pointer hover:text-eleventh-grey bg-white
+    @apply flex justify-center items-center p-5 cursor-pointer hover:text-eleventh-grey bg-white;
 }
 
 .error{
-    @apply flex justify-center items-center p-5 cursor-pointer hover:text-eleventh-grey bg-red-400
+    @apply flex justify-center items-center p-5 cursor-pointer hover:text-eleventh-blue bg-red-400 text-eleventh-grey;
 }
 
 .navBG{

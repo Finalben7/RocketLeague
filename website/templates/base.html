@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% block title %}Amateur Gamer Series{% endblock %}</title> 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dist/output.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations/animations.css') }}"/>
   </head>
     <body class="text-eleventh-blue font-LemonMilk bg-eleventh-grey">
       <div class="p-5 grid md:grid-cols-10"><!--Content wrapper-->
@@ -18,11 +19,11 @@
               
             <ul class="py-2">
               <li class="md:hidden">
-                <a href="javascript:void(0);" style="font-size:25px;" onclick="openDropdown()"><img src="../static/dropdownBG.png" alt=""></a>
+                <a href="javascript:void(0);" onclick="mainNavDropdown()"><img src="../static/dropdownBG.png" alt=""></a>
               </li>
             </ul>
 
-            <ul class="hidden text-xl py-2 md:text-lg md:list-item" id="nav">                   
+            <ul class="hidden text-xl py-2 md:text-lg md:list-item" id="mainNav">                   
               <li class="navBG navButtons">
                 <a href="/"><span class="ml-6">Home</span></a>
               </li>
@@ -46,51 +47,91 @@
           </nav>
         </div><!--End navigation-->
 
-      <main class="px-16 py-6 md:col-span-9">
-        <div class="flex justify-center md:justify-end" id="buttons"><!-- Log in/Sign up buttons -->
+        <main class="px-16 py-6 md:col-span-9">
           {% if user.is_authenticated %}
-          <a href="/logout" class="w-24 h-8 button buttonBG">Log Out</a>
+            <div class="flex justify-center items-center md:justify-end" id="buttons"><!-- Log in/Sign up buttons -->
+              <a class="button buttonBG" id="logOut" href="/logout">Log Out</a>
+              <a href="javascript:void(0);" onclick="userNavDropdown()"><img src="../static/placeholder.png" alt="" class="h-20 w-20"></a><!-- User's profile picture here -->
+            </div>
+            <div class="flex justify-center items-center md:justify-end ">
+              <ul class="hidden" id="userNav">
+                <li class="navBG userNav">
+                  <a href="/profile"><span class="mr-6">Profile</span></a>
+                </li>
+                <li class="navBG userNav">
+                  <a href="/teams"><span class="mr-6">Teams</span></a>
+                </li>
+              </ul>
+            </div>
           {% else %}
-          <a class="h-8 button buttonBG" id="signUp" href="/signup">Sign Up</a>
-          <a class="h-8 button buttonBG w-24" id="login" href="/login">Login</a>
+            <div class="flex justify-center items-center md:justify-end" id="buttons"><!-- Log in/Sign up buttons -->
+              <a class="button buttonBG" id="signUp" href="/signup">Sign Up</a>
+              <a class="button buttonBG w-24" id="signUp" href="/login">Log In</a>
+            </div>
           {% endif %}
-        </div>
+        
   
         {% with messages = get_flashed_messages(with_categories=true) %} 
         {% if messages %} 
         {% for category, message in messages %} 
         {% if category == 'error' %}
-        <div class="error" role="alert">
-        {{ message }}
-        <span class="text-3xl px-5" aria-hidden="true" onclick="this.parentElement.style.display='none';">&times;</span>
-        </div>
+          <div class="grid gap-8 lg:grid-cols-10 justify-items-center">
+            <div class="lg:col-span-8">
+              <div class="error" role="alert">
+                {{ message }}
+                <span class="text-3xl px-5" aria-hidden="true" onclick="this.parentElement.style.display='none';">&times;</span>
+              </div>
+            </div>
+          </div>
         {% else %}
-        <div class="success" role="alert">
-        {{ message }}
-        <span class="text-3xl px-5" aria-hidden="true" onclick="this.parentElement.style.display='none';">&times;</span>
-        </div>
+          <div class="grid gap-8 lg:grid-cols-10 justify-items-center">
+            <div class="lg:col-span-8">
+              <div class="success" role="alert">
+                {{ message }}
+                <span class="text-3xl px-5" aria-hidden="true" onclick="this.parentElement.style.display='none';">&times;</span>
+              </div>
+            </div>
+          </div>
         {% endif %} 
         {% endfor %} 
         {% endif %} 
         {% endwith %}
 
-  
         {% block content %}<!-- Main content render inside this block -->
           
         {% endblock %}
+      </main>
+    </div>
 
   <script>
-  function openDropdown() {
-  var nav = document.getElementById("nav");
-  var buttons = document.getElementById("buttons");
-  if (nav.className === "hidden text-xl py-2 md:text-lg md:list-item") {
-  nav.className -= "list-item text-xl py-2 md:text-lg md:list-item";
-  buttons.classList.add("hidden")
-  } else {
-  nav.className = "hidden text-xl py-2 md:text-lg md:list-item";
-  buttons.classList.remove("hidden")
-  }
-  }
+    function mainNavDropdown() {
+      var mainNav = document.getElementById("mainNav");
+      var buttons = document.getElementById("buttons");
+      if (mainNav.className === "hidden text-xl py-2 md:text-lg md:list-item") {
+        mainNav.classList.remove("hidden");
+        mainNav.classList.add("slide-in-left");
+        buttons.classList.add("slide-out-right");
+      } else if (mainNav.className === "text-xl py-2 md:text-lg md:list-item slide-in-left"){
+        mainNav.classList.remove("slide-in-left");
+        mainNav.classList.add("slide-out-left");
+        buttons.classList.remove("slide-out-right");
+        buttons.classList.add("slide-in-right");
+      } else if (mainNav.className === "text-xl py-2 md:text-lg md:list-item slide-out-left"){
+        mainNav.classList.remove("slide-out-left");
+        mainNav.classList.add("slide-in-left");
+        buttons.classList.remove("slide-in-right");
+        buttons.classList.add("slide-out-right");
+      }
+    }
+
+    function userNavDropdown() {
+      var userNav = document.getElementById("userNav");
+        if (userNav.className === "hidden") {
+          userNav.className -= "list-item";
+        } else {
+          userNav.className = "hidden";
+        }
+      }
   </script>
-  </body>
+</body>
 </html>

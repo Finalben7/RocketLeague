@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="animations.css">
 </head>
 <body class="text-eleventh-blue font-LemonMilk bg-eleventh-grey">
     
@@ -17,7 +18,7 @@
                 </div>
                 
                 <ul class="py-2">
-                    <li class="md:hidden">
+                    <li class="slide-in-top md:hidden">
                         <a href="javascript:void(0);" style="font-size:25px;" onclick="openDropdown()">
                             <img src="../media/dropdownBG.png" alt="">
                         </a>
@@ -25,7 +26,7 @@
                 </ul>
 
                 <ul class="hidden text-xl py-2 md:text-lg md:list-item" id="nav">                   
-                    <li class="bg-linkBG">
+                    <li class="navButtons bg-[url('../media/linkBG.png')]">
                         <a href="index.html">
                             <span class="ml-6">Home</span>
                         </a>
@@ -54,8 +55,8 @@
 
         <main class="px-16 py-6 md:col-span-9">
             <div class="flex justify-center md:justify-end" id="buttons"><!-- Log in/Sign up buttons -->
-                <a href="signup.html" class="w-26 h-8 button bg-contain bg-no-repeat bg-[url('../media/buttonBG.png')]">Sign Up</a>
-                <a href="login.html" class="w-24 h-8 button bg-contain bg-no-repeat bg-[url('../media/buttonBG.png')]">Log In</a>
+                <a href="login.html" class="h-10 button bg-contain bg-no-repeat bg-[url('../media/buttonBG.png')]">Sign Up</a>
+                <a href="login.html" class="h-10 w-24 button bg-contain bg-no-repeat bg-[url('../media/buttonBG.png')]">Log In</a>
             </div>
 
             <div class="grid gap-8 lg:grid-cols-10 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4xl"><!-- Main content goes inside this div -->
@@ -69,7 +70,8 @@
             var nav = document.getElementById("nav");
             var buttons = document.getElementById("buttons");
             if (nav.className === "hidden text-xl py-2 md:text-lg md:list-item") {
-                nav.className -= "list-item text-xl py-2 md:text-lg md:list-item";
+                nav.classList.remove("hidden");
+
                 buttons.classList.add("hidden")
           } else {
                 nav.className = "hidden text-xl py-2 md:text-lg md:list-item";
