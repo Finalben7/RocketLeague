@@ -1,82 +1,76 @@
 {% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block content %}
-<form method="POST">
-    <h3 align="center">Sign Up</h3>
-    <div class="form-group">
-    <label for="email">Email Address</label>
-    <input
-        type="email"
-        class="form-control"
-        id="email"
-        name="email"
-        placeholder="Enter email"
-    />
-    </div>
-    <div class="form-group">
-    <label for="firstName">First Name</label>
-    <input
-        type="text"
-        class="form-control"
-        id="firstName"
-        name="firstName"
-        placeholder="Enter first name"
-    />
-    </div>
-    <div class="form-group">
-    <label for="username">Username</label>
-    <input
-        type="username"
-        class="form-control"
-        id="username"
-        name="username"
-        placeholder="Enter username"
-    />
-    </div>
-    <div class="form-group">
-    <label for="platform">Platform</label>
-    <select
-        type="platform"
-        class="form-control"
-        id="platform"
-        name="platform">   
-            <option value="steam">Steam</option>
-            <option value="epic">Epic</option>
-            <option value="xbox">Xbox</option>
-            <option value="ps">Playstation</option>
-    </select>
-    </div>
-    <div class="form-group">
-        <label for="region">Region</label>
-        <select
-            type="region"
+<div class="grid gap-8 lg:grid-cols-10 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4xl"><!-- Main content goes inside this div -->
+    <form class="lg:col-span-8 py-5" method="POST">
+        <h3 class="flex justify-center py-5">Sign Up</h3>
+        <div class="py-2">
+        <label for="email">Email Address</label>
+        <input
+            type="email"
             class="form-control"
-            id="region"
-            name="region">   
-                <option value="naE">NA East</option>
-                <option value="naW">NA West</option>
-                <option value="eu">Europe</option>
+            id="email"
+            name="email"
+            placeholder="Enter email"
+        />
+        </div>
+        <div class="py-2">
+        <label for="username">Username</label>
+        <input
+            type="username"
+            class="form-control"
+            id="username"
+            name="username"
+            placeholder="Enter username"
+        />
+        </div>
+        <div class="py-2">
+        <label for="platform">Platform</label>
+        <select
+            type="platform"
+            class="form-control"
+            id="platform"
+            name="platform">   
+                <option value="steam">Steam</option>
+                <option value="epic">Epic</option>
+                <option value="xbox">Xbox</option>
+                <option value="ps">Playstation</option>
         </select>
         </div>
-    <div class="form-group">
-    <label for="password1">Password</label>
-    <input
-        type="password"
-        class="form-control"
-        id="password1"
-        name="password1"
-        placeholder="Enter password"
-    />
-    </div>
-    <div class="form-group">
-    <label for="password2">Password (Confirm)</label>
-    <input
-        type="password"
-        class="form-control"
-        id="password2"
-        name="password2"
-        placeholder="Confirm password"
-    />
-    </div>
-    <br />
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+        <div class="py-2">
+            <label for="region">Region</label>
+            <select
+                type="region"
+                class="form-control"
+                id="region"
+                name="region">   
+                    <option value="naE">NA East</option>
+                    <option value="naW">NA West</option>
+                    <option value="eu">Europe</option>
+            </select>
+            </div>
+        <div class="py-2">
+        <label for="password1">Password</label>
+        <input
+            type="password"
+            class="form-control"
+            id="password1"
+            name="password1"
+            placeholder="Enter password"
+        />
+        </div>
+        <div class="py-2">
+        <label for="password2">Password (Confirm)</label>
+        <input
+            type="password"
+            class="form-control"
+            id="password2"
+            name="password2"
+            placeholder="Confirm password"
+        />
+        </div>
+        <br />
+        <div class="flex justify-center justify-items-center">
+        <button type="submit" class="w-26 h-10 button buttonBG">Submit</button>
+        </div>
+    </form>
+</div>
 {% endblock %}

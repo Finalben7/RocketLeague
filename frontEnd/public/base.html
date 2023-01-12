@@ -1,0 +1,84 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="animations.css">
+</head>
+<body class="text-eleventh-blue font-LemonMilk bg-eleventh-grey">
+    
+    <div class="p-5 grid md:grid-cols-10"><!--Content wrapper-->
+        <div class="relative md:col-span-1"><!--Navigation bar and links-->
+            <nav>
+                <div class="flex">
+                    <img src="../media/placeholder.png" alt="" class="h-20 w-20 lg:h-40 lg:w-40">
+                    <h1 class="self-center text-xl uppercase px-2 lg:my-0">Amatuer Gamer Series</h1><!-- Not final -->
+                </div>
+                
+                <ul class="py-2">
+                    <li class="slide-in-top md:hidden">
+                        <a href="javascript:void(0);" style="font-size:25px;" onclick="openDropdown()">
+                            <img src="../media/dropdownBG.png" alt="">
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="hidden text-xl py-2 md:text-lg md:list-item" id="nav">                   
+                    <li class="navButtons bg-[url('../media/linkBG.png')]">
+                        <a href="index.html">
+                            <span class="ml-6">Home</span>
+                        </a>
+                    </li>
+                    <li class="navButtons bg-[url('../media/linkBG.png')]">
+                        <a href="media.html">
+                            <span class="ml-6">Media</span><!--Youtube, twitch and social links-->
+                        </a>
+                    </li>
+                    <li class="navButtons bg-[url('../media/linkBG.png')]">
+                        <a href="circuitrules.html">
+                            <span class="ml-6">Rules</span>
+                        </a>
+                    </li>
+                    <li class="navButtons bg-[url('../media/linkBG.png')]">
+                            <span class="ml-6">Search</span><!--Search through ongoing tournaments to find a specific team or players page-->
+                    </li>
+                    <li class="navButtons bg-[url('../media/linkBG.png')]">
+                        <a href="learnmore.html">
+                            <span class="ml-6 md:text-base">Learn More</span><!--(For future use-) "Made by your community, for your community!"-->
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div><!--End navigation-->
+
+        <main class="px-16 py-6 md:col-span-9">
+            <div class="flex justify-center md:justify-end" id="buttons"><!-- Log in/Sign up buttons -->
+                <a href="login.html" class="h-10 button bg-contain bg-no-repeat bg-[url('../media/buttonBG.png')]">Sign Up</a>
+                <a href="login.html" class="h-10 w-24 button bg-contain bg-no-repeat bg-[url('../media/buttonBG.png')]">Log In</a>
+            </div>
+
+            <div class="grid gap-8 lg:grid-cols-10 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4xl"><!-- Main content goes inside this div -->
+                
+            </div>
+        </main>
+    </div>
+    <!-- JS logic for dropdown menu -->
+    <script>
+        function openDropdown() {
+            var nav = document.getElementById("nav");
+            var buttons = document.getElementById("buttons");
+            if (nav.className === "hidden text-xl py-2 md:text-lg md:list-item") {
+                nav.classList.remove("hidden");
+
+                buttons.classList.add("hidden")
+          } else {
+                nav.className = "hidden text-xl py-2 md:text-lg md:list-item";
+                buttons.classList.remove("hidden")
+          }
+        }
+    </script>
+
+</body>
+</html>

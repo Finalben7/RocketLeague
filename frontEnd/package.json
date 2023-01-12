@@ -4,19 +4,19 @@
   "description": "RocketLeague stuff",
   "main": "index.js",
   "scripts": {
-    "build-css": "tailwindcss build src/styles.css -o public/styles.css"
+    "build-css": "tailwindcss build src/styles.css -o public/styles.css --watch -i ./src/styles.css"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Finalben7/RocketLeague.git"
+    "url": "git+https://github.com/ncotta/RocketLeague.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Finalben7/RocketLeague/issues"
+    "url": "https://github.com/ncotta/RocketLeague/issues"
   },
-  "homepage": "https://github.com/Finalben7/RocketLeague#readme",
+  "homepage": "https://github.com/ncotta/RocketLeague#readme",
   "dependencies": {
     "tailwindcss": "^3.2.4"
   }
