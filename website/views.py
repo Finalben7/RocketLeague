@@ -15,3 +15,11 @@ def profile():
 @views.route('/teams')
 def teams():
     return render_template('teams.html', user=current_user)
+
+@views.route('/match')
+def match():
+    return render_template('match.html', user=current_user)
+
+@views.route('/submitScore')
+def submitScore():
+    return render_template('submitScore.html', user=current_user)

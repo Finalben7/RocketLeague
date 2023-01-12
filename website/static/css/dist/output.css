@@ -541,6 +541,10 @@ video {
   display: flex;
 }
 
+.table {
+  display: table;
+}
+
 .grid {
   display: grid;
 }
@@ -601,6 +605,10 @@ video {
   gap: 2rem;
 }
 
+.gap-5 {
+  gap: 1.25rem;
+}
+
 .gap-4 {
   gap: 1rem;
 }
@@ -614,14 +622,24 @@ video {
   background-color: rgb(35 35 35 / var(--tw-bg-opacity));
 }
 
-.bg-red-400 {
+.bg-orange-400 {
   --tw-bg-opacity: 1;
-  background-color: rgb(248 113 113 / var(--tw-bg-opacity));
+  background-color: rgb(251 146 60 / var(--tw-bg-opacity));
 }
 
 .bg-blue-400 {
   --tw-bg-opacity: 1;
   background-color: rgb(96 165 250 / var(--tw-bg-opacity));
+}
+
+.bg-white {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-red-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(248 113 113 / var(--tw-bg-opacity));
 }
 
 .bg-green-400 {
@@ -809,10 +827,27 @@ video {
   color: rgb(10 204 255 / var(--tw-text-opacity));
 }
 
-.bannerUserName {
+.bannerUserName{
   left: 40%;
   top: 40%;
   position: absolute;
+}
+
+.teamStatSubmitTable {
+  border-collapse: separate;
+  --tw-border-spacing-x: 1.25rem;
+  --tw-border-spacing-y: 1.25rem;
+  border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
+  text-align: center;
+}
+
+@media (min-width: 1024px) {
+  .teamStatSubmitTable {
+    grid-column: span 8 / span 8;
+    --tw-border-spacing-x: 2.5rem;
+    --tw-border-spacing-y: 2.5rem;
+    border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
+  }
 }
 
 @media (min-width: 768px) {
@@ -860,6 +895,18 @@ video {
     grid-column: span 4 / span 4;
   }
 
+  .lg\:col-span-1 {
+    grid-column: span 1 / span 1;
+  }
+
+  .lg\:col-span-5 {
+    grid-column: span 5 / span 5;
+  }
+
+  .lg\:col-span-9 {
+    grid-column: span 9 / span 9;
+  }
+
   .lg\:col-span-10 {
     grid-column: span 10 / span 10;
   }
@@ -887,6 +934,10 @@ video {
 
   .lg\:items-center {
     align-items: center;
+  }
+
+  .lg\:justify-end {
+    justify-content: flex-end;
   }
 
   .lg\:justify-items-center {
