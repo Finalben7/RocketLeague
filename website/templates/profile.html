@@ -1,0 +1,12 @@
+{% extends "base.html" %} {% block title %} {{ user.username }} {% endblock %} {% block content %}
+<div class="grid gap-4 justify-items-center lg:grid-cols-10 lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4xl lg:justify-items-center">
+    <div class="py-5 relative text-center lg:col-span-8">
+        <img src="../static/bannerBG.png" alt="" class="w-full h-full">
+        <h1 class="bannerUserName">{{ user.username }}</h1>
+    </div>
+
+    <div class="lg:col-span-8">
+        
+    </div>
+</div>
+{% endblock %}
