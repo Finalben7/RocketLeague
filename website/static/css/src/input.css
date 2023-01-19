@@ -29,8 +29,12 @@
     @apply flex justify-center items-center p-5 cursor-pointer hover:text-eleventh-blue bg-red-400 text-eleventh-grey;
 }
 
-.bannerUserName {
+.bannerUserName{
     left: 40%;
     top: 40%;
     @apply absolute;
+}
+
+.teamStatSubmitTable{
+    @apply border-separate border-spacing-5 text-center lg:col-span-8 lg:border-spacing-10;
 }

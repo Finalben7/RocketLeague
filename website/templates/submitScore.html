@@ -1,0 +1,171 @@
+{% extends "base.html" %} {% block title %} Submit Scores {% endblock %} {% block content %}
+<div class="grid gap-8 lg:grid-cols-10 justify-items-center lg:py-36"><!-- Main content goes inside this div -->
+    <div class="lg:col-span-8 text-center">   
+        <h1>Upload a replay file here</h1>
+        <form action="/action_page.php">
+            <input class="p-5" type="file" id="myFile" name="filename">
+            <br/>
+            <input type="submit" class="button w-26">
+        </form>
+    </div>
+    
+    <div class="lg:col-span-8">
+        <form method="POST" id="scoreSubmitForm"></form>    
+            <table class="teamStatSubmitTable">
+                <tr>
+                    <th></th>
+                    <th>Team Name</th>
+                    <td>
+                        <select id="teamName0" name="teamName0">
+                            <option value="teamName0" id="teamName0"> {{ user.username }} </option>
+                            <option value="teamName1" id="teamName1"> {{ user.username }} </option>
+                        </select>
+                    </td>
+                    <th>Team Score</th>
+                    <td><input type="number" id="teamName0Score" name="teamName0Score" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th>Username</th>
+                    <th>Score</th>
+                    <th>Goals</th>
+                    <th>Saves</th>
+                    <th>Assists</th>
+                    <th>Shots</th>
+                </tr>
+                <tr>
+                    <td>
+                        <select id="userName0" name="userName0">
+                            <option value="userName0" id="userName0"> {{ user.username }} </option>
+                            <option value="userName1" id="userName1"> {{ user.username }} </option>
+                            <option value="userName2" id="userName2"> {{ user.username }} </option>
+                            <option value="userName3" id="userName3"> {{ user.username }} </option>
+                            <option value="userName4" id="userName4"> {{ user.username }} </option>
+                            <option value="userName5" id="userName5"> {{ user.username }} </option>
+                        </select>
+                    </td>
+                    <td><input type="number" id="userName0Score" name="userName0Score" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input type="number" id="userName0Goals" name="userName0Goals" form="scoreSubmitForm" min="0" max="2000"/></td>
+                    <td><input type="number" id="userName0Saves" name="userName0Saves" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input type="number" id="userName0Assists" name="userName0Assists" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input type="number" id="userName0Shots" name="userName0Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
+                </tr>
+                <tr>
+                    <td>
+                        <select id="userNam1" name="userNam1">
+                            <option value="userName0" id="userName0"> {{ user.username }} </option>
+                            <option value="userName1" id="userName1"> {{ user.username }} </option>
+                            <option value="userName2" id="userName2"> {{ user.username }} </option>
+                            <option value="userName3" id="userName3"> {{ user.username }} </option>
+                            <option value="userName4" id="userName4"> {{ user.username }} </option>
+                            <option value="userName5" id="userName5"> {{ user.username }} </option>
+                        </select>
+                    </td>
+                    <td><input type="number" id="userName1Score" name="userName1Score" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input type="number" id="userName1Goals" name="userName1Goals" form="scoreSubmitForm" min="0" max="2000"/></td>
+                    <td><input type="number" id="userName1Saves" name="userName1Saves" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input type="number" id="userName1Assists" name="userName1Assists" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input type="number" id="userName1Shots" name="userName1Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
+                </tr>
+                <tr>
+                    <td>
+                        <select id="userName" name="userName">
+                            <option value="userName0" id="userName0"> {{ user.username }} </option>
+                            <option value="userName1" id="userName1"> {{ user.username }} </option>
+                            <option value="userName2" id="userName2"> {{ user.username }} </option>
+                            <option value="userName3" id="userName3"> {{ user.username }} </option>
+                            <option value="userName4" id="userName4"> {{ user.username }} </option>
+                            <option value="userName5" id="userName5"> {{ user.username }} </option>
+                        </select>
+                    </td>
+                    <td><input type="number" id="userName2Score" name="userName2Score" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input type="number" id="userName2Goals" name="userName2Goals" form="scoreSubmitForm" min="0" max="2000"/></td>
+                    <td><input type="number" id="userName2Saves" name="userName2Saves" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input type="number" id="userName2Assists" name="userName2Assists" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input type="number" id="userName2Shots" name="userName2Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
+                </tr>
+            </table>
+    </div>
+
+    <div class="lg:col-span-8">  
+            <table class="teamStatSubmitTable">
+                <tr>
+                    <th></th>
+                    <th>Team Name</th>
+                    <td>
+                        <select id="teamName1" name="teamName1">
+                            <option value="teamName0" id="teamName0"> {{ user.username }} </option>
+                            <option value="teamName1" id="teamName1"> {{ user.username }} </option>
+                        </select>
+                    </td>
+                    <th>Team Score</th>
+                    <td><input type="number" id="teamName1Score" name="teamName1Score" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th>Username</th>
+                    <th>Score</th>
+                    <th>Goals</th>
+                    <th>Saves</th>
+                    <th>Assists</th>
+                    <th>Shots</th>
+                </tr>
+                <tr>
+                    <td>
+                        <select id="userName0" name="userName0">
+                            <option value="userName0" id="userName0"> {{ user.username }} </option>
+                            <option value="userName1" id="userName1"> {{ user.username }} </option>
+                            <option value="userName2" id="userName2"> {{ user.username }} </option>
+                            <option value="userName3" id="userName3"> {{ user.username }} </option>
+                            <option value="userName4" id="userName4"> {{ user.username }} </option>
+                            <option value="userName5" id="userName5"> {{ user.username }} </option>
+                        </select>
+                    </td>
+                    <td><input type="number" id="userName0Score" name="userName0Score" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input type="number" id="userName0Goals" name="userName0Goals" form="scoreSubmitForm" min="0" max="2000"/></td>
+                    <td><input type="number" id="userName0Saves" name="userName0Saves" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input type="number" id="userName0Assists" name="userName0Assists" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input type="number" id="userName0Shots" name="userName0Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
+                </tr>
+                <tr>
+                    <td>
+                        <select id="userNam1" name="userNam1">
+                            <option value="userName0" id="userName0"> {{ user.username }} </option>
+                            <option value="userName1" id="userName1"> {{ user.username }} </option>
+                            <option value="userName2" id="userName2"> {{ user.username }} </option>
+                            <option value="userName3" id="userName3"> {{ user.username }} </option>
+                            <option value="userName4" id="userName4"> {{ user.username }} </option>
+                            <option value="userName5" id="userName5"> {{ user.username }} </option>
+                        </select>
+                    </td>
+                    <td><input type="number" id="userName1Score" name="userName1Score" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input type="number" id="userName1Goals" name="userName1Goals" form="scoreSubmitForm" min="0" max="2000"/></td>
+                    <td><input type="number" id="userName1Saves" name="userName1Saves" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input type="number" id="userName1Assists" name="userName1Assists" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input type="number" id="userName1Shots" name="userName1Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
+                </tr>
+                <tr>
+                    <td>
+                        <select id="userName" name="userName">
+                            <option value="userName0" id="userName0"> {{ user.username }} </option>
+                            <option value="userName1" id="userName1"> {{ user.username }} </option>
+                            <option value="userName2" id="userName2"> {{ user.username }} </option>
+                            <option value="userName3" id="userName3"> {{ user.username }} </option>
+                            <option value="userName4" id="userName4"> {{ user.username }} </option>
+                            <option value="userName5" id="userName5"> {{ user.username }} </option>
+                        </select>
+                    </td>
+                    <td><input type="number" id="userName2Score" name="userName2Score" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input type="number" id="userName2Goals" name="userName2Goals" form="scoreSubmitForm" min="0" max="2000"/></td>
+                    <td><input type="number" id="userName2Saves" name="userName2Saves" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input type="number" id="userName2Assists" name="userName2Assists" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input type="number" id="userName2Shots" name="userName2Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
+                </tr>
+            </table>
+    </div>
+
+    <div class="lg:col-span-8">
+        <button type="submit" class="w-26 h-10 button">Submit</button>
+    </div>
+</div>
+{% endblock %}

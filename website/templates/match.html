@@ -1,0 +1,33 @@
+{% extends "base.html" %} {% block title %} Team Name VS Team Name {% endblock %} {% block content %}
+<div class="py-6 text-3xl justify-items-center grid gap-8 lg:grid-cols-10 lg:text-xl xl:text-2xl 2xl:text-4x">            
+    <div class="bg-orange-400 flex gap-5 lg:col-span-4 lg:justify-end">
+        <h2>(W - L)</h2>
+        <h1>Team Name</h1><!-- TODO: Dynamically update team name here -->
+    </div>
+
+    <div class="flex lg:col-span-1 justify-items-center">
+        <h1>VS</h1>
+    </div>
+
+    <div class="bg-blue-400 flex gap-5 lg:col-span-5">
+        <h2>(W - L)</h2>
+        <h1>Team Name</h1><!-- TODO: Dynamically update team name here -->
+    </div>
+</div>
+
+<div class="py-6 text-3xl justify-items-center grid gap-8 lg:grid-cols-10 lg:text-xl xl:text-2xl 2xl:text-4x"><!-- TODO: Message portal so teams can schedule matches -->
+    <div class="grid justify-items-center gap-8 lg:col-span-9">
+        <h1>Messenger</h1>
+        <canvas id="messageDisplay" width="500" height="500"  class="bg-white" style="border:1px solid #000000;"></canvas>
+        <input type="text" id="messenger" value="Input Message Here" class="">
+    </div>
+</div>
+
+<div class="py-6 text-3xl justify-items-center grid gap-8 lg:grid-cols-10 lg:text-xl xl:text-2xl 2xl:text-4x"><!-- TODO: Create calendat that show 7 weeks from league creation date and put's confirmed matches on-->
+    <div class="grid justify-items-center gap-8 lg:col-span-9">
+        <h1>Calendar</h1>
+        <canvas id="calendar" width="500" height="300"  class="bg-white" style="border:1px solid #000000;"></canvas>
+        <a href="/submitScore"><span class="userNav lg:col-span-8">Submit Scores</span></a>
+    </div>
+</div>
+{% endblock %}
