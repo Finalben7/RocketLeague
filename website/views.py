@@ -23,3 +23,7 @@ def match():
 @views.route('/submitScore')
 def submitScore():
     return render_template('submitScore.html', user=current_user)
+
+@views.route('/league')
+def league():
+    return render_template('league.html', user=current_user)

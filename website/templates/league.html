@@ -1,0 +1,129 @@
+{% extends "base.html" %} {% block title %}League Name{% endblock %} {% block content %}
+<div class="py-6 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4x">
+    <div class="flex flex-col">
+        <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
+                <div class="overflow-hidden">
+                    <table class="min-w-full text-center border-separate border-spacing-2 border border-slate-500">
+                        <thead class="text-sm">
+                            <tr><th colspan="11" class="text-2xl">League Name</th></tr>
+                            <tr>
+                                <th>Team Name</th>
+                                <th>Series Record W/L</th>
+                                <th>Matches Record W/L</th>
+                                <th>Goals</th>
+                                <th>Goals Allowed</th>
+                                <th>Assisted Goal Percentage</th>
+                                <th>Saves Per Game</th>
+                                <th>Demolitions Per Game</th>
+                                <th>Player To Watch <!-- The player with the highest score average --></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-red-400">
+                                <td>Team 1</td>
+                                <td>#/#</td>
+                                <td>#/#</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>%</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>Username</td>
+                            </tr>
+
+                            <tr class="bg-blue-400">
+                                <td>Team 2</td>
+                                <td>#/#</td>
+                                <td>#/#</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>%</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>Username</td>
+                            </tr>
+
+                            <tr class="bg-green-400">
+                                <td>Team 3</td>
+                                <td>#/#</td>
+                                <td>#/#</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>%</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>Username</td>
+                            </tr>
+
+                            <tr class="bg-yellow-400">
+                                <td>Team 4</td>
+                                <td>#/#</td>
+                                <td>#/#</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>%</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>Username</td>
+                            </tr>
+
+                            <tr class="bg-purple-400">
+                                <td>Team 5</td>
+                                <td>#/#</td>
+                                <td>#/#</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>%</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>Username</td>
+                            </tr>
+
+                            <tr class="bg-fuchsia-400">
+                                <td>Team 6</td>
+                                <td>#/#</td>
+                                <td>#/#</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>%</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>Username</td>
+                            </tr>
+
+                            <tr class="bg-zinc-500">
+                                <td>Team 7</td>
+                                <td>#/#</td>
+                                <td>#/#</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>%</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>Username</td>
+                            </tr>
+
+                            <tr class="bg-orange-400">
+                                <td>Team 8</td>
+                                <td>#/#</td>
+                                <td>#/#</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>%</td>
+                                <td>#</td>
+                                <td>#</td>
+                                <td>Username</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bg-zinc-700 py-6 text-3xl justify-items-center grid gap-8 lg:grid-cols-10 lg:text-xl xl:text-2xl 2xl:text-4x"><!-- TODO: Create calendat that show 7 weeks from league creation date and put's confirmed matches on-->
+<h1>Calendar</h1>
+</div>
+{% endblock %}

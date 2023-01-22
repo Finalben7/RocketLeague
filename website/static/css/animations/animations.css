@@ -5,6 +5,10 @@
  * w: http://animista.net, t: @cssanimista
  * ---------------------------------------------- */
 
+
+/** For main navigation on mobile only  */
+
+
  .slide-in-left {
 	-webkit-animation: slide-in-left 1s ease-in-out both;
 	        animation: slide-in-left 1s ease-in-out both;

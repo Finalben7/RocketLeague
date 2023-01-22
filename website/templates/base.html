@@ -50,7 +50,7 @@
         <main class="px-16 py-6 md:col-span-9">
           {% if user.is_authenticated %}
             <div class="flex justify-center items-center md:justify-end" id="buttons"><!-- Log in/Sign up buttons -->
-              <a href="javascript:void(0);" onclick="userNavDropdown()"><img src="../static/placeholder.png" alt="" class="h-20 w-20"></a><!-- User's profile picture here -->
+              <a href="javascript:void(0);" onclick="userNavDropdown()"><img src="../static/placeholder.png" alt="" class="rounded-lg border-4 border-eleventh-blue h-20 w-20"></a><!-- User's profile picture here -->
             </div>
             <div class="flex justify-center items-center md:justify-end ">
               <ul class="hidden" id="userNav">
@@ -132,11 +132,16 @@
     function userNavDropdown() {
       var userNav = document.getElementById("userNav");
         if (userNav.className === "hidden") {
-          userNav.className -= "list-item";
-        } else {
-          userNav.className = "hidden";
-        }
+          userNav.classList.remove("hidden");
+          userNav.classList.add("slide-in-right");
+        } else if (userNav.className === "slide-in-right") {
+          userNav.classList.remove("slide-in-right");
+          userNav.classList.add("slide-out-right");         
+        } else if (userNav.className === "slide-out-right") {
+          userNav.classList.remove("slide-out-right");
+          userNav.classList.add("slide-in-right");
       }
+    }
   </script>
 </body>
 </html>
