@@ -1,7 +1,9 @@
 {
     "matchID": "5412757F441AAD56D60D66B25E81954C",
+    "datePlayed": "2022-07-31 22-35-16",
     "team0Score": 1,
     "team1Score": 2,
+    "winner": "team1",
     "playerStats": [
         {
             "Assists": 0,

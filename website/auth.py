@@ -55,9 +55,9 @@ def sign_up():
             flash("password must be greater than 6 characters.", category='error')
         else:
             new_user = User(email=email, firstName=firstName, password=generate_password_hash(password1, method='sha256'), username=username, platform=platform, region=region)
-            db.session.add(new_user)
-            db.session.commit()
-            print(new_user)
+            db.session.add(new_user)  # FIXME
+            db.session.commit()  # FIXME
+            print(new_user)  
             login_user(new_user, remember=True)
             flash('Account created!', category='success')
             return redirect(url_for('views.home'))
