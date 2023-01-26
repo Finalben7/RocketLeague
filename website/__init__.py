@@ -1,25 +1,26 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from os import path
+from os import path, environ
 from flask_login import LoginManager
 from flask_mysqldb import MySQL
 
 # db = SQLAlchemy()
-DB_NAME = "database.db"
+DB_NAME = "RL"
 
 def create_app():
     app = Flask(__name__)
-    
     app.config['SECRET_KEY'] = 'secretkeytest'
     # MySQL credentials
-    app.config['SECRET_KEY'] = 'secretkeytest'  # needed?
-    app.config['MYSQL_HOST'] = ''  #FIXME
-    app.config['MYSQL_USER'] = ''  #FIXME
-    app.config['MYSQL_PASSWORD'] = ''  #FIXME
+    app.config['SECRET_KEY'] = environ.get('SECRET_KEY')  # needed?
+    app.config['MYSQL_HOST'] = environ.get('DB_HOST')  #FIXME
+    app.config['MYSQL_USER'] = environ.get('DB_USER')  #FIXME
+    app.config['MYSQL_PASSWORD'] = environ.get('DB_PASS')  #FIXME
     app.config['MYSQL_DB'] = DB_NAME  #FIXME
     # app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///" + DB_NAME
 
     mysql = MySQL(app)
+
+    cursor = mysql.connect.cursor()  # Create connection cursor so Flask can interact with tables
 
     """
     Example code for SQL statements
