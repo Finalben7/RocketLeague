@@ -7,12 +7,12 @@ from . import glblvars
 
 # db = SQLAlchemy()
 DB_NAME = "RL"
-DB_PORT = '3660'
+DB_PORT = 3660
 
 def create_app():
     # print(glblvars.DB_HOST)
     app = Flask(__name__)
-    mysql = MySQL()
+    mysql = MySQL(app)
     # app.config['SECRET_KEY'] = 'secretkeytest'
     # MySQL credentials
     # app.config['SECRET_KEY'] = environ.get('SECRET_KEY')  # needed?
