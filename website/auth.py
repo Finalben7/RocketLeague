@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import db
+# from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 import subprocess
 
@@ -53,8 +53,8 @@ def sign_up():
             flash("Password must be greater than 6 characters", category='error')
         else:
             new_user = User(email=email, password=generate_password_hash(password1, method='sha256'), username=username, platform=platform, region=region)
-            db.session.add(new_user)
-            db.session.commit()
+            # db.session.add(new_user)
+            # db.session.commit()
             # print(new_user)
             login_user(new_user, remember=True)
             flash('Account created!', category='success')
@@ -63,10 +63,11 @@ def sign_up():
     return render_template('signup.html', user=current_user)
 
 def verify_user(user):
-    username = user.username
-    platform = user.platform
-    path = f'php ./rankdata.php?user={username}&platform={platform}'
-    print(path)
-    result = subprocess.Popen([path], stdout=subprocess.PIPE, shell=True)
-    response = result.stdout.read()
-    print(result.stdout)
+    pass
+    # username = user.username
+    # platform = user.platform
+    # path = f'php ./rankdata.php?user={username}&platform={platform}'
+    # print(path)
+    # result = subprocess.Popen([path], stdout=subprocess.PIPE, shell=True)
+    # response = result.stdout.read()
+    # print(result.stdout)
