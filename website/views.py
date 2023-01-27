@@ -27,3 +27,7 @@ def submitScore():
 @views.route('/league')
 def league():
     return render_template('league.html', user=current_user)
+
+@views.route('/bracket')
+def bracket():
+    return render_template('bracket.html', user=current_user)
