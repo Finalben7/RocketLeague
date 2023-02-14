@@ -16,6 +16,5 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(150), unique=True)
     platform = db.Column(db.String(150))
     region = db.Column(db.String(150))
-    firstName = db.Column(db.String(150))
     notes = db.relationship('Note')
     is_active = True

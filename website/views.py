@@ -30,4 +30,4 @@ def league():
 
 @views.route('/bracket')
 def bracket():
-    return render_template('bracket.html', user=current_user)
+    return render_template('beta-bracket.html', user=current_user)

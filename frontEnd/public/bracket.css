@@ -110,3 +110,6 @@ body {
 .bracket .round.finals .winners .connector .line {
   height: 1.5rem;
 }
+.hidden {
+  display: none;
+}
