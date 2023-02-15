@@ -12,9 +12,11 @@ def create_app():
     
     db.init_app(app)
     
+    # Import blueprints
     from .views import views
     from .auth import auth
     
+    # Register blueprints for Flask
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     

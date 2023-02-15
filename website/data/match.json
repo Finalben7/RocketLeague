@@ -1,0 +1,84 @@
+{
+    "matchID": "5412757F441AAD56D60D66B25E81954C",
+    "datePlayed": "2022-07-31 22-35-16",
+    "team0Score": 1,
+    "team1Score": 2,
+    "winner": "team1",
+    "playerStats": [
+        {
+            "Assists": 0,
+            "Goals": 0,
+            "Name": "Finalben7",
+            "OnlineID": "76561198044533924",
+            "Platform": {
+                "kind": "OnlinePlatform",
+                "value": "OnlinePlatform_Steam"
+            },
+            "Saves": 2,
+            "Score": 258,
+            "Shots": 2,
+            "Team": 0,
+            "bBot": false
+        },
+        {
+            "Assists": 0,
+            "Goals": 0,
+            "Name": "trt\u0142.",
+            "OnlineID": "0",
+            "Platform": {
+                "kind": "OnlinePlatform",
+                "value": "OnlinePlatform_Epic"
+            },
+            "Saves": 0,
+            "Score": 86,
+            "Shots": 2,
+            "Team": 1,
+            "bBot": false
+        },
+        {
+            "Assists": 0,
+            "Goals": 1,
+            "Name": "ttv Voltres_",
+            "OnlineID": "0",
+            "Platform": {
+                "kind": "OnlinePlatform",
+                "value": "OnlinePlatform_Epic"
+            },
+            "Saves": 1,
+            "Score": 190,
+            "Shots": 1,
+            "Team": 0,
+            "bBot": false
+        },
+        {
+            "Assists": 1,
+            "Goals": 1,
+            "Name": "Phoenix7498",
+            "OnlineID": "76561198083421022",
+            "Platform": {
+                "kind": "OnlinePlatform",
+                "value": "OnlinePlatform_Steam"
+            },
+            "Saves": 3,
+            "Score": 506,
+            "Shots": 2,
+            "Team": 1,
+            "bBot": false
+        },
+        {
+            "Assists": 1,
+            "Goals": 1,
+            "Name": "Inferno!",
+            "OnlineID": "76561198863952827",
+            "Platform": {
+                "kind": "OnlinePlatform",
+                "value": "OnlinePlatform_Steam"
+            },
+            "Saves": 1,
+            "Score": 412,
+            "Shots": 5,
+            "Team": 1,
+            "bBot": false
+        }
+    ]
+}
