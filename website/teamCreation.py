@@ -6,9 +6,9 @@ from flask_login import login_user, login_required, logout_user, current_user
 """
 Outlines:
     Team Creation
-    - A team is a collection of players (2, 3, ...?) 
-        - Should team be collection of player objects or just user_id strings?
-        - Should we assume team captain is creator of team?
+    - A team is a collection of players (2v2) 
+    - Team captain is team creator
+        - Should team be collection of player objects or just user_id strings? Basically size vs speed
     - Each player has a rank (players will input own rank)
     - The Team rank is the same rank as the highest-ranked player on the team
     - Each team object will have a teamID, teamRank, teamCaptain, teamName, and region
@@ -37,8 +37,8 @@ def createTeam():
     return newTeam
     
 def submitTeam(team):
-    if len(team.players) != 3:
-        flash("Team does not have three members", category='error')
+    if len(team.players) != 2: 
+        flash("Team does not have two members", category='error')
         return False
     
     db.session.add(team)
@@ -80,8 +80,7 @@ def matchListener(match):  # Event listener
         winner = team1
         loser = team0
     else:
-        winner = "tie"
-        # how do we treat ties for bracket?
+        pass  # Won't be any ties
         
     return winner
 
