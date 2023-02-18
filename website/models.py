@@ -1,20 +1,18 @@
 from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
+import datetime
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, UniqueConstraint, Index
 
+Base = declarative_base()
 
-class Note(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    data = db.Column(db.String(10000))
-    date = db.Column(db.DateTime(timezone=True), default=func.now())
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-class User(db.Model, UserMixin):
+class User(db.Model,  UserMixin):
+    __tablename__ = 'User'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     username = db.Column(db.String(150), unique=True)
     platform = db.Column(db.String(150))
     region = db.Column(db.String(150))
-    notes = db.relationship('Note')
     is_active = True
