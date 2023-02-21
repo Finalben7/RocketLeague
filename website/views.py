@@ -31,3 +31,7 @@ def league():
 @views.route('/bracket')
 def bracket():
     return render_template('beta-bracket.html', user=current_user)
+
+@views.route('/createTeam')
+def createTeam():
+    return render_template('createTeam.html', user=current_user)
