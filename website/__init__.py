@@ -8,10 +8,13 @@ def create_app():
     app = Flask(__name__)
     
     app.config['SECRET_KEY'] = 'secretkeytest'
-    app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:@localhost/underground"
+    
+    # MySQL-Python
+    # mysql+mysqldb://<user>:<password>@<host>[:<port>]/<dbname>
+    app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqldb://RLuser:FearTheLemon11!!@ix.cs.uoregon.edu:3660/RL1" # old:::: "mysql://root:@localhost/underground"
     
     db.init_app(app)
-    
+
     from .views import views
     from .auth import auth
     from .logic import logic
