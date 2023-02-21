@@ -27,8 +27,8 @@ def createTeam():
             rank2 = userOne.rank
             teamRank = max(rank1, rank2)
             #Validate the user doesn't already have a team with the exact same region/rank combination
-            teamCheckOne = Team.query.filter_by(teamCaptain=captainID, region=teamRegion, rank=teamRank)
-            teamCheckTwo = Team.query.filter_by(teamCaptain=userOne.id, region=teamRegion, rank=teamRank)
+            teamCheckOne = Team.query.filter(Team.teamCaptain == captainID, Team.region == teamRegion, Team.rank == teamRank).first()
+            teamCheckTwo = Team.query.filter(Team.teamCaptain == userOne.id, Team.region == teamRegion, Team.rank == teamRank).first()
             if teamCheckOne is not None or teamCheckTwo is not None:
                 flash('You, or your teammate, already have a team in this division', category='error')
                 return render_template('createTeam.html', user=current_user) 

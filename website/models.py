@@ -16,7 +16,6 @@ class User(db.Model,  UserMixin):
     platform = db.Column(db.String(150))
     region = db.Column(db.String(150))
     rank = db.Column(db.Numeric(2, 0), default=15)
-    is_active = True
     Index("userIdIndex", "id", "email", "username" )
 
 class Team(db.Model):
