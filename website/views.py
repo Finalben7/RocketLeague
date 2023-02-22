@@ -23,3 +23,15 @@ def match():
 @views.route('/submitScore')
 def submitScore():
     return render_template('submitScore.html', user=current_user)
+
+@views.route('/league')
+def league():
+    return render_template('league.html', user=current_user)
+
+@views.route('/bracket')
+def bracket():
+    return render_template('beta-bracket.html', user=current_user)
+
+@views.route('/createTeam')
+def createTeam():
+    return render_template('createTeam.html', user=current_user)

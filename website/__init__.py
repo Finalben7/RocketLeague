@@ -1,13 +1,10 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from os import path, environ
 from flask_login import LoginManager
 from flask_mysqldb import MySQL
 from . import glblvars
 
-# db = SQLAlchemy()
-DB_NAME = "RL"
-DB_PORT = 3660
+db = SQLAlchemy()
 
 def create_app():
     # print(glblvars.DB_HOST)
@@ -28,28 +25,21 @@ def create_app():
     # app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///" + DB_NAME
 
     
-
-    """
-    Example code for SQL statements
-
-    cursor = mysql.connection.cursor()  # Create connection cursor so Flask can interact with tables
-    cursor.execute(''' CREATE TABLE table_name(field1, field2...) ''')
-    cursor.execute(''' INSERT INTO table_name VALUES(v1,v2...) ''')
-    cursor.execute(''' DELETE FROM table_name WHERE condition ''')
-
-    mysql.connection.commit()  # save actions performed
-    cursor.close()  # disconnect
-    """
+    app.config['SECRET_KEY'] = 'secretkeytest'
     
-    # db.init_app(app)
-    with app.app_context():
-        cursor = mysql.connect.cursor()  # Create connection cursor so Flask can interact with tables
+    # MySQL-Python
+    # mysql+mysqldb://<user>:<password>@<host>[:<port>]/<dbname>
+    app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:@localhost/underground" #TOM'S "mysql+mysqldb://RLuser:FearTheLemon11!!@ix.cs.uoregon.edu:3660/RL1"
     
+    db.init_app(app)
+
     from .views import views
     from .auth import auth
+    from .logic import logic
     
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
+    app.register_blueprint(logic, url_prefix='/')
     
     from .models import User
     

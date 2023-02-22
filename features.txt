@@ -1,11 +1,13 @@
 Features To Implement
 
-Rank Verification through API or web scraper (Look for rank if possible otherwise use hours or matches played in specific playlists)
 Make username match RL name to make rank verification/stat connection easier
 Show scheduled matches on league page in a calendar to increase interactivity
 Donation prompt upon league completion
 Feedback + bug + user report page
 Auto generate league name
 3 month IP ban for cheating
-Winner league for champions of leagues (Identical functions to basic tournament but can only be entered if after you've won a tournament)
 Promotion/Demotion to next league based off final standings
+
+Future updates
+Rank Verification through API or web scraper (Look for rank if possible otherwise use hours or matches played in specific playlists)
+Winner league for champions of leagues (Identical functions to basic tournament but can only be entered if after you've won a tournament)

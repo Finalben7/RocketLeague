@@ -1,0 +1,80 @@
+{% extends "base.html" %} {% block title %}Bracket{% endblock %} {% block content %}
+<div class="bracket">
+    <section class="round quarterfinals">
+      <div class="winners">
+        <div class="matchups">
+          <div class="matchup">
+            <div class="participants">
+              <div class="participant winner"><span>{{ user.username }}</span></div>
+              <div class="participant"><span>{{ user.username }}</span></div>
+            </div>
+          </div>
+          <div class="matchup">
+            <div class="participants">
+              <div class="participant"><span>{{ user.username }}</span></div>
+              <div class="participant winner"><span>{{ user.username }}</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="connector">
+          <div class="merger"></div>
+          <div class="line"></div>
+        </div>
+      </div>
+      <div class="winners">
+        <div class="matchups">
+          <div class="matchup">
+            <div class="participants">
+              <div class="participant"><span>{{ user.username }}</span></div>
+              <div class="participant winner"><span>{{ user.username }}</span></div>
+            </div>
+          </div>
+          <div class="matchup">
+            <div class="participants">
+              <div class="participant"><span>{{ user.username }}</span></div>
+              <div class="participant winner"><span>{{ user.username }}</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="connector">
+          <div class="merger"></div>
+          <div class="line"></div>
+        </div>
+      </div>
+    </section>
+    <section class="round semifinals">
+      <div class="winners">
+        <div class="matchups">
+          <div class="matchup">
+            <div class="participants">
+              <div class="participant winner"><span>{{ user.username }}</span></div>
+              <div class="participant"><span>{{ user.username }}</span></div>
+            </div>
+          </div>
+          <div class="matchup">
+            <div class="participants">
+              <div class="participant winner"><span>{{ user.username }}</span></div>
+              <div class="participant"><span>{{ user.username }}</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="connector">
+          <div class="merger"></div>
+          <div class="line"></div>
+        </div>
+      </div>
+    </section>
+    <section class="round finals">
+      <div class="winners">
+        <div class="matchups">
+          <div class="matchup">
+            <div class="participants">
+              <div class="participant winner"><span>{{ user.username }}</span></div>
+              <div class="participant"><span>{{ user.username }}</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  {% endblock %}
