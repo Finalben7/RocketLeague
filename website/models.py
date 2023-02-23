@@ -1,17 +1,10 @@
-# from . import db
+from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, UniqueConstraint, Index
 
-<<<<<<< HEAD
-class User(UserMixin):
-    id = 'test'
-    password = 'test'
-    username = 'test'
-    email = 'test'
-=======
 Base = declarative_base()
 
 class User(db.Model,  UserMixin):
@@ -63,4 +56,3 @@ class TeamPlayers(db.Model):
     __tablename__ = 'TeamPlayers'
     userId = db.Column(db.Integer, ForeignKey("User.id"), primary_key=True)
     teamId = db.Column(db.Integer, ForeignKey("Team.id"), primary_key=True)
->>>>>>> Benjamin
