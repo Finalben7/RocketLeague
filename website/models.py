@@ -53,6 +53,6 @@ class Stats(db.Model):
     shots = db.Column(db.Numeric(2, 0))
 
 class TeamPlayers(db.Model):
-    __tablename__ = 'Team_Players'
+    __tablename__ = 'TeamPlayers'
     userId = db.Column(db.Integer, ForeignKey("User.id"), primary_key=True)
     teamId = db.Column(db.Integer, ForeignKey("Team.id"), primary_key=True)
