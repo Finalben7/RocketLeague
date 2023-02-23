@@ -38,7 +38,6 @@ def createTeam():
             db.session.commit()
             #Get the teamId of the newly created team, store it in a variable and pass that data to the teamPlayers table as well
             teamId = newTeam.id
-            print(teamId)
             teamPlayers1 = TeamPlayers(userId=captainID, teamId=teamId)
             teamPlayers2 = TeamPlayers(userId=userOne.id, teamId=teamId)
             db.session.add_all([teamPlayers1, teamPlayers2])
