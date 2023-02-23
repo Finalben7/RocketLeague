@@ -21,11 +21,7 @@ def create_app():
     
     # MySQL-Python
     # mysql+mysqldb://<user>:<password>@<host>[:<port>]/<dbname>
-<<<<<<< HEAD
     app.config['SQLALCHEMY_DATABASE_URI'] = uri
-=======
-    app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:@localhost/underground" #TOM'S "mysql+mysqldb://<user>:<pass>@ix.cs.uoregon.edu:3660/RL1"
->>>>>>> Benjamin
     
     db.init_app(app)
 

@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
-# from . import db
+from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 import subprocess
 
@@ -53,9 +53,9 @@ def sign_up():
             flash("Password must be greater than 6 characters", category='error')
         else:
             new_user = User(email=email, password=generate_password_hash(password1, method='sha256'), username=username, platform=platform, region=region)
-            # db.session.add(new_user)
-            # db.session.commit()
-            # print(new_user)
+            db.session.add(new_user)
+            db.session.commit()
+            print(new_user)
             login_user(new_user, remember=True)
             flash('Account created!', category='success')
             return redirect(url_for('views.home'))
