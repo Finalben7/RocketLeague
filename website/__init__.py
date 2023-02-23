@@ -10,15 +10,15 @@ def create_app():
     app = Flask(__name__)
     mysql = MySQL(app)
 
-    MYSQL_HOST = glblvars.DB_HOST  #FIXME
+    MYSQL_HOST = glblvars.DB_HOST
     MYSQL_USER = glblvars.DB_USER
-    MYSQL_PASSWORD = glblvars.DB_PASS  #FIXME
+    MYSQL_PASSWORD = glblvars.DB_PASS
     SECRET_KEY = glblvars.SECRET_KEY
     MYSQL_PORT = glblvars.DB_PORT
     MYSQL_NAME = glblvars.DB_NAME
 
     uri = "mysql+mysqldb://"+ MYSQL_USER + ":" + MYSQL_PASSWORD + "@" + MYSQL_HOST + ":" + MYSQL_PORT + "/" + MYSQL_NAME
-    
+    app.config['SECRET_KEY'] = SECRET_KEY
     # MySQL-Python
     # mysql+mysqldb://<user>:<password>@<host>[:<port>]/<dbname>
     app.config['SQLALCHEMY_DATABASE_URI'] = uri
@@ -35,8 +35,8 @@ def create_app():
     
     from .models import User
     
-    # with app.app_context():
-    #     db.create_all()
+    with app.app_context():
+        db.create_all()
     
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
