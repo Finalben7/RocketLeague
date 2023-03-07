@@ -62,3 +62,4 @@ class TeamPlayers(db.Model):
 class Tournament(db.Model):
     __tablename__ = 'Tournament'
     id = db.Column(db.Integer, primary_key=True)
+    
