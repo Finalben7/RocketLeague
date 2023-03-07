@@ -3,7 +3,7 @@
         <button type="submit" class="lg:col-span-10 w-26 h-8 button"><a href="/createTeam">Create Team</a></button>  
         {% for team, user in teams.items() %}    
             <div class="lg:col-span-10 lg:items-center bg-red-400">
-                <h1 class="lg:col-span-10"><a href="/team?team_id={{ team.id }}">{{ team }}</a></h1>
+                <h1 class="lg:col-span-10"><a href="/team?team={{ team }}">{{ team }}</a></h1>
                 <h2>{{ user|join('  ') }}</h2>
             </div>
         {% endfor %}

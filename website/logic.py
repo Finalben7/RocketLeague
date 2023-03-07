@@ -50,14 +50,7 @@ def createTeam():
 #Queue and league generation logic
 #@logic.route('/joinQueue', methods=['GET', 'POST'])
 #def joinQueue():
-#    if request.method == 'POST':
-#        teamID = request.form.get('teamID')
-#        teamName = request.form.get('teamName')
-#        record = request.form.get('record')
-#        queue = []
-#        queue.append(teamID)
-#    if queue.__len__ == 8:
-#        for teamID in queue:
-#            newLeague = league(teamID = teamID, teamName = teamName, record = record)
-#            db.session.add = newLeague(league)
-#            db.session.commit()
+    #team = request.args.get('team')
+    #usernames = request.args.get('usernames')
+    #print("test!")
+    #return render_template('team.html', user=current_user, team=team, usernames=usernames)

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required, current_user
 from .models import User, Team, TeamPlayers
 from . import db
@@ -41,20 +41,21 @@ def teams():
             if team_name not in team_users:
                 team_users[team_name] = []
             team_users[team_name].append(team['username'])
+    print(teams)
     return render_template('teams.html', user=current_user, teams=team_users)
 
 @views.route('/team')
 def team():
-    team_id = request.args.get('team_id')
-    print(team_id)
-    # Fetch the team object from the database using the team_id
-    #team = Team.query.filter_by(id=team_id).first()
-    #print(team)
+    def joinQueue():
+        print("test!")
+
+    team = request.args.get('team')
     # Fetch the players for the team
-    #players = User.query.join(TeamPlayers).filter(TeamPlayers.teamId == team.id).all()
-    #print(players)
+    players = User.query.join(TeamPlayers).join(Team).filter(Team.teamName == team).all()
+    # Get a list of usernames for the players
+    usernames = [player.username for player in players]
     # Render the team page template and pass in the team and players objects
-    return render_template('team.html', user=current_user, team_id=team_id)
+    return render_template('team.html', user=current_user, team=team, usernames=usernames)
 
 @views.route('/match')
 def match():
@@ -75,3 +76,10 @@ def bracket():
 @views.route('/createTeam')
 def createTeam():
     return render_template('createTeam.html', user=current_user)
+
+@views.route('/joinQueue')
+def joinQueue():
+    team = request.args.get('team')
+    usernames = request.args.get('usernames')
+    print("joinQueue called!")
+    return redirect(url_for('views.team', team=team, usernames=usernames))
