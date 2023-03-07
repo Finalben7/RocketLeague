@@ -1,14 +1,11 @@
-{% extends "base.html" %} {% block title %} Teams {% endblock %} {% block content %}
-<div class="grid gap-8 lg:grid-cols-10 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4x">                
-    <button type="submit" class="lg:col-span-10 w-26 h-8 button"><a href="/createTeam">Create Team</a></button>
-    {% for team in teams %}
-        <h1 class="pt-10 lg:col-span-10"><a href="/">{{ team[1] }}</a></h1>
-            <div class="flex lg:col-span-2 lg:items-center bg-red-400">
-                <img src="../../media/placeholder.png" alt="" class="mr-5 h-10 w-10"><!-- User 1 logo-->
-                {% for username in team[0].split(',') %}
-                <h2><a href="matches.html">{{ username }}</a></h2>
-                {% endfor %}
+{% extends "base.html" %} {% block title %} {{ user.username }}'s Teams {% endblock %} {% block content %}
+    <div class="grid gap-8 lg:grid-cols-10 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4x">                
+        <button type="submit" class="lg:col-span-10 w-26 h-8 button"><a href="/createTeam">Create Team</a></button>  
+        {% for team, user in teams.items() %}    
+            <div class="lg:col-span-10 lg:items-center bg-red-400">
+                <h1 class="lg:col-span-10"><a href="/team?team_id={{ team.id }}">{{ team }}</a></h1>
+                <h2>{{ user|join('  ') }}</h2>
             </div>
-    {% endfor %}      
-</div>
+        {% endfor %}
+    </div>
 {% endblock %}
