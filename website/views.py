@@ -2,6 +2,7 @@ from flask import Blueprint, render_template
 from flask_login import login_required, current_user
 from .models import User, Team, TeamPlayers
 from . import db
+# from .logic import joinQueue
 from sqlalchemy import text
 
 views = Blueprint('views', __name__)

@@ -1,0 +1,39 @@
+{% extends "base.html" %} {% block title %} {{ user.username }} {% endblock %} {% block content %}
+<div class="grid gap-4 justify-items-center lg:grid-cols-10 lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4xl lg:justify-items-center">
+    <div class="py-5 relative text-center lg:col-span-8">
+        <img src="../static/bannerBG.png" alt="" class="w-full h-full">
+        <h1 class="bannerUserName">{{ user.username }}</h1>
+    </div>
+
+    <div class="lg:col-span-8">
+        <div class="flex">
+            <h2 class="p-5">Username:</h2>
+            <h3 class="p-5">{{ user.username }}</h3>
+        </div>
+        <div class="flex">
+            <h2 class="p-5">Email:</h2>
+            <h3 class="p-5">{{ user.email }}</h3>
+        </div>
+        <div class="flex">
+            <h2 class="p-5">Region:</h2>
+            <h3 class="p-5">{{ user.region }}</h3>
+        </div>
+        <div class="flex">
+            <h2 class="p-5">Platform:</h2>
+            <h3 class="p-5">{{ user.platform }}</h3>
+        </div>
+        <div class="flex">
+            <h2 class="p-5">Rank:</h2>
+            <h3 class="p-5">{{ user.rank }}</h3>
+        </div>
+        <div class="flex">
+            <h2 class="p-5">Profile Picture:</h2>
+            <h3 class="p-5">{{ user.username }}</h3>
+        </div>
+        <div class="flex">
+            <h2 class="p-5">ID:</h2>
+            <h3 class="p-5">{{ user.id }}</h3>
+        </div>
+    </div>
+</div>
+{% endblock %}

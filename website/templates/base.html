@@ -4,79 +4,147 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-
-    <title>{% block title %}Casual Gamer Circuits{% endblock %}</title> 
+    <title>{% block title %}Amateur Gamer Series{% endblock %}</title> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dist/output.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations/animations.css') }}"/>
   </head>
-  <body class="text-gray-900 bg-blue-400">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbar"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbar">
-        <div class="navbar-nav">
-          {% if user.is_authenticated %}
-          <a class="nav-item nav-link" id="home" href="/">Home</a>
-          <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
-          {% else %}
-          <a class="nav-item nav-link" id="home" href="/">Home</a>
-          <a class="nav-item nav-link" id="login" href="/login">Login</a>
-          <a class="nav-item nav-link" id="signUp" href="/signup">Sign Up</a>
-          {% endif %}
-        </div>
-      </div>
-    </nav>
-
-    {% with messages = get_flashed_messages(with_categories=true) %} 
-        {% if messages %} 
-            {% for category, message in messages %} 
-                {% if category == 'error' %}
-                    <div class="alert alert-danger alter-dismissable fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="close" data-dismiss="alert">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    </div>
-        {% else %}
-            <div class="alert alert-success alter-dismissable fade show" role="alert">
-            {{ message }}
-            <button type="button" class="close" data-dismiss="alert">
-                <span aria-hidden="true">&times;</span>
-            </button>
+    <body class="text-eleventh-blue font-LemonMilk bg-eleventh-grey">
+      <div class="p-5 grid md:grid-cols-10"><!--Content wrapper-->
+        <div class="relative md:col-span-1"><!--Navigation bar and links-->
+          <nav>
+            <div class="flex">
+              <img src="../static/placeholder.png" alt="" class="h-20 w-20 lg:h-40 lg:w-40">
+              <h1 class="self-center text-xl uppercase px-2 lg:my-0">Amatuer Gamer Series</h1><!-- Not final -->
             </div>
+              
+            <ul class="py-2">
+              <li class="md:hidden">
+                <a href="javascript:void(0);" onclick="mainNavDropdown()"><img src="../static/dropdownBG.png" alt=""></a>
+              </li>
+            </ul>
+
+            <ul class="hidden text-xl py-2 md:text-lg md:list-item" id="mainNav">                   
+              <li class="navButtons">
+                <a href="/"><span class="ml-6">Home</span></a>
+              </li>
+  
+              <li class="navButtons">
+                <a href="/media"><span class="ml-6">Media</span></a><!--Youtube, twitch and social links-->
+              </li>
+  
+              <li class="navButtons">
+                <a href="/circuitrules"><span class="ml-6">Rules</span></a>
+              </li>
+  
+              <li class="navButtons">
+                <span class="ml-6">Search</span><!--Search through ongoing tournaments to find a specific team or players page-->
+              </li>
+  
+              <li class="navButtons">
+                <a href="/learnmore"><span class="ml-6 md:text-base">Learn More</span></a><!--(For future use-) "Made by your community, for your community!"-->
+              </li>
+            </ul>
+          </nav>
+        </div><!--End navigation-->
+
+        <main class="px-16 py-6 md:col-span-9">
+          {% if user.is_authenticated %}
+            <div class="flex justify-center items-center md:justify-end" id="buttons"><!-- Log in/Sign up buttons -->
+              <a href="javascript:void(0);" onclick="userNavDropdown()"><img src="../static/placeholder.png" alt="" class="rounded-lg border-4 border-eleventh-blue h-20 w-20"></a><!-- User's profile picture here -->
+            </div>
+            <div class="flex justify-center items-center md:justify-end ">
+              <ul class="hidden" id="userNav">
+                <li class="userNav">
+                  <a href="/profile"><span class="mr-6">Profile</span></a>
+                </li>
+                <li class="userNav">
+                  <a href="/teams"><span class="mr-6">Teams</span></a>
+                </li>
+                <li class="userNav">
+                  <a href="/match"><span class="mr-6">Match</span></a>
+                </li>
+                <li class="userNav">
+                  <a href="/bracket"><span class="mr-6">Bracket</span></a>
+                </li>
+                <li class="userNav">
+                  <a href="/logout"><span class="mr-6">Log Out</span></a>
+                </li>
+              </ul>
+            </div>
+          {% else %}
+            <div class="flex justify-center items-center md:justify-end" id="buttons"><!-- Log in/Sign up buttons -->
+              <a class="button" id="signUp" href="/signup">Sign Up</a>
+              <a class="button w-24" id="signUp" href="/login">Log In</a>
+            </div>
+          {% endif %}
+        
+  
+        {% with messages = get_flashed_messages(with_categories=true) %} 
+        {% if messages %} 
+        {% for category, message in messages %} 
+        {% if category == 'error' %}
+          <div class="grid gap-8 lg:grid-cols-10 justify-items-center">
+            <div class="lg:col-span-8">
+              <div class="error" role="alert">
+                {{ message }}
+                <span class="text-3xl px-5" aria-hidden="true" onclick="this.parentElement.style.display='none';">&times;</span>
+              </div>
+            </div>
+          </div>
+        {% else %}
+          <div class="grid gap-8 lg:grid-cols-10 justify-items-center">
+            <div class="lg:col-span-8">
+              <div class="success" role="alert">
+                {{ message }}
+                <span class="text-3xl px-5" aria-hidden="true" onclick="this.parentElement.style.display='none';">&times;</span>
+              </div>
+            </div>
+          </div>
         {% endif %} 
         {% endfor %} 
         {% endif %} 
         {% endwith %}
 
-    <div class="container">{% block content %} {% endblock %}</div>
-    <script
-      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-      crossorigin="anonymous"
-    ></script>
+        {% block content %}<!-- Main content render inside this block -->
+          
+        {% endblock %}
+      </main>
+    </div>
 
-    <script
-      type="text/javascript"
-      src="{{ url_for('static', filename='index.js') }}"
-    ></script>
-  </body>
+  <script>
+    function mainNavDropdown() {
+      var mainNav = document.getElementById("mainNav");
+      var buttons = document.getElementById("buttons");
+      if (mainNav.className === "hidden text-xl py-2 md:text-lg md:list-item") {
+        mainNav.classList.remove("hidden");
+        mainNav.classList.add("slide-in-left");
+        buttons.classList.add("slide-out-right");
+      } else if (mainNav.className === "text-xl py-2 md:text-lg md:list-item slide-in-left"){
+        mainNav.classList.remove("slide-in-left");
+        mainNav.classList.add("slide-out-left");
+        buttons.classList.remove("slide-out-right");
+        buttons.classList.add("slide-in-right");
+      } else if (mainNav.className === "text-xl py-2 md:text-lg md:list-item slide-out-left"){
+        mainNav.classList.remove("slide-out-left");
+        mainNav.classList.add("slide-in-left");
+        buttons.classList.remove("slide-in-right");
+        buttons.classList.add("slide-out-right");
+      }
+    }
+
+    function userNavDropdown() {
+      var userNav = document.getElementById("userNav");
+        if (userNav.className === "hidden") {
+          userNav.classList.remove("hidden");
+          userNav.classList.add("slide-in-right");
+        } else if (userNav.className === "slide-in-right") {
+          userNav.classList.remove("slide-in-right");
+          userNav.classList.add("slide-out-right");         
+        } else if (userNav.className === "slide-out-right") {
+          userNav.classList.remove("slide-out-right");
+          userNav.classList.add("slide-in-right");
+      }
+    }
+  </script>
+</body>
 </html>

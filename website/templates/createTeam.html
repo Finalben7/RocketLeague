@@ -1,0 +1,52 @@
+{% extends "base.html" %} {% block title %}Create Team{% endblock %} {% block content %}
+<div class="grid gap-8 lg:grid-cols-10 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4xl"><!-- Main content goes inside this div -->
+    <form class="lg:col-span-8 py-5" method="POST">
+        <h3 class="flex justify-center py-5">Create Team</h3>
+        <div class="py-2">
+        <label for="teamName">Team Name</label>
+        <input
+            type="text"
+            id="teamName"
+            name="teamName"
+            placeholder="Enter Team Name"
+        />
+        </div>
+        <div class="py-2">
+            <label for="region">Region</label>
+            <select
+                id="region"
+                name="region">   
+                    <option value="naE">NA East</option>
+                    <option value="naW">NA West</option>
+                    <option value="eu">Europe</option>
+            </select>
+        </div>
+        <div class="py-2">
+            <p>{{ user.username }}</p>
+            <p>{{ user.id }}</p>
+        </div>
+        <div class="py-2">
+        <label for="userOneName">Teammate #1 Underground Username</label>
+        <input
+            type="text"
+            id="userOneName"
+            name="userOneName"
+            placeholder="Enter a teammates username here"
+        />
+        </div>
+        <div class="py-2">
+        <label for="userOneId">Teammate #1 Underground ID</label>
+        <input
+            type="number"
+            id="userOneId"
+            name="userOneId"
+            placeholder="Enter a teammates Underground ID here"
+        />
+        </div>
+        <br />
+        <div class="flex justify-center justify-items-center">
+        <button type="submit" class="w-26 h-10 button">Create Team</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
