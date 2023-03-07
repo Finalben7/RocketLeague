@@ -8,7 +8,7 @@ db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
-    mysql = MySQL(app)
+    MySQL(app)
 
     MYSQL_HOST = glblvars.DB_HOST
     MYSQL_USER = glblvars.DB_USER

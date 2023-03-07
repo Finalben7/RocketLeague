@@ -25,6 +25,8 @@ class Team(db.Model):
     rank = db.Column(db.String(150))
     region = db.Column(db.String(150))
     teamCaptain = db.Column(db.Integer, ForeignKey("User.id"))
+    isQueued = db.Column(db.tinyint)
+    isActive = db.Column(db.tinyint)
 
 class League(db.Model):
     __tablename__ = 'League'
@@ -56,3 +58,7 @@ class TeamPlayers(db.Model):
     __tablename__ = 'TeamPlayers'
     userId = db.Column(db.Integer, ForeignKey("User.id"), primary_key=True)
     teamId = db.Column(db.Integer, ForeignKey("Team.id"), primary_key=True)
+
+class Tournament(db.Model):
+    __tablename__ = 'Tournament'
+    id = db.Column(db.Integer, primary_key=True)
