@@ -46,9 +46,6 @@ def teams():
 
 @views.route('/team')
 def team():
-    def joinQueue():
-        print("test!")
-
     team = request.args.get('team')
     # Fetch the players for the team
     players = User.query.join(TeamPlayers).join(Team).filter(Team.teamName == team).all()
@@ -71,7 +68,7 @@ def league():
 
 @views.route('/bracket')
 def bracket():
-    return render_template('beta-bracket.html', user=current_user)
+    return render_template('bracket.html', user=current_user)
 
 @views.route('/createTeam')
 def createTeam():

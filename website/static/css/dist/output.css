@@ -529,10 +529,6 @@ video {
   margin-right: 1.5rem;
 }
 
-.mr-5 {
-  margin-right: 1.25rem;
-}
-
 .block {
   display: block;
 }
@@ -561,16 +557,16 @@ video {
   height: 5rem;
 }
 
+.h-10 {
+  height: 2.5rem;
+}
+
 .h-8 {
   height: 2rem;
 }
 
 .h-full {
   height: 100%;
-}
-
-.h-10 {
-  height: 2.5rem;
 }
 
 .w-20 {
@@ -583,10 +579,6 @@ video {
 
 .w-full {
   width: 100%;
-}
-
-.w-10 {
-  width: 2.5rem;
 }
 
 .min-w-full {
@@ -749,18 +741,14 @@ video {
   padding-right: 1.25rem;
 }
 
-.py-8 {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-}
-
 .py-5 {
   padding-top: 1.25rem;
   padding-bottom: 1.25rem;
 }
 
-.pt-10 {
-  padding-top: 2.5rem;
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 .text-center {
@@ -932,7 +920,6 @@ video {
   top: 50%;
   transform: translate(-50%, -50%);
   white-space: nowrap;
-  font-size: 0;
 }
 
 .bracket .round {
@@ -967,11 +954,15 @@ video {
 .bracket .round .winners > div.matchups .matchup .participants .participant.orange {
   color: #F7AA4F;
   border-color: #F7AA4F;
+  font-size: large;
+  font-weight: bold;
 }
 
 .bracket .round .winners > div.matchups .matchup .participants .participant.blue {
   color: #0ACCFF;
   border-color: #0ACCFF;
+  font-size: large;
+  font-weight: bold;
 }
 
 .bracket .round .winners > div.matchups .matchup .participants .participant.winner {
@@ -1135,10 +1126,6 @@ video {
 
   .lg\:col-span-10 {
     grid-column: span 10 / span 10;
-  }
-
-  .lg\:col-span-2 {
-    grid-column: span 2 / span 2;
   }
 
   .lg\:my-0 {
