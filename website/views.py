@@ -46,13 +46,33 @@ def teams():
 
 @views.route('/team')
 def team():
+    # query = f'''
+    #     SELECT t.id, t.rank, t.region, t.isQueued  # TODO: uncomment when db model is updated
+    #     FROM Team t
+    # '''
+
+    query = f'''
+        SELECT t.id, t.rank, t.region
+        FROM Team t
+    '''
+
+    with db.engine.connect() as conn:
+        teamsList = conn.execute(query).fetchall()
+    # filteredTeams = [t for t in teamsList if ((t.rank == current_user.rank) and (t.region == current_user.region) and (t.isQueued))]  # TODO: uncomment when db model is updated
+    filteredTeams = [t for t in teamsList if ((t.rank == current_user.rank) and (t.region == current_user.region))]
+    numberInQueue = len(filteredTeams)
+
+    if not filteredTeams:
+        flash('No queues currently available, feel free to create your own!', category='error')
+
+
     team = request.args.get('team')
     # Fetch the players for the team
     players = User.query.join(TeamPlayers).join(Team).filter(Team.teamName == team).all()
     # Get a list of usernames for the players
     usernames = [player.username for player in players]
     # Render the team page template and pass in the team and players objects
-    return render_template('team.html', user=current_user, team=team, usernames=usernames)
+    return render_template('team.html', user=current_user, team=team, usernames=usernames, numberInQueue=numberInQueue)
 
 @views.route('/match')
 def match():
@@ -78,5 +98,11 @@ def createTeam():
 def joinQueue():
     team = request.args.get('team')
     usernames = request.args.get('usernames')
+
+    team = Team.query.filter(Team.teamCaptain == current_user.id).first()
+    # team.isQueued = True  # TODO: uncomment me when db model is updated 
+    # ? Here, query database and get number of ppl in queue. If == 8, then [(team.isQueued = False) and (team.isActive = True) for team in teamsList where team.isQueued == True]
+    db.session.commit()
+
     print("joinQueue called!")
     return redirect(url_for('views.team', team=team, usernames=usernames))

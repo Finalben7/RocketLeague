@@ -47,10 +47,88 @@ def createTeam():
         else: flash('The teammate information you entered is not valid, please double check the form.', category='error')
         return render_template('createTeam.html', user=current_user)
 
+
+
+
+
+
+
 #Queue and league generation logic
-#@logic.route('/joinQueue', methods=['GET', 'POST'])
-#def joinQueue():
-    #team = request.args.get('team')
-    #usernames = request.args.get('usernames')
-    #print("test!")
-    #return render_template('team.html', user=current_user, team=team, usernames=usernames)
+# @logic.route('/joinQueue', methods=['GET', 'POST'])
+# def joinQueue():
+#     team = request.args.get('team')
+#     usernames = request.args.get('usernames')
+#     print("test!")
+#     return render_template('team.html', user=current_user, team=team, usernames=usernames)
+
+
+
+#Queue and league generation logic
+# @logic.route('/joinQueue', methods=['GET', 'POST'])
+# def joinQueue():
+#     if request.method == 'POST':
+#         queueToJoin = None  # TODO: attach to button
+
+#         team = Team.query.filter(Team.teamCaptain == current_user.id).first()
+
+#         if len(queueToJoin) >= 8:
+#             flash("Queue is full!", category='error')
+#             return render_template('joinQueue.html', user=current_user) 
+        
+#         if queueToJoin.rank != team.rank:
+#             flash("Queue rank does not match team rank!", category='error')
+#             return render_template('joinQueue.html', user=current_user)
+        
+#         if queueToJoin.region != team.region:
+#             flash("Queue region does not match team region!", category='error')
+#             return render_template('joinQueue.html', user=current_user)
+
+#         queueToJoin.teams.append(teamID)
+#         if len(queueToJoin) == 8:
+#             for teamID in queueToJoin:
+#                 newLeague = league(teamID = teamID, teamName = teamName, record = record)
+#                 db.session.add = newLeague(league)
+
+#         db.session.commit()
+#         flash('Queue joined!', category='success')
+#         return render_template('team.html', user=current_user) 
+        
+#     elif request.method == 'GET':
+#         team = Team.query.filter(Team.teamCaptain == current_user.id).first()
+
+#         query = f'''
+#         SELECT q.teams, q.rank, q.region
+#         FROM Queue q
+#         '''
+
+#         with db.engine.connect() as conn:
+#             queueList = conn.execute(query).fetchall()
+
+#         filteredQueues = [q for q in queueList if ((q.rank == team.rank) and (q.region == team.region))]
+        
+#         if not filteredQueues:
+#             flash('No queues currently available, feel free to create your own!', category='error')
+#             return render_template("joinQueue.html", user=current_user)
+
+#        return render_template()  # TODO: queue template
+
+
+
+
+# @logic.route('/createQueue', methods=['POST'])
+# def createQueue():
+#     if request.method == 'POST':
+#         teamID = request.form.get('teamID')
+#         teamName = request.form.get('teamName')
+#         record = request.form.get('record')
+
+#         # Create Queue object and populate
+#         newQueue = Queue()  # FIXME
+#         newQueue.teams = deque()
+#         newQueue.teams.append(team)
+#         newQueue.rank = team.rank
+#         newQueue.region = team.region
+
+#         # Commit changes to database
+#         db.session.add(newQueue)
+#         db.session.commit()
