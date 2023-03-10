@@ -1,0 +1,11 @@
+{% extends "base.html" %} {% block title %} {{ user.username }}'s Teams {% endblock %} {% block content %}
+    <div class="grid gap-8 lg:grid-cols-10 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4x">                
+        <button type="submit" class="lg:col-span-10 w-26 h-8 button"><a href="/joinQueue?team={{ team }}&usernames={{ usernames }}">Join Queue</a></button>
+            <div class="lg:col-span-10 lg:items-center bg-red-400">
+                <h1 class="lg:col-span-10"><a href="/team?team={{ team }}">{{ team }}</a></h1>             
+                    {% for user in usernames %}
+                        <h2>{{ user }}</h2>
+                    {% endfor %}
+            </div>
+    </div>
+{% endblock %}

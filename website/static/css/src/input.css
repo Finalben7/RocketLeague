@@ -47,7 +47,6 @@
     top: 50%;
     transform: translate(-50%, -50%);
     white-space: nowrap;
-    font-size: 0;
   }
   .bracket .round {
     display: inline-block;
@@ -76,10 +75,14 @@
   .bracket .round .winners > div.matchups .matchup .participants .participant.orange {
     color: #F7AA4F;
     border-color: #F7AA4F;
+    font-size: large;
+    font-weight: bold;
   }
   .bracket .round .winners > div.matchups .matchup .participants .participant.blue {
     color: #0ACCFF;
     border-color: #0ACCFF;
+    font-size: large;
+    font-weight: bold;
   }
   .bracket .round .winners > div.matchups .matchup .participants .participant.winner {
     color: #60c645;
