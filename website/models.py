@@ -3,7 +3,7 @@ from flask_login import UserMixin
 from sqlalchemy.sql import func
 import datetime
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, UniqueConstraint, Index
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, UniqueConstraint, Index, Boolean
 
 Base = declarative_base()
 
@@ -25,8 +25,8 @@ class Team(db.Model):
     rank = db.Column(db.String(150))
     region = db.Column(db.String(150))
     teamCaptain = db.Column(db.Integer, ForeignKey("User.id"))
-    isQueued = db.Column(db.tinyint)
-    isActive = db.Column(db.tinyint)
+    isQueued = db.Column(db.Boolean)
+    isActive = db.Column(db.Boolean)
 
 class League(db.Model):
     __tablename__ = 'League'
