@@ -1,11 +1,54 @@
 {% extends "base.html" %} {% block title %} {{ user.username }}'s Teams {% endblock %} {% block content %}
     <div class="grid gap-8 lg:grid-cols-10 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4x">                
-        <button type="submit" class="lg:col-span-10 w-26 h-8 button"><a href="/joinQueue?team={{ team }}&usernames={{ usernames }}">Join Queue</a></button>
+        {% if current_team.isActive == false %}
+        <button type="submit" class="lg:col-span-10 w-26 h-8 button"><a href="/joinQueue?team={{ current_team }}&usernames={{ usernames }}">Join Queue</a></button>
+        <h1 class="lg:col-span-10 lg:items-center">Queue: {{ numberInQueue }} /4</h1>
+        {% endif %}
             <div class="lg:col-span-10 lg:items-center bg-red-400">
-                <h1 class="lg:col-span-10"><a href="/team?team={{ team }}">{{ team }}</a></h1>             
+                <h1 class="lg:col-span-10">{{ current_team.teamName }}</h1> 
                     {% for user in usernames %}
                         <h2>{{ user }}</h2>
                     {% endfor %}
             </div>
+        {% if current_team.isActive %}
+        <div class="bracket lg:col-span-10 lg:items-center">
+            <section class="round semifinals">
+                <div class="winners">
+                <div class="matchups">
+                    <div class="matchup">
+                    <div class="participants">
+                        <div class="participant orange"><span>{{ bracket["match1"]["team0"] }}</span></div>
+                        <div class="participant blue"><span>{{ bracket["match1"]["team1"] }}</span></div>
+                    </div>
+                    </div>
+                    <div class="matchup">
+                    <div class="participants">
+                        <div class="participant orange"><span>{{ bracket["match2"]["team0"] }}</span></div>
+                        <div class="participant blue"><span>{{ bracket["match2"]["team1"] }}</span></div>
+                    </div>
+                    </div>
+                </div>
+                <div class="connector">
+                    <div class="merger"></div>
+                    <div class="line"></div>
+                </div>
+                </div>
+            </section>
+            <section class="round finals">
+                <div class="winners">
+                <div class="matchups">
+                    <div class="matchup">
+                    <div class="participants">
+                        <div class="participant orange"><span>{{ bracket["match3"]["team0"] }}</span></div>
+                        <div class="participant blue"><span>{{ bracket["match3"]["team1"] }}</span></div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </section>
+        </div>
+        </div>
+        <button type="submit" class="lg:col-span-10 w-26 h-8 button p-4"><a href="/submitScore?current_team={{ current_team.teamName }}&opponent_team={{ opponent_team }}">Submit Scores</a></button>
+        {% endif %}
     </div>
 {% endblock %}

@@ -10,18 +10,73 @@
     </div>
     
     <div class="lg:col-span-8">
-        <form method="POST" id="scoreSubmitForm"></form>    
+        <form method="POST" id="scoreSubmitForm">
             <table class="teamStatSubmitTable">
                 <tr>
                     <th></th>
-                    <th>Team Name</th>
+                    <th>Game One Winner</th>
                     <td>
-                        <select id="teamName0" name="teamName0">
-                            <option value="teamName0" id="teamName0"> {{ user.username }} </option>
-                            <option value="teamName1" id="teamName1"> {{ user.username }} </option>
+                        <select id="gameOneWinner" name="gameOneWinner">
+                            <option value="{{ current_team_dict['teamId'] }}" id="teamName0" form="scoreSubmitForm"> {{ current_team_name }} </option>
+                            <option value="{{ opponent_team_dict['teamId'] }}" id="teamName1" form="scoreSubmitForm"> {{ opponent_team_name }} </option>
                         </select>
                     </td>
-                    <th>Team Score</th>
+                </tr>
+            </table>
+            <table class="teamStatSubmitTable">
+                <tr>
+                    <th></th>
+                    <th>Game Two Winner</th>
+                    <td>
+                        <select id="gameTwoWinner" name="gameTwoWinner">
+                            <option value="{{ current_team_dict['teamId'] }}" id="teamName0" form="scoreSubmitForm"> {{ current_team_name }} </option>
+                            <option value="{{ opponent_team_dict['teamId'] }}" id="teamName1" form="scoreSubmitForm"> {{ opponent_team_name }} </option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <table class="teamStatSubmitTable">
+                <tr>
+                    <th></th>
+                    <th>Game Three Winner</th>
+                    <td>
+                        <select id="gameThreeWinner" name="gameThreeWinner">
+                            <option value="0" id="teamName0" form="scoreSubmitForm"> No game 3 </option>
+                            <option value="{{ current_team_dict['teamId'] }}" id="teamName0" form="scoreSubmitForm"> {{ current_team_name }} </option>
+                            <option value="{{ opponent_team_dict['teamId'] }}" id="teamName1" form="scoreSubmitForm"> {{ opponent_team_name }} </option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="lg:col-span-8">
+            <button type="submit" class="w-26 h-10 button">Submit</button>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+        <!-- FOR FUTURE USE 
+            <form method="POST" id="scoreSubmitForm">  
+            <table class="teamStatSubmitTable">
+                <tr>
+                    <th></th>
+                    <th>Winning Team Name</th>
+                    <td>
+                        <select id="gameOneWinner" name="gameOneWinner">
+                            <option value="{{ current_team_name }}" id="teamName0" form="scoreSubmitForm"> {{ current_team_name }} </option>
+                            <option value="{{ opponent_team_name }}" id="teamName1" form="scoreSubmitForm"> {{ opponent_team_name }} </option>
+                        </select>
+                    </td>
+                    <th>Score</th>
                     <td><input type="number" id="teamName0Score" name="teamName0Score" form="scoreSubmitForm" min="0" max="20"/></td>
                     <th></th>
                 </tr>
@@ -36,12 +91,7 @@
                 <tr>
                     <td>
                         <select id="userName0" name="userName0">
-                            <option value="userName0" id="userName0"> {{ user.username }} </option>
-                            <option value="userName1" id="userName1"> {{ user.username }} </option>
-                            <option value="userName2" id="userName2"> {{ user.username }} </option>
-                            <option value="userName3" id="userName3"> {{ user.username }} </option>
-                            <option value="userName4" id="userName4"> {{ user.username }} </option>
-                            <option value="userName5" id="userName5"> {{ user.username }} </option>
+                            <option value="userName0" id="userName0">{{ username }}</option>
                         </select>
                     </td>
                     <td><input type="number" id="userName0Score" name="userName0Score" form="scoreSubmitForm" min="0" max="20"/></td>
@@ -52,13 +102,8 @@
                 </tr>
                 <tr>
                     <td>
-                        <select id="userNam1" name="userNam1">
-                            <option value="userName0" id="userName0"> {{ user.username }} </option>
-                            <option value="userName1" id="userName1"> {{ user.username }} </option>
-                            <option value="userName2" id="userName2"> {{ user.username }} </option>
-                            <option value="userName3" id="userName3"> {{ user.username }} </option>
-                            <option value="userName4" id="userName4"> {{ user.username }} </option>
-                            <option value="userName5" id="userName5"> {{ user.username }} </option>
+                        <select id="userName1" name="userName1">
+                            <option value="userName1" id="userName1">{{ username }}</option>
                         </select>
                     </td>
                     <td><input type="number" id="userName1Score" name="userName1Score" form="scoreSubmitForm" min="0" max="20"/></td>
@@ -94,8 +139,7 @@
                     <th>Team Name</th>
                     <td>
                         <select id="teamName1" name="teamName1">
-                            <option value="teamName0" id="teamName0"> {{ user.username }} </option>
-                            <option value="teamName1" id="teamName1"> {{ user.username }} </option>
+                            <option value="teamName1" id="teamName1"> {{ opponent_team_name }} </option>
                         </select>
                     </td>
                     <th>Team Score</th>
@@ -112,13 +156,8 @@
                 </tr>
                 <tr>
                     <td>
-                        <select id="userName0" name="userName0">
-                            <option value="userName0" id="userName0"> {{ user.username }} </option>
-                            <option value="userName1" id="userName1"> {{ user.username }} </option>
-                            <option value="userName2" id="userName2"> {{ user.username }} </option>
-                            <option value="userName3" id="userName3"> {{ user.username }} </option>
-                            <option value="userName4" id="userName4"> {{ user.username }} </option>
-                            <option value="userName5" id="userName5"> {{ user.username }} </option>
+                        <select id="userName2" name="userName2">
+                            <option value="userName2" id="userName2">{{ username }}</option>
                         </select>
                     </td>
                     <td><input type="number" id="userName0Score" name="userName0Score" form="scoreSubmitForm" min="0" max="20"/></td>
@@ -129,13 +168,8 @@
                 </tr>
                 <tr>
                     <td>
-                        <select id="userNam1" name="userNam1">
-                            <option value="userName0" id="userName0"> {{ user.username }} </option>
-                            <option value="userName1" id="userName1"> {{ user.username }} </option>
-                            <option value="userName2" id="userName2"> {{ user.username }} </option>
-                            <option value="userName3" id="userName3"> {{ user.username }} </option>
-                            <option value="userName4" id="userName4"> {{ user.username }} </option>
-                            <option value="userName5" id="userName5"> {{ user.username }} </option>
+                        <select id="userName3" name="userName3">
+                            <option value="userName3" id="userName3">{{ username }}</option>
                         </select>
                     </td>
                     <td><input type="number" id="userName1Score" name="userName1Score" form="scoreSubmitForm" min="0" max="20"/></td>
@@ -167,5 +201,6 @@
     <div class="lg:col-span-8">
         <button type="submit" class="w-26 h-10 button">Submit</button>
     </div>
+    </form>   -->
 </div>
 {% endblock %}

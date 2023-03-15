@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block title %} {{ user.username }}'s Teams {% endblock %} {% block content %}
     <div class="grid gap-8 lg:grid-cols-10 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4x">                
-        <button type="submit" class="lg:col-span-10 w-26 h-8 button"><a href="/createTeam">Create Team</a></button>  
+        <a href="/createTeam" class="lg:col-span-10"><button type="submit" class="button w-26 h-8">Create Team</button></a>
         {% for team, user in teams.items() %}    
             <div class="lg:col-span-10 lg:items-center bg-red-400">
                 <h1 class="lg:col-span-10"><a href="/team?team={{ team }}">{{ team }}</a></h1>

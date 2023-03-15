@@ -1,7 +1,9 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User, Team, TeamPlayers
+from .models import User, Team, TeamPlayers, Stats, Series
 from . import db
-from flask_login import login_user, login_required, logout_user, current_user
+from flask_login import current_user
+from sqlalchemy import func
+from collections import Counter
 
 logic = Blueprint('logic', __name__)
 
@@ -43,14 +45,49 @@ def createTeam():
             db.session.add_all([teamPlayers1, teamPlayers2])
             db.session.commit()
             flash('Team Created!', category='success')
-            return render_template('teams.html', user=current_user)
+            return redirect(url_for('views.teams', user=current_user))
         else: flash('The teammate information you entered is not valid, please double check the form.', category='error')
         return render_template('createTeam.html', user=current_user)
 
-#Queue and league generation logic
-#@logic.route('/joinQueue', methods=['GET', 'POST'])
-#def joinQueue():
-    #team = request.args.get('team')
-    #usernames = request.args.get('usernames')
-    #print("test!")
-    #return render_template('team.html', user=current_user, team=team, usernames=usernames)
+# Score submission
+@logic.route('/submitScore', methods=['GET', 'POST'])
+def submitScore():
+    if request.method == 'POST':
+        # Get Team.id's from form
+        winners = [int(request.form.get('gameOneWinner')), int(request.form.get('gameTwoWinner')), int(request.form.get('gameThreeWinner'))]
+
+        # Check to make sure that all three values are not the same
+        if len(set(winners)) == 1:
+            flash("One team cannot win all 3 games in a best of 3, please try again.", category="error")
+            return redirect(request.referrer)
+        
+        # Check if game 3 has a winner for no reason
+        if winners[0] == winners[1] and winners[2] != 0:
+            flash("Game 3 cannot have a winner if the series is over after two games.", category="error")
+            return redirect(request.referrer)
+
+        # Remove and 0 values from the winner list
+        winners = [i for i in winners if i !=0]
+
+        # Get the series winner
+        winnerCount = Counter(winners)
+        seriesWinner = winnerCount.most_common(1)[0][0]
+
+        # Get the latest Series.id
+        last_id = db.session.query(func.coalesce(func.max(Series.id), 0)).scalar()
+        
+        # Increment the Series.id by 1
+        new_id = last_id + 1
+
+        # Enter series id in table
+        series_entry = [Series(id=new_id, seriesWinner=seriesWinner)]
+        db.session.add_all(series_entry)
+
+        # Create new Stats entries for each winning team
+        for team_id in winners:
+            if team_id:
+                new_stats_entry = Stats(Series_id=new_id, winningTeam=team_id)
+                db.session.add(new_stats_entry)
+        db.session.commit()
+        flash("Results submitted!", category="success")
+        return redirect(url_for('views.teams'))
