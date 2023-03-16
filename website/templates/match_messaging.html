@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      crossorigin="anonymous"
+    />
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+    <title>{% block title %}Casual Gamer Circuits{% endblock %}</title> 
+  </head>
+<div class="py-6 text-3xl justify-items-center grid gap-8 lg:grid-cols-10 lg:text-xl xl:text-2xl 2xl:text-4x">            
+    <div class="bg-orange-400 flex gap-5 lg:col-span-4 lg:justify-end">
+        <h2>(W - L)</h2>
+        <h1>Team Name</h1><!-- TODO: Dynamically update team name here -->
+    </div>
+
+    <div class="flex lg:col-span-1 justify-items-center">
+        <h1>VS</h1>
+    </div>
+
+    <div class="bg-blue-400 flex gap-5 lg:col-span-5">
+        <h2>(W - L)</h2>
+        <h1>Team Name</h1><!-- TODO: Dynamically update team name here -->
+    </div>
+</div>
+
+<div class="py-6 text-3xl justify-items-center grid gap-8 lg:grid-cols-10 lg:text-xl xl:text-2xl 2xl:text-4x"><!-- TODO: Message portal so teams can schedule matches -->
+    <div class="grid justify-items-center gap-8 lg:col-span-9">
+        <h1>Messenger</h1>
+        <!-- JavaScript logic for messaging -->
+        <script type="text/javascript">
+            $(document).ready(() => {
+                var socket = io.connect("http://localhost:5000");  // FIXME: connect from computer
+                socket.on('connect', () => {
+                    socket.send("User connected!");  // FIXME: How to get username?
+                });
+        
+                socket.on('message', (data) => {
+                    $('#messages').append($('<p>').text(data)); 
+                });
+        
+                $('#sendBtn').on('click', () => {
+                    socket.send($('#username').val() + ': ' + $('#message').val());
+                    $('#message').val('');
+                });
+            })
+        </script>
+        <canvas id="messageDisplay" width="500" height="500"  class="bg-white" style="border:1px solid #000000;"> <!-- FIXME -->
+        </canvas>
+        <div id="messages"></div>
+        <input type="text" id="username" placeholder="Username">
+        <input type="text" id="message" placeholder="Input Message Here">
+        <button id="sendBtn">Send</button>
+    </div>
+</div>
+
+<div class="py-6 text-3xl justify-items-center grid gap-8 lg:grid-cols-10 lg:text-xl xl:text-2xl 2xl:text-4x"><!-- TODO: Create calendat that show 7 weeks from league creation date and put's confirmed matches on-->
+    <div class="grid justify-items-center gap-8 lg:col-span-9">
+        <h1>Calendar</h1>
+        <canvas id="calendar" width="500" height="300"  class="bg-white" style="border:1px solid #000000;"></canvas>
+        <a href="/submitScore"><span class="userNav lg:col-span-8">Submit Scores</span></a>
+    </div>
+</div>
+</html>

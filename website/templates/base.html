@@ -4,9 +4,15 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>{% block title %}Amateur Gamer Series{% endblock %}</title> 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dist/output.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/animations/animations.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}"/>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
   </head>
     <body class="text-eleventh-blue font-LemonMilk bg-eleventh-grey">
       <div class="p-5 grid md:grid-cols-10"><!--Content wrapper-->

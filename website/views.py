@@ -7,6 +7,7 @@ from collections import Counter
 
 views = Blueprint('views', __name__)
 
+# Home page for root
 @views.route('/')
 #@login_required
 def home():

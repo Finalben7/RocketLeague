@@ -30,6 +30,7 @@ def create_app():
     from .auth import auth
     from .logic import logic
     
+    # Register blueprints for Flask
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(logic, url_prefix='/')
