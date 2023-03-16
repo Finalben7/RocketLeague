@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from .models import User, Team, TeamPlayers, League, Series
 from . import db
 from sqlalchemy import text, func
+from collections import Counter
 
 views = Blueprint('views', __name__)
 
@@ -97,7 +98,8 @@ def team():
     filteredWinners = [s for s in series_winners if s.seriesWinner in team_ids]
 
     winner_names = [w[1] for w in filteredWinners]
-    print(winner_names)
+    
+    winner=''
 
     if len(filteredWinners) == 1:
         if winner_names[0] in (match1['team0'], match1['team1']):
@@ -112,6 +114,18 @@ def team():
         else:
             match3['team0'] = winner_names[1]
             match3['team1'] = winner_names[0]
+
+    if len(filteredWinners) == 3:
+        name_counts = Counter(winner_names)
+        winner = next((name for name, count in name_counts.items() if count > 1), None)
+        if winner_names[0] in (match1['team0'], match1['team1']):
+            match3['team0'] = winner_names[0]
+            match3['team1'] = winner_names[1]
+        else:
+            match3['team0'] = winner_names[1]
+            match3['team1'] = winner_names[0]
+
+
     # Store matches is bracket dictionary
     bracket = {"match1" : match1, "match2" : match2, "match3" : match3}
     # Search bracket for current team_name passed through args to find their opponent team name
@@ -123,7 +137,7 @@ def team():
             # get the other team name from the match dictionary using the key
             opponent_team = match[other_team_key]
             # return the other team name
-    return render_template('team.html', user=current_user, current_team=team, opponent_team=opponent_team, bracket=bracket, usernames=usernames)
+    return render_template('team.html', user=current_user, current_team=team, opponent_team=opponent_team, bracket=bracket, usernames=usernames, winner=winner)
 
 @views.route('/match')
 def match():
@@ -135,15 +149,15 @@ def submitScore():
     current_team_name = request.args.get('current_team')
     opponent_team_name = request.args.get('opponent_team')
 
-    # Get Team from db with matching teamNames
+    # # Get Team from db with matching teamNames
     current_team = Team.query.filter_by(teamName=current_team_name).first()
     opponent_team = Team.query.filter_by(teamName=opponent_team_name).first()
 
-    # Get Users associated with Team.Id's from TeamPlayes
+    # # Get Users associated with Team.Id's from TeamPlayes
     current_team_users = User.query.join(TeamPlayers).filter_by(teamId=current_team.id).all()
     opponent_team_users = User.query.join(TeamPlayers).filter_by(teamId=opponent_team.id).all()
 
-    # Store Team.id with User.usernames inside
+    # # Store Team.id with User.usernames inside
     current_team_dict = {'teamId': current_team.id, 'usernames': [user.username for user in current_team_users]}
     opponent_team_dict = {'teamId': opponent_team.id, 'usernames': [user.username for user in opponent_team_users]}
 
@@ -174,7 +188,7 @@ def createTeam():
 @views.route('/joinQueue')
 def joinQueue():
     # Find team that current_user is captain of with matching teamName passed through args
-    team = Team.query.filter(Team.teamCaptain == current_user.id, Team.teamName == request.args.get('team')).first()
+    team = Team.query.filter(Team.teamCaptain == current_user.id, Team.teamName == request.args.get('current_team')).first()
     
     # Store teamName in variable
     teamName = request.args.get('team')
