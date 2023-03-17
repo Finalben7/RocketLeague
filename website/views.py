@@ -22,7 +22,7 @@ def teams():
     #Create a variable to store current_users id for use in query
     current_user_id = current_user.id
     #Find all usernames from each teamId associated with the current_user.id's teamId's (that's a mouthful)
-    query = f'''
+    query = text(f'''
         SELECT u.username, t.teamName
         FROM User u
         INNER JOIN TeamPlayers tp ON u.id = tp.userId
@@ -32,17 +32,17 @@ def teams():
             FROM TeamPlayers tp2
             WHERE tp2.userId = {current_user_id}
         );
-    '''
+    ''')
     with db.engine.connect() as con:
         result = con.execute(query)
         teams = result.fetchall()
         #Store the results of the query in a dictionary to make data easier to access with Jinja
         team_users = {}
         for team in teams:
-            team_name = team['teamName']
+            team_name = team[1]
             if team_name not in team_users:
                 team_users[team_name] = []
-            team_users[team_name].append(team['username'])
+            team_users[team_name].append(team[0])
     return render_template('teams.html', user=current_user, teams=team_users)
 
 @views.route('/team')
@@ -57,11 +57,11 @@ def team():
 
     # Check if team isActive, if not render joinQueue button and numberInQueue
     if team.isActive == False:
-        query = f'''
+        query = text(f'''
             SELECT t.id, t.rank, t.region, t.isQueued
             FROM Team t
             WHERE t.isQueued = 1
-        '''
+        ''')
         with db.engine.connect() as conn:
             teamsList = conn.execute(query).fetchall()
         # Filter out teams that don't match current teams rank and region
@@ -72,11 +72,11 @@ def team():
         return render_template('team.html', user=current_user, current_team=team, usernames=usernames, numberInQueue=numberInQueue)
     # If team isActive get team names for bracket
     else: #FIXME: Add logic to make this specific to teams within certain leagues
-        query = f'''
+        query = text(f'''
          SELECT t.id, t.teamName
          FROM Team t
          WHERE t.isActive = 1
-    '''
+    ''')
     with db.engine.connect() as conn:
         team_data = conn.execute(query).fetchall()
     # Store teamNames is a list to remove quotations and parenthesis
@@ -87,11 +87,11 @@ def team():
     match2 = {"team0" : team_names[2], "team1" : team_names[3]}
     match3 = {"team0" : "TBD", "team1" : "TBD"}
     # Check to see if any team is a seriesWinner, if yes add them to match 3
-    winners = f'''
+    winners = text(f'''
             SELECT s.seriesWinner, t.teamName
             FROM Series s
             JOIN Team t ON s.seriesWinner = t.id
-        '''
+        ''')
     with db.engine.connect() as conn:
         series_winners = conn.execute(winners).fetchall()
     

@@ -25,8 +25,8 @@ class Team(db.Model):
     rank = db.Column(db.String(150))
     region = db.Column(db.String(150))
     teamCaptain = db.Column(db.Integer, ForeignKey("User.id"))
-    isQueued = db.Column(db.Boolean)
-    isActive = db.Column(db.Boolean)
+    isQueued = db.Column(db.Boolean, default=0)
+    isActive = db.Column(db.Boolean, default=0)
 
 class League(db.Model):
     __tablename__ = 'League'
