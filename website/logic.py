@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import User, Team, TeamPlayers, Stats, Series
 from . import db
 from flask_login import current_user
-from sqlalchemy import text, func
+from sqlalchemy import text, update, and_, or_, func
 from collections import Counter
 
 logic = Blueprint('logic', __name__)
@@ -69,39 +69,49 @@ def submitScore():
         # Remove and 0 values from the winner list
         winners = [i for i in winners if i !=0]
 
-        # Get the series winner
-        winnerCount = Counter(winners)
-        seriesWinner = winnerCount.most_common(1)[0][0]
+        # # Get the series winner
+        # winnerCount = Counter(winners)
+        # seriesWinner = winnerCount.most_common(1)[0][0]
 
         # Get League.id and Team.id's from args
         current_league_id = request.form['current_league_id']
         current_team_id = request.form['current_team_id']
         opponent_team_id = request.form['opponent_team_id']
 
-        # Get the Stats.Series_id with the identical League.id, Stats.team0_id and Stats.team1_id
-        query = text(f'''
-            SELECT * FROM Stats 
-            WHERE League_id = {current_league_id} AND 
-            (Team0_id = {current_team_id} OR Team1_id = {current_team_id}) AND 
-            (Team0_id = {opponent_team_id} OR Team1_id = {opponent_team_id})
-        ''')
-        with db.engine.connect() as con:
-            result = con.execute(query)
-            series = result.fetchall()
+        if len(winners) == 3:
 
-            # Update the Stats rows with the winning team IDs
-            for row in series:
-                series_id = row['Series_id']
-                team0_id = row['Team0_id']
-                team1_id = row['Team1_id']
-                winning_team_id = winners[series.index(row)]
+            # Generate the WHERE clause for three entries
+            where_clause = and_(
+            Stats.League_id == current_league_id,
+                or_(Stats.Team0_id == current_team_id, Stats.Team1_id == current_team_id),
+                or_(Stats.Team0_id == opponent_team_id, Stats.Team1_id == opponent_team_id)
+            )
 
-                update_query = text(f'''
-                    UPDATE Stats SET winningTeam = {winning_team_id}
-                    WHERE Series_id = {series_id} AND 
-                    (Team0_id = {team0_id} AND Team1_id = {team1_id})
-                ''')
-                con.execute(update_query)
+            # Get all 3 rows to update
+            stats_to_update = db.session.query(Stats).filter(where_clause)
+
+            # Update winningTeam for each row
+            for stat in stats_to_update:
+                stat.winningTeam = winners.pop(0)
+
+            db.session.commit()
+            flash("Results submitted!", category="success")
+            return redirect(url_for('views.teams'))
+        else:
+
+            # Genereate where clause for 2 entries
+            where_clause = and_(
+                Stats.League_id == current_league_id,
+                or_(Stats.Team0_id == current_team_id, Stats.Team1_id == current_team_id),
+                or_(Stats.Team0_id == opponent_team_id),
+                or_(Stats.Team1_id == opponent_team_id)
+            )
+
+            # Get 2 rows to update
+            update_stmt = update(Stats).where(where_clause).values(winningTeam=winners[:2])
+
+            db.session.execute(update_stmt)
+            db.session.commit()
 
             flash("Results submitted!", category="success")
             return redirect(url_for('views.teams'))

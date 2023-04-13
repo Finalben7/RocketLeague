@@ -23,16 +23,17 @@
                     </div>
             </div>
             {% endfor %}
-            <div class="team-stat-card">
-                <h1>{{ current_team.teamName }}</h1>
-                <div class="flex justify-between gap-5 pt-4">
-                    <h3>Goals</h3>
-                    <h3>Saves</h3>
-                    <h3>Assists</h3>
-                </div>
-            </div>
 
         {% if current_league.isActive and current_league.isPlayoffs == 0 %}
+        <div class="team-stat-card">
+            <h1>{{ current_team.teamName }}</h1>
+            <div class="flex justify-between gap-5 pt-4">
+                <h3>Goals</h3>
+                <h3>Saves</h3>
+                <h3>Assists</h3>
+            </div>
+        </div>
+
         <h1 class="lg:col-span-10 lg:items-center">Matches</h1>
         {% for match_num, match_details in matchups.items() %}
             <div class="teams-card">
@@ -46,6 +47,15 @@
         {% endif %}
 
         {% if current_league.isPlayoffs %}
+        <div class="team-stat-card">
+            <h1>{{ current_team.teamName }}</h1>
+            <div class="flex justify-between gap-5 pt-4">
+                <h3>Goals</h3>
+                <h3>Saves</h3>
+                <h3>Assists</h3>
+            </div>
+        </div>
+        
         <h1 class="lg:col-span-10 lg:items-center">It's playoff time!</h1>
         <button type="submit" class="lg:col-span-10 w-26 h-8 button"><a href="/bracket?league_id={{ current_league.id }}">View Bracket</a></button>
         <h1 class="lg:col-span-10 lg:items-center">Your matches from this season.</h1> <!-- TODO Put these matches inside a dropdown that opens when you click here -->

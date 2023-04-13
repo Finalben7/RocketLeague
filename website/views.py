@@ -84,7 +84,7 @@ def team():
                 JOIN Team t1 ON s.Team0_id = t1.id 
                 JOIN Team t2 ON s.Team1_id = t2.id 
                 WHERE s.League_id = {league.id} AND (s.Team0_id = {team.id} OR s.Team1_id = {team.id});
-        ''')
+        ''').columns(Stats.Team0_id, Stats.Team1_id)
         with db.engine.connect() as conn:
             teamsList = conn.execute(query).fetchall()
 
@@ -184,7 +184,25 @@ def match():
     team0 = Team.query.filter(Team.id == team0_id).first()
     team1 = Team.query.filter(Team.id == team1_id).first()
 
-    return render_template('match.html', user=current_user, team0=team0, team1=team1, current_league_id=current_league_id)
+    # Check to see if scores have already been submitted
+    query = text(f'''
+        SELECT * FROM Stats 
+			WHERE League_id = {current_league_id} AND 
+			(Team0_id = {team0_id} OR Team1_id = {team0_id}) AND 
+			(Team0_id = {team1_id} OR Team1_id = {team1_id})
+    ''')
+
+    with db.engine.connect() as conn:
+        series = conn.execute(query).fetchall()
+    
+    # Check to see if scores have already been submitted
+    hasWinner = False
+    for row in series:
+        if row.winningTeam is not None:
+            hasWinner = True
+            break
+
+    return render_template('match.html', user=current_user, team0=team0, team1=team1, current_league_id=current_league_id, hasWinner=hasWinner)
 
 @views.route('/bracket')
 def bracket():
@@ -295,8 +313,8 @@ def joinQueue():
                     stat = Stats()
                     stat.League_id = new_league_id
                     stat.Series_id = series.id
-                    stat.Team0_id = queued_teams[m]
-                    stat.Team1_id = queued_teams[n]
+                    stat.Team0_id = queued_teams[m].id
+                    stat.Team1_id = queued_teams[n].id
                     db.session.add(stat)
                 n+=1
                 if i == 3:
@@ -306,13 +324,12 @@ def joinQueue():
                     m+= 1
                     n = 3
 
-
             # Commit changes to the database
             db.session.add_all(league_entries)
             db.session.commit()
 
             # Get the IDs of the newly created Series
-            series_ids = list(range(last_series_id + 1, last_series_id + 7))
+            # series_ids = list(range(last_series_id + 1, last_series_id + 7))
                     
             flash("Queue is now full and bracket has been generated!", category="success")
 
