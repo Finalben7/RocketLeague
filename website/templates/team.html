@@ -1,55 +1,63 @@
 {% extends "base.html" %} {% block title %} {{ user.username }}'s Teams {% endblock %} {% block content %}
-    <div class="grid gap-8 lg:grid-cols-10 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4x">                
-        {% if current_team.isActive == false %}
-        <button type="submit" class="lg:col-span-10 w-26 h-8 button"><a href="/joinQueue?current_team={{ current_team.teamName }}&usernames={{ usernames }}">Join Queue</a></button>
-        <h1 class="lg:col-span-10 lg:items-center">Queue: {{ numberInQueue }} /4</h1>
+    <div class="grid gap-8 lg:grid-cols-10 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4x">
+        <img src="../static/banner.jpg" class="pb-5 w-full lg:col-span-10"/>
+
+        {% if current_league is none and current_team.isQueued == false %}
+        <a href="/joinQueue?current_team={{ current_team.id }}" class="lg:col-span-10"><button type="submit" class="w-26 h-8 button">Join Queue</button></a>
+        <h1 class="lg:col-span-10 lg:items-center">Queue: {{ numberInQueue }}/4</h1>
         {% endif %}
-            <div class="lg:col-span-10 lg:items-center bg-red-400">
-                <h1 class="lg:col-span-10">{{ current_team.teamName }}</h1> 
-                    {% for user in usernames %}
-                        <h2>{{ user }}</h2>
-                    {% endfor %}
+
+        {% if current_league is none and current_team.isQueued %}
+        <h1 class="lg:col-span-10 lg:items-center">Your team is in the queue, you will be notified when your bracket is generated.</h1>
+        <h1 class="lg:col-span-10 lg:items-center">Queue: {{ numberInQueue }} /4</h1>
+        <!-- TODO: Add function to leave queue to this button! <a href="/leaveQueue?current_team={{ current_team.id }}" class="lg:col-span-10"><button type="submit" class="w-26 h-8 button">Leave Queue</button> -->
+        {% endif %}
+            {% for user in usernames %}
+            <div class="player-card">
+                    <div class="flex justify-between gap-5 items-center">
+                            <h2 class="w-44">{{ user }}</h2>
+                            <img src="../static/placeholder.png" alt="" class="rounded-lg border-4 border-eleventh-blue h-20 w-20">
+                            <h3>Goals</h3>
+                            <h3>Saves</h3>
+                            <h3>Assists</h3>
+                    </div>
             </div>
-        {% if current_team.isActive %}
-        <div class="bracket lg:col-span-10 lg:items-center">
-            <section class="round semifinals">
-                <div class="winners">
-                <div class="matchups">
-                    <div class="matchup">
-                    <div class="participants">
-                        <div class="participant orange"><span>{{ bracket["match1"]["team0"] }}</span></div>
-                        <div class="participant blue"><span>{{ bracket["match1"]["team1"] }}</span></div>
-                    </div>
-                    </div>
-                    <div class="matchup">
-                    <div class="participants">
-                        <div class="participant orange"><span>{{ bracket["match2"]["team0"] }}</span></div>
-                        <div class="participant blue"><span>{{ bracket["match2"]["team1"] }}</span></div>
-                    </div>
-                    </div>
+            {% endfor %}
+            <div class="team-stat-card">
+                <h1>{{ current_team.teamName }}</h1>
+                <div class="flex justify-between gap-5 pt-4">
+                    <h3>Goals</h3>
+                    <h3>Saves</h3>
+                    <h3>Assists</h3>
                 </div>
-                <div class="connector">
-                    <div class="merger"></div>
-                    <div class="line"></div>
+            </div>
+
+        {% if current_league.isActive and current_league.isPlayoffs == 0 %}
+        <h1 class="lg:col-span-10 lg:items-center">Matches</h1>
+        {% for match_num, match_details in matchups.items() %}
+            <div class="teams-card">
+                <a href ="/match?current_league={{ current_league.id }}&team0_id={{ match_details['Team0_id'] }}&team1_id={{ match_details['Team1_id'] }}" class="lg:col-span-10"><h1 class="pb-5">{{ match_num }}</h1></a>
+                <div class="flex justify-between gap-5">
+                    <h2>{{ match_details['Team0_name'] }}</h2>
+                    <h2>{{ match_details['Team1_name'] }}</h2>
                 </div>
+            </div>
+        {% endfor %}
+        {% endif %}
+
+        {% if current_league.isPlayoffs %}
+        <h1 class="lg:col-span-10 lg:items-center">It's playoff time!</h1>
+        <button type="submit" class="lg:col-span-10 w-26 h-8 button"><a href="/bracket?league_id={{ current_league.id }}">View Bracket</a></button>
+        <h1 class="lg:col-span-10 lg:items-center">Your matches from this season.</h1> <!-- TODO Put these matches inside a dropdown that opens when you click here -->
+        {% for match_num, match_details in matchups.items() %}
+            <div class="teams-card">
+                <a href ="/match?current_league={{ current_league.id }}&team0_id={{ match_details['Team0_id'] }}&team1_id={{ match_details['Team1_id'] }}" class="lg:col-span-10"><h1 class="pb-5">{{ match_num }}</h1></a>
+                <div class="flex justify-between gap-5">
+                    <h2>{{ match_details['Team0_name'] }}</h2>
+                    <h2>{{ match_details['Team1_name'] }}</h2>
                 </div>
-            </section>
-            <section class="round finals">
-                <div class="winners">
-                <div class="matchups">
-                    <div class="matchup">
-                    <div class="participants">
-                        <div class="participant orange"><span>{{ bracket["match3"]["team0"] }}</span></div>
-                        <div class="participant blue"><span>{{ bracket["match3"]["team1"] }}</span></div>
-                    </div>
-                    </div>
-                </div>
-                </div>
-            </section>
-        </div>
-        <h1 class="absolute right-1/3 bottom-1/3">WINNER:{{ winner }}</h1>
-        </div>
-        <button type="submit" class="lg:col-span-10 w-26 h-8 button p-4"><a href="/submitScore?current_team={{ current_team.teamName }}&opponent_team={{ opponent_team }}">Submit Scores</a></button>
+            </div>
+        {% endfor %}
         {% endif %}
     </div>
 {% endblock %}

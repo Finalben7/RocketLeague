@@ -1,80 +1,94 @@
 {% extends "base.html" %} {% block title %}Bracket{% endblock %} {% block content %}
 <div class="bracket">
-    <!-- <section class="round quarterfinals">
-      <div class="winners">
-        <div class="matchups">
-          <div class="matchup">
-            <div class="participants">
-              <div class="participant orange"><span>{{ team[0] }}</span></div>
-              <div class="participant blue"><span>{{ team[1] }}</span></div>
-            </div>
-          </div>
-          <div class="matchup">
-            <div class="participants">
-              <div class="participant orange"><span>{{ team[2] }}</span></div>
-              <div class="participant blue"><span>{{ team[3] }}</span></div>
-            </div>
+  <section class="round quarterfinals">
+    <div class="winners">
+      <div class="matchups">
+        <div class="matchup">
+          <div class="participants">
+            <div class="participant orange"><span>Team 1</span></div>
+            <div class="participant blue"><span>Team 2</span></div>
           </div>
         </div>
-        <div class="connector">
-          <div class="merger"></div>
-          <div class="line"></div>
-        </div>
-      </div>
-      <div class="winners">
-        <div class="matchups">
-          <div class="matchup">
-            <div class="participants">
-              <div class="participant orange"><span>{{ team[4] }}</span></div>
-              <div class="participant blue"><span>{{ team[5] }}</span></div>
-            </div>
-          </div>
-          <div class="matchup">
-            <div class="participants">
-              <div class="participant orange"><span>{{ team[6] }}</span></div>
-              <div class="participant blue"><span>{{ team[7] }}</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="connector">
-          <div class="merger"></div>
-          <div class="line"></div>
-        </div>
-      </div>
-    </section> -->
-    <section class="round semifinals">
-      <div class="winners">
-        <div class="matchups">
-          <div class="matchup">
-            <div class="participants">
-              <div class="participant orange"><span>{{ team[0] }}</span></div>
-              <div class="participant blue"><span>{{ team[1] }}</span></div>
-            </div>
-          </div>
-          <div class="matchup">
-            <div class="participants">
-              <div class="participant orange"><span>{{ team[2] }}</span></div>
-              <div class="participant blue"><span>{{ team[3] }}</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="connector">
-          <div class="merger"></div>
-          <div class="line"></div>
-        </div>
-      </div>
-    </section>
-    <section class="round finals">
-      <div class="winners">
-        <div class="matchups">
-          <div class="matchup">
-            <div class="participants">
-              <div class="participant orange"><span>TBD</span></div>
-              <div class="participant blue"><span>TBD</span></div>
-            </div>
+        <div class="matchup">
+          <div class="participants">
+            <div class="participant orange"><span>Team 3</span></div>
+            <div class="participant blue"><span>Team 4</span></div>
           </div>
         </div>
       </div>
-    </section>
-  </div>
+      <div class="connector">
+        <div class="merger"></div>
+        <div class="line"></div>
+      </div>
+    </div>
+    <div class="winners">
+      <div class="matchups">
+        <div class="matchup">
+          <div class="participants">
+            <div class="participant orange"><span>Team 5</span></div>
+            <div class="participant blue"><span>Team 6</span></div>
+          </div>
+        </div>
+        <div class="matchup">
+          <div class="participants">
+            <div class="participant orange"><span>Team 7</span></div>
+            <div class="participant blue"><span>Team 8</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="connector">
+        <div class="merger"></div>
+        <div class="line"></div>
+      </div>
+    </div>
+  </section>
+  <section class="round semifinals">
+    <div class="winners">
+      <div class="matchups">
+        <div class="matchup">
+          <div class="participants">
+            <div class="participant orange"><span>TBD</span></div>
+            <div class="participant blue"><span>TBD</span></div>
+          </div>
+        </div>
+        <div class="matchup">
+          <div class="participants">
+            <div class="participant orange"><span>TBD</span></div>
+            <div class="participant blue"><span>TBD</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="connector">
+        <div class="merger"></div>
+        <div class="line"></div>
+      </div>
+    </div>
+  </section>
+  <section class="round finals">
+    <div class="winners">
+      <div class="matchups">
+        <div class="matchup">
+          <div class="participants">
+            <div class="participant orange"><span>TBD</span></div>
+            <div class="participant blue"><span>TBD</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="round finals">
+      <div class="winners">
+          <div class="connector">
+              <div class="merger"></div>
+              <div class="line"></div>
+          </div>
+          <div class="matchups">
+            <div class="matchup">
+              <div class="participants">
+                <div class="participant orange"><span>TBD</span></div>
+              </div>
+            </div>
+          </div>
+  </section>
+</div>
   {% endblock %}

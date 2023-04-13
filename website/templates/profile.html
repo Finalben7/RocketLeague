@@ -27,13 +27,16 @@
             <h3 class="p-5">{{ user.rank }}</h3>
         </div>
         <div class="flex">
-            <h2 class="p-5">Profile Picture:</h2>
-            <h3 class="p-5">{{ user.username }}</h3>
-        </div>
-        <div class="flex">
             <h2 class="p-5">ID:</h2>
             <h3 class="p-5">{{ user.id }}</h3>
         </div>
+    </div>
+
+    <div class="lg:col-span-8">
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="profile_image">
+            <button type="submit" class="w-26 h-10 button">Upload</button>
+        </form>
     </div>
 </div>
 {% endblock %}

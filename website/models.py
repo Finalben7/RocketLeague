@@ -3,7 +3,7 @@ from flask_login import UserMixin
 from sqlalchemy.sql import func
 import datetime
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, UniqueConstraint, Index, Sequence
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, UniqueConstraint, Index, Sequence, BLOB
 
 Base = declarative_base()
 
@@ -16,6 +16,8 @@ class User(db.Model,  UserMixin):
     platform = db.Column(db.String(150))
     region = db.Column(db.String(150))
     rank = db.Column(db.Numeric(2, 0), default=15)
+    profile_image = db.Column(db.LargeBinary)
+    banner_image = db.Column(db.LargeBinary)
     Index("userIdIndex", "id", "email", "username" )
 
 class Team(db.Model):
@@ -26,12 +28,13 @@ class Team(db.Model):
     region = db.Column(db.String(150))
     teamCaptain = db.Column(db.Integer, ForeignKey("User.id"))
     isQueued = db.Column(db.Boolean, default=0)
-    isActive = db.Column(db.Boolean, default=0)
 
 class League(db.Model):
     __tablename__ = 'League'
     id = db.Column(db.Integer, primary_key=True)
     team_id = db.Column(db.Integer, ForeignKey("Team.id"))
+    isActive = db.Column(db.Boolean, default=1)
+    isPlayoffs = db.Column(db.Boolean, default=0)
 
 class Series(db.Model):
     __tablename__ = 'Series'
@@ -41,10 +44,12 @@ class Series(db.Model):
 class Stats(db.Model):
     __tablename__ = 'Stats'
     id = db.Column(db.Integer, primary_key=True)
+    League_id = db.Column(db.Integer, ForeignKey("League.id"))
     Series_id = db.Column(db.Integer, ForeignKey("Series.id"))
+    Team0_id = db.Column(db.Integer, ForeignKey("Team.id"))
+    Team1_id = db.Column(db.Integer, ForeignKey("Team.id"))
     winningTeam = db.Column(db.Integer, ForeignKey("Team.id"))
-    #Team_id = db.Column(db.Integer, ForeignKey("Team.id"))
-    #userId = db.Column(db.Integer, ForeignKey("User.id"))
+    # userId = db.Column(db.Integer, ForeignKey("User.id"))
     # score = db.Column(db.Numeric(4, 0))
     # goals = db.Column(db.Numeric(2, 0))
     # assists = db.Column(db.Numeric(2, 0))

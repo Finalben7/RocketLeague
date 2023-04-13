@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import User, Team, TeamPlayers, Stats, Series
 from . import db
 from flask_login import current_user
-from sqlalchemy import func
+from sqlalchemy import text, func
 from collections import Counter
 
 logic = Blueprint('logic', __name__)
@@ -73,21 +73,45 @@ def submitScore():
         winnerCount = Counter(winners)
         seriesWinner = winnerCount.most_common(1)[0][0]
 
-        # Get the latest Series.id
-        last_id = db.session.query(func.coalesce(func.max(Series.id), 0)).scalar()
-        
-        # Increment the Series.id by 1
-        new_id = last_id + 1
+        # Get League.id and Team.id's from args
+        current_league_id = request.form['current_league_id']
+        current_team_id = request.form['current_team_id']
+        opponent_team_id = request.form['opponent_team_id']
 
-        # Enter series id in table
-        series_entry = [Series(id=new_id, seriesWinner=seriesWinner)]
-        db.session.add_all(series_entry)
+        # Get the Stats.Series_id with the identical League.id, Stats.team0_id and Stats.team1_id
+        query = text(f'''
+            SELECT * FROM Stats 
+            WHERE League_id = {current_league_id} AND 
+            (Team0_id = {current_team_id} OR Team1_id = {current_team_id}) AND 
+            (Team0_id = {opponent_team_id} OR Team1_id = {opponent_team_id})
+        ''')
+        with db.engine.connect() as con:
+            result = con.execute(query)
+            series = result.fetchall()
 
-        # Create new Stats entries for each winning team
-        for team_id in winners:
-            if team_id:
-                new_stats_entry = Stats(Series_id=new_id, winningTeam=team_id)
-                db.session.add(new_stats_entry)
+            # Update the Stats rows with the winning team IDs
+            for row in series:
+                series_id = row['Series_id']
+                team0_id = row['Team0_id']
+                team1_id = row['Team1_id']
+                winning_team_id = winners[series.index(row)]
+
+                update_query = text(f'''
+                    UPDATE Stats SET winningTeam = {winning_team_id}
+                    WHERE Series_id = {series_id} AND 
+                    (Team0_id = {team0_id} AND Team1_id = {team1_id})
+                ''')
+                con.execute(update_query)
+
+            flash("Results submitted!", category="success")
+            return redirect(url_for('views.teams'))
+
+# Image upload
+@logic.route('/profile', methods=['GET', 'POST'])
+def profile():
+    if request.method == 'POST':
+        profile_image = request.files['profile_image'].read()
+        current_user.profile_image = profile_image
         db.session.commit()
-        flash("Results submitted!", category="success")
-        return redirect(url_for('views.teams'))
+    
+        return redirect(url_for('views.profile'))

@@ -1,7 +1,8 @@
 {
   "name": "rocketleague",
   "scripts": {
-    "watch-css": "npx tailwindcss -i ./static/css/src/input.css -o ./static/css/dist/output.css --watch"
+    "watch-css": "npx tailwindcss -i ./static/css/src/input.css -o ./static/css/dist/output.css --watch",
+    "build-css": "tailwindcss build ./static/css/src/input.css ./static/css/dist/output.css"
   },
   "devDependencies": {
     "tailwindcss": "^3.2.4"

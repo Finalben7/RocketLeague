@@ -11,6 +11,10 @@
     
     <div class="lg:col-span-8">
         <form method="POST" id="scoreSubmitForm">
+            <!-- Pass League.id from args -->
+            <input type="hidden" name="current_league_id" value="{{ current_league_id }}">
+            <input type="hidden" name="current_team_id" value="{{ current_team_dict['teamId'] }}">
+            <input type="hidden" name="opponent_team_id" value="{{ opponent_team_dict['teamId'] }}">
             <table class="teamStatSubmitTable">
                 <tr>
                     <th></th>
@@ -58,7 +62,8 @@
 
 
 
-
+        <!--<option value="{{ current_team_dict['teamId'] }}" id="teamName0" form="scoreSubmitForm"> {{ current_team_name }} </option>
+            <option value="{{ opponent_team_dict['teamId'] }}" id="teamName1" form="scoreSubmitForm"> {{ opponent_team_name }} </option>-->
 
 
 

@@ -1,11 +1,16 @@
 {% extends "base.html" %} {% block title %} {{ user.username }}'s Teams {% endblock %} {% block content %}
-    <div class="grid gap-8 lg:grid-cols-10 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4x">                
-        <a href="/createTeam" class="lg:col-span-10"><button type="submit" class="button w-26 h-8">Create Team</button></a>
-        {% for team, user in teams.items() %}    
-            <div class="lg:col-span-10 lg:items-center bg-red-400">
-                <h1 class="lg:col-span-10"><a href="/team?team={{ team }}">{{ team }}</a></h1>
-                <h2>{{ user|join('  ') }}</h2>
+    <div class="grid gap-8 lg:grid-cols-10 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4x">
+        <h1 class="uppercase lg:col-span-10 lg:items-center p-5">{{ user.username }}'s Teams</h1>             
+        {% for team_id, team in teams.items() %}    
+            <div class="teams-card">
+                <a href="/team?team_id={{ team_id }}"><h1 class="pb-5 hover:text-eleventh-grey lg:col-span-10">{{ team[0] }}</h1></a>
+                <div class="flex justify-between gap-5">
+                    {% for user in team[1] %}
+                        <h2>{{ user }}</h2>
+                    {% endfor %}
+                </div>
             </div>
         {% endfor %}
+        <a href="/createTeam" class="lg:col-span-10"><button type="submit" class="button w-26 h-8">Create A New Team</button></a>
     </div>
 {% endblock %}

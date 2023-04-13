@@ -18,7 +18,7 @@ def create_app():
     MYSQL_NAME = glblvars.DB_NAME
 
     app.config['SECRET_KEY'] = SECRET_KEY
-    uri = "mysql+mysqldb://"+ MYSQL_USER + ":" + MYSQL_PASSWORD + "@" + MYSQL_HOST + ":" + MYSQL_PORT + "/" + MYSQL_NAME
+    uri = "mysql+mysqldb://"+ MYSQL_USER + ":" + MYSQL_PASSWORD + "@" + MYSQL_HOST + ":" + MYSQL_PORT + "/" + MYSQL_NAME \
     
     # MySQL-Python
     # mysql+mysqldb://<user>:<password>@<host>[:<port>]/<dbname>

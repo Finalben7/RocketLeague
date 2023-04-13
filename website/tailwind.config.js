@@ -397,7 +397,7 @@ module.exports = {
         '"Courier New"',
         'monospace',
       ],
-      LemonMilk: ["LemonMilk", 'ui-monospace', 'SFMono-Regular', 'Menlo','"Courier New"']
+      Golos: ["Golos", 'ui-monospace', 'SFMono-Regular', 'Menlo','"Courier New"']
     },
     fontSize: {
       xxs: ['0.5rem', { lineHeight: '1rem' }],
