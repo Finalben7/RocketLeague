@@ -250,8 +250,8 @@ def joinQueue():
     if current_user.id != team.teamCaptain:
         flash("Only the captain of the team can join the queue.", category="error")
         return redirect(url_for('views.teams'))
-    # Check to see if team is aleary in a league with the same rank/region combination    
-    if team and team.isQueued or league:
+    # Check to see if team is already in a league with the same rank/region combination    
+    if team and team.isQueued or league: # this is slightly unclear --thomas
         flash(f"{team.teamName} is already queued or active in this rank and region.", category="error")
         return redirect(url_for('views.teams'))
     # If not change isQueued = true
@@ -284,11 +284,28 @@ def joinQueue():
             # Get the latest Series.id
             last_series_id = db.session.query(func.coalesce(func.max(Series.id), 0)).scalar()
 
-            # Create six new series entries
+            # Create six new series entries [1, 2, 3, 4]
+            m = 0
+            n = 1
             for i in range(1, 7):
                 series = Series()
                 series.id = last_series_id + i
                 db.session.add(series)
+                for j in range(1, 4):
+                    stat = Stats()
+                    stat.League_id = new_league_id
+                    stat.Series_id = series.id
+                    stat.Team0_id = queued_teams[m]
+                    stat.Team1_id = queued_teams[n]
+                    db.session.add(stat)
+                n+=1
+                if i == 3:
+                    m+= 1
+                    n = 2
+                if i == 5:
+                    m+= 1
+                    n = 3
+
 
             # Commit changes to the database
             db.session.add_all(league_entries)
