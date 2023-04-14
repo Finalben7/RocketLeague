@@ -78,14 +78,14 @@ def submitScore():
         current_team_id = request.form['current_team_id']
         opponent_team_id = request.form['opponent_team_id']
 
-        if len(winners) == 3:
-
-            # Generate the WHERE clause for three entries
-            where_clause = and_(
+        # Generate the WHERE clause for three entries
+        where_clause = and_(
             Stats.League_id == current_league_id,
                 or_(Stats.Team0_id == current_team_id, Stats.Team1_id == current_team_id),
                 or_(Stats.Team0_id == opponent_team_id, Stats.Team1_id == opponent_team_id)
-            )
+        )
+
+        if len(winners) == 3:
 
             # Get all 3 rows to update
             stats_to_update = db.session.query(Stats).filter(where_clause)
@@ -99,18 +99,13 @@ def submitScore():
             return redirect(url_for('views.teams'))
         else:
 
-            # Genereate where clause for 2 entries
-            where_clause = and_(
-                Stats.League_id == current_league_id,
-                or_(Stats.Team0_id == current_team_id, Stats.Team1_id == current_team_id),
-                or_(Stats.Team0_id == opponent_team_id),
-                or_(Stats.Team1_id == opponent_team_id)
-            )
+            # Get first row to update
+            stats_to_update = db.session.query(Stats).filter(where_clause).limit(2)
 
-            # Get 2 rows to update
-            update_stmt = update(Stats).where(where_clause).values(winningTeam=winners[:2])
+            # Update winningTeam for the row
+            for stat in stats_to_update:
+                stat.winningTeam = winners[0]
 
-            db.session.execute(update_stmt)
             db.session.commit()
 
             flash("Results submitted!", category="success")
