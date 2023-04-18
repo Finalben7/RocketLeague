@@ -302,10 +302,12 @@ def joinQueue():
             # Get the latest Series.id
             last_series_id = db.session.query(func.coalesce(func.max(Series.id), 0)).scalar()
 
-            # Create six new series entries [1, 2, 3, 4]
+            # Create n!/(n-p)!p! new series entries. for [1, 2, 3, 4, 5, 6, 7, 8] -> 28 entries.
+            checkpoints = [7, 13, 18, 22, 25, 27, 28]
             m = 0
             n = 1
-            for i in range(1, 7):
+            x = 1
+            for i in range(1, 29):
                 series = Series()
                 series.id = last_series_id + i
                 db.session.add(series)
@@ -317,12 +319,10 @@ def joinQueue():
                     stat.Team1_id = queued_teams[n].id
                     db.session.add(stat)
                 n+=1
-                if i == 3:
+                if i in checkpoints:
                     m+= 1
-                    n = 2
-                if i == 5:
-                    m+= 1
-                    n = 3
+                    n = 1 + x
+                    x+= 1
 
             # Commit changes to the database
             db.session.add_all(league_entries)
