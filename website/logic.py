@@ -70,15 +70,15 @@ def submitScore():
         winners = [i for i in winners if i !=0]
 
         # # Get the series winner
-        # winnerCount = Counter(winners)
-        # seriesWinner = winnerCount.most_common(1)[0][0]
+        winnerCount = Counter(winners)
+        seriesWinner = winnerCount.most_common(1)[0][0]
 
         # Get League.id and Team.id's from args
         current_league_id = request.form['current_league_id']
         current_team_id = request.form['current_team_id']
         opponent_team_id = request.form['opponent_team_id']
 
-        # Generate the WHERE clause for three entries
+        # WHERE clause for update queries
         where_clause = and_(
             Stats.League_id == current_league_id,
                 or_(Stats.Team0_id == current_team_id, Stats.Team1_id == current_team_id),
@@ -89,22 +89,35 @@ def submitScore():
 
             # Get all 3 rows to update
             stats_to_update = db.session.query(Stats).filter(where_clause)
+            print(stats_to_update[0].Series_id)
 
             # Update winningTeam for each row
             for stat in stats_to_update:
                 stat.winningTeam = winners.pop(0)
+
+            # Get Series to update
+            series = Series.query.filter(Series.id == stats_to_update[0].Series_id).first()
+
+            # Update seriesWinner in Series table
+            series.seriesWinner = seriesWinner
 
             db.session.commit()
             flash("Results submitted!", category="success")
             return redirect(url_for('views.teams'))
         else:
 
-            # Get first row to update
+            # Get 2 rows to update
             stats_to_update = db.session.query(Stats).filter(where_clause).limit(2)
 
             # Update winningTeam for the row
             for stat in stats_to_update:
                 stat.winningTeam = winners[0]
+
+            # Get Series to update
+            series = Series.query.filter(Series.id == stats_to_update[0].Series_id).first()
+
+            # Update seriesWinner in Series table
+            series.seriesWinner = seriesWinner
 
             db.session.commit()
 

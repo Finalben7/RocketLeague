@@ -4,12 +4,12 @@
 
         {% if current_league is none and current_team.isQueued == false %}
         <a href="/joinQueue?current_team={{ current_team.id }}" class="lg:col-span-10"><button type="submit" class="w-26 h-8 button">Join Queue</button></a>
-        <h1 class="lg:col-span-10 lg:items-center">Queue: {{ numberInQueue }}/4</h1>
+        <h1 class="lg:col-span-10 lg:items-center">Queue: {{ numberInQueue }}/8</h1>
         {% endif %}
 
         {% if current_league is none and current_team.isQueued %}
         <h1 class="lg:col-span-10 lg:items-center">Your team is in the queue, you will be notified when your bracket is generated.</h1>
-        <h1 class="lg:col-span-10 lg:items-center">Queue: {{ numberInQueue }} /4</h1>
+        <h1 class="lg:col-span-10 lg:items-center">Queue: {{ numberInQueue }} /8</h1>
         <!-- TODO: Add function to leave queue to this button! <a href="/leaveQueue?current_team={{ current_team.id }}" class="lg:col-span-10"><button type="submit" class="w-26 h-8 button">Leave Queue</button> -->
         {% endif %}
             {% for user in usernames %}

@@ -279,10 +279,10 @@ def joinQueue():
 
         # Count number of teams in queue for current team's rank/region
         count = Team.query.filter_by(rank=team.rank, region=team.region, isQueued=True).count()
-        flash(f"{team.teamName} has been added to the queue. Position:{count}/4", category="success")
+        flash(f"{team.teamName} has been added to the queue. Position:{count}/8", category="success")
 
         # Queue is full, add teams to league
-        if count == 4:
+        if count == 8:
             # Get all teams in the queue
             queued_teams = Team.query.filter_by(rank=team.rank, region=team.region, isQueued=True).all()
             
