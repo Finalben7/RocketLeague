@@ -9,7 +9,8 @@ module.exports = {
       colors: {
       'eleventh-blue': '#0ACCFF',
       'eleventh-orange': '#F7AA4F',
-      'eleventh-grey': '#232323'
+      'eleventh-grey': '#313537',
+      'card-bg' : 'rgba(41, 43, 45, 0.5)'
       }
     },
     screens: {

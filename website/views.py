@@ -75,103 +75,95 @@ def team():
 
         # Render the team page template and pass in the team and players objects
         return render_template('team.html', user=current_user, current_team=team, usernames=usernames, numberInQueue=numberInQueue, current_league=league)
-    else:
+    if league.isPlayoffs == 0:
 
-        # Get all matchups from Stats table associated with the League.id and Team.id
+        # Get all seasone matchups from Stats table associated with the League.id and Team.id
         query = text(f'''
-            SELECT DISTINCT s.Team0_id, s.Team1_id, t1.teamName AS Team0_name, t2.teamName AS Team1_name 
+            SELECT DISTINCT s.Series_id, s.Team0_id, s.Team1_id, t1.teamName AS Team0_name, t2.teamName AS Team1_name
                 FROM Stats s 
                 JOIN Team t1 ON s.Team0_id = t1.id 
                 JOIN Team t2 ON s.Team1_id = t2.id 
-                WHERE s.League_id = {league.id} AND (s.Team0_id = {team.id} OR s.Team1_id = {team.id});
-        ''').columns(Stats.Team0_id, Stats.Team1_id)
+                WHERE s.League_id = {league.id} AND round_one = 0 AND round_two = 0 and round_three = 0 AND (s.Team0_id = {team.id} OR s.Team1_id = {team.id});
+        ''').columns(Stats.Series_id, Stats.Team0_id, Stats.Team1_id)
+
         with db.engine.connect() as conn:
             teamsList = conn.execute(query).fetchall()
 
-        # Create matches from query in dictionary to sent to template
         matchups = {}
-        i = 1
         for row in teamsList:
-            key = f"Match #{i}"
-            matchups[key] = {
+            series_id = row["Series_id"]
+            matchups[series_id] = {
                 "Team0_id": row["Team0_id"],
                 "Team0_name": row["Team0_name"],
                 "Team1_id": row["Team1_id"],
                 "Team1_name": row["Team1_name"],
             }
-            i += 1
 
-    #                 \\\\\OLD CODE BELOW FOR REFERENCE\\\
-    # If team isActive get team names for bracket
-    # else: #FIXME: Add logic to make this specific to teams within certain leagues
-    #     query = text(f'''
-    #      SELECT t.id, t.teamName
-    #      FROM Team t
-    #      WHERE t.isActive = 1
-    # ''')
-    # with db.engine.connect() as conn:
-    #     team_data = conn.execute(query).fetchall()
-    # # Store teamNames is a list to remove quotations and parenthesis
-    #     team_names = [data[1] for data in team_data]
-    #     team_ids = [data[0] for data in team_data]
-    # # Pair teamNames together to create matches
-    # match1 = {"team0" : team_names[0], "team1" : team_names[1]}
-    # match2 = {"team0" : team_names[2], "team1" : team_names[3]}
-    # match3 = {"team0" : "TBD", "team1" : "TBD"}
-    # # Check to see if any team is a seriesWinner, if yes add them to match 3
-    # winners = text(f'''
-    #         SELECT s.seriesWinner, t.teamName
-    #         FROM Series s
-    #         JOIN Team t ON s.seriesWinner = t.id
-    #     ''')
-    # with db.engine.connect() as conn:
-    #     series_winners = conn.execute(winners).fetchall()
-    
-    # # Filter winners that don't match current team_ids
-    # filteredWinners = [s for s in series_winners if s.seriesWinner in team_ids]
+            return render_template('team.html', user=current_user, current_team=team, usernames=usernames, current_league=league, matchups=matchups)
 
-    # winner_names = [w[1] for w in filteredWinners]
-    
-    # winner=''
+    if league.isPlayoffs:
 
-    # if len(filteredWinners) == 1:
-    #     if winner_names[0] in (match1['team0'], match1['team1']):
-    #         match3['team0'] = winner_names[0]
-    #     else:
-    #         match3['team1'] = winner_names[0]
+        # Get highest Series_id from Stats
+        seriesQuery = text(f'''
+            SELECT * from Stats
+            WHERE League_id = 20 AND
+            (Team0_id = 1 or Team1_id = 1)
+            ORDER BY Series_id DESC
+        ''')
+        with db.engine.connect() as conn:
+            activeSeries = conn.execute(seriesQuery).first()
 
-    # if len(filteredWinners) == 2:
-    #     if winner_names[0] in (match1['team0'], match1['team1']):
-    #         match3['team0'] = winner_names[0]
-    #         match3['team1'] = winner_names[1]
-    #     else:
-    #         match3['team0'] = winner_names[1]
-    #         match3['team1'] = winner_names[0]
+        if activeSeries.round_one:
 
-    # if len(filteredWinners) == 3:
-    #     name_counts = Counter(winner_names)
-    #     winner = next((name for name, count in name_counts.items() if count > 1), None)
-    #     if winner_names[0] in (match1['team0'], match1['team1']):
-    #         match3['team0'] = winner_names[0]
-    #         match3['team1'] = winner_names[1]
-    #     else:
-    #         match3['team0'] = winner_names[1]
-    #         match3['team1'] = winner_names[0]
+            # Get round_one playoff matchup
+            query = text(f'''
+                SELECT DISTINCT s.Series_id, s.Team0_id, s.Team1_id, t1.teamName AS Team0_name, t2.teamName AS Team1_name, winningTeam
+                    FROM Stats s 
+                    JOIN Team t1 ON s.Team0_id = t1.id 
+                    JOIN Team t2 ON s.Team1_id = t2.id 
+                    WHERE s.League_id = {league.id} AND round_one = 1 AND (s.Team0_id = {team.id} OR s.Team1_id = {team.id});
+            ''')
+            with db.engine.connect() as conn:
+                playoffSeries = conn.execute(query).first()
 
+            round_name = "Quarter-Finals"
 
-    # # Store matches is bracket dictionary
-    # bracket = {"match1" : match1, "match2" : match2, "match3" : match3}
-    # # Search bracket for current team_name passed through args to find their opponent team name
-    # for match_name, match in bracket.items():
-    #     # check if the team_name is in the match dictionary values
-    #     if team_name in match.values():
-    #         # get the key associated with the other team name
-    #         other_team_key = [key for key, value in match.items() if value != team_name][0]
-    #         # get the other team name from the match dictionary using the key
-    #         opponent_team = match[other_team_key]
-    #         # return the other team name
-    # removed from return statement opponent_team=opponent_team, winner=winner, bracket=bracket
-        return render_template('team.html', user=current_user, current_team=team, usernames=usernames, current_league=league, matchups=matchups)
+            return render_template('team.html', user=current_user, current_team=team, usernames=usernames, current_league=league, playoffSeries=playoffSeries, round_name=round_name)
+        
+        if activeSeries.round_two:
+
+            # Get round_one playoff matchup
+            query = text(f'''
+                SELECT DISTINCT s.Series_id, s.Team0_id, s.Team1_id, t1.teamName AS Team0_name, t2.teamName AS Team1_name, winningTeam
+                    FROM Stats s 
+                    JOIN Team t1 ON s.Team0_id = t1.id 
+                    JOIN Team t2 ON s.Team1_id = t2.id 
+                    WHERE s.League_id = {league.id} AND round_two = 1 AND (s.Team0_id = {team.id} OR s.Team1_id = {team.id});
+            ''')
+            with db.engine.connect() as conn:
+                playoffSeries = conn.execute(query).first()
+
+            round_name = "Semi-Finals"
+
+            return render_template('team.html', user=current_user, current_team=team, usernames=usernames, current_league=league, playoffSeries=playoffSeries, round_name=round_name)
+        
+        if activeSeries.round_three:
+
+            # Get round_one playoff matchup
+            query = text(f'''
+                SELECT DISTINCT s.Series_id, s.Team0_id, s.Team1_id, t1.teamName AS Team0_name, t2.teamName AS Team1_name, winningTeam
+                    FROM Stats s 
+                    JOIN Team t1 ON s.Team0_id = t1.id 
+                    JOIN Team t2 ON s.Team1_id = t2.id 
+                    WHERE s.League_id = {league.id} AND round_three = 1 AND (s.Team0_id = {team.id} OR s.Team1_id = {team.id});
+            ''')
+            with db.engine.connect() as conn:
+                playoffSeries = conn.execute(query).first()
+
+            round_name = "Championship"
+
+            return render_template('team.html', user=current_user, current_team=team, usernames=usernames, current_league=league, playoffSeries=playoffSeries, round_name=round_name)
+
 
 @views.route('/match') #TODO: Get usernames, use profile image, team logo and team banner to pass to template
 def match():
@@ -179,6 +171,7 @@ def match():
     current_league_id = request.args.get('current_league')
     team0_id = request.args.get('team0_id')
     team1_id = request.args.get('team1_id')
+    series_id = request.args.get('series_id')
 
     # Get Team object for each Team
     team0 = Team.query.filter(Team.id == team0_id).first()
@@ -188,8 +181,7 @@ def match():
     query = text(f'''
         SELECT * FROM Stats 
 			WHERE League_id = {current_league_id} AND 
-			(Team0_id = {team0_id} OR Team1_id = {team0_id}) AND 
-			(Team0_id = {team1_id} OR Team1_id = {team1_id})
+			Series_id = {series_id}
     ''')
 
     with db.engine.connect() as conn:
@@ -202,20 +194,42 @@ def match():
             hasWinner = True
             break
 
-    return render_template('match.html', user=current_user, team0=team0, team1=team1, current_league_id=current_league_id, hasWinner=hasWinner)
+    return render_template('match.html', user=current_user, team0=team0, team1=team1, current_league_id=current_league_id, hasWinner=hasWinner, series_id=series_id)
 
 @views.route('/bracket')
 def bracket():
-    print(request.args.get('league_id'))
-    # query = text(f'''
-    #      SELECT t.teamName
-    #      FROM Team t
-    #      WHERE t.isActive = 1
-    # ''')
-    # with db.engine.connect() as conn:
-    #     teamsList = conn.execute(query).fetchall()
 
-    return render_template('bracket.html', user=current_user)
+    # Get League.id from args
+    current_league_id = request.args.get('league_id')
+
+    # Get count of winningTeam and their respective Team.teamName to fill bracket
+    seasonQuery = text(f'''
+        SELECT Stats.winningTeam, COUNT(*), Team.teamName
+            FROM Stats
+            JOIN Team ON Stats.winningTeam = Team.id
+            WHERE Stats.League_id = {current_league_id} AND Stats.winningTeam IS NOT NULL AND round_one = 0 AND round_two = 0 AND round_three = 0
+            GROUP BY Stats.winningTeam
+            ORDER BY COUNT(*) DESC
+        ''')
+    with db.engine.connect() as conn:
+        results = conn.execute(seasonQuery).fetchall()
+
+    # Check to see if round_one matches have been played
+    roundOneQuery = text(f'''
+        SELECT Stats.winningTeam, COUNT(*), Team.teamName
+            FROM Stats
+            JOIN Team ON Stats.winningTeam = Team.id
+            WHERE Stats.League_id = 19
+            AND round_one = 1 AND round_two = 0 AND round_three = 0
+            GROUP BY Stats.winningTeam, Team.teamName
+            HAVING COUNT(*) = 2;
+        ''')
+    with db.engine.connect() as conn:
+        roundOneResults = conn.execute(roundOneQuery).fetchall()
+
+    
+
+    return render_template('bracket.html', user=current_user, results=results)
 
 @views.route('/submitScore')
 def submitScore():
@@ -223,6 +237,7 @@ def submitScore():
     current_league_id = request.args.get('current_league_id')
     current_team_name = request.args.get('current_team')
     opponent_team_name = request.args.get('opponent_team')
+    series_id = request.args.get('series_id')
 
     # Get Team from db with matching teamNames
     current_team = Team.query.filter_by(teamName=current_team_name).first()
@@ -242,7 +257,8 @@ def submitScore():
                                 opponent_team_name=opponent_team_name,
                                 current_team_dict=current_team_dict,
                                 opponent_team_dict=opponent_team_dict,
-                                current_league_id=current_league_id
+                                current_league_id=current_league_id,
+                                series_id=series_id
                             )
 
 @views.route('/league')
@@ -302,10 +318,12 @@ def joinQueue():
             # Get the latest Series.id
             last_series_id = db.session.query(func.coalesce(func.max(Series.id), 0)).scalar()
 
-            # Create six new series entries [1, 2, 3, 4]
+            # Create n!/(n-p)!p! new series entries. for [1, 2, 3, 4, 5, 6, 7, 8] -> 28 entries.
+            checkpoints = [7, 13, 18, 22, 25, 27, 28]
             m = 0
             n = 1
-            for i in range(1, 7):
+            x = 1
+            for i in range(1, 29):
                 series = Series()
                 series.id = last_series_id + i
                 db.session.add(series)
@@ -317,19 +335,14 @@ def joinQueue():
                     stat.Team1_id = queued_teams[n].id
                     db.session.add(stat)
                 n+=1
-                if i == 3:
+                if i in checkpoints:
                     m+= 1
-                    n = 2
-                if i == 5:
-                    m+= 1
-                    n = 3
+                    n = 1 + x
+                    x+= 1
 
             # Commit changes to the database
             db.session.add_all(league_entries)
             db.session.commit()
-
-            # Get the IDs of the newly created Series
-            # series_ids = list(range(last_series_id + 1, last_series_id + 7))
                     
             flash("Queue is now full and bracket has been generated!", category="success")
 

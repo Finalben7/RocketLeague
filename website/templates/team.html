@@ -16,7 +16,7 @@
             <div class="player-card">
                     <div class="flex justify-between gap-5 items-center">
                             <h2 class="w-44">{{ user }}</h2>
-                            <img src="../static/placeholder.png" alt="" class="rounded-lg border-4 border-eleventh-blue h-20 w-20">
+                            <img src="../static/placeholder.png" alt="" class="rounded-lg border-4 h-20 w-20">
                             <h3>Goals</h3>
                             <h3>Saves</h3>
                             <h3>Assists</h3>
@@ -37,7 +37,7 @@
         <h1 class="lg:col-span-10 lg:items-center">Matches</h1>
         {% for match_num, match_details in matchups.items() %}
             <div class="teams-card">
-                <a href ="/match?current_league={{ current_league.id }}&team0_id={{ match_details['Team0_id'] }}&team1_id={{ match_details['Team1_id'] }}" class="lg:col-span-10"><h1 class="pb-5">{{ match_num }}</h1></a>
+                <a href ="/match?current_league={{ current_league.id }}&team0_id={{ match_details['Team0_id'] }}&team1_id={{ match_details['Team1_id'] }}&series_id={{ match_num }}" class="lg:col-span-10"><h1 class="pb-5">{{ match_num }}</h1></a>
                 <div class="flex justify-between gap-5">
                     <h2>{{ match_details['Team0_name'] }}</h2>
                     <h2>{{ match_details['Team1_name'] }}</h2>
@@ -57,17 +57,16 @@
         </div>
         
         <h1 class="lg:col-span-10 lg:items-center">It's playoff time!</h1>
-        <button type="submit" class="lg:col-span-10 w-26 h-8 button"><a href="/bracket?league_id={{ current_league.id }}">View Bracket</a></button>
-        <h1 class="lg:col-span-10 lg:items-center">Your matches from this season.</h1> <!-- TODO Put these matches inside a dropdown that opens when you click here -->
-        {% for match_num, match_details in matchups.items() %}
-            <div class="teams-card">
-                <a href ="/match?current_league={{ current_league.id }}&team0_id={{ match_details['Team0_id'] }}&team1_id={{ match_details['Team1_id'] }}" class="lg:col-span-10"><h1 class="pb-5">{{ match_num }}</h1></a>
-                <div class="flex justify-between gap-5">
-                    <h2>{{ match_details['Team0_name'] }}</h2>
-                    <h2>{{ match_details['Team1_name'] }}</h2>
-                </div>
+
+        <div class="teams-card">
+            <a href ="/match?current_league={{ current_league.id }}&team0_id={{ playoffSeries['Team0_id'] }}&team1_id={{ playoffSeries['Team1_id'] }}&series_id={{ playoffSeries['Series_id'] }}" class="lg:col-span-10"><h1 class="pb-5">{{ round_name }}</h1></a>
+            <div class="flex justify-between gap-5">
+                <h2>{{ playoffSeries['Team0_name'] }}</h2>
+                <h2>{{ playoffSeries['Team1_name'] }}</h2>
             </div>
-        {% endfor %}
+        </div>
+
+        <button type="submit" class="lg:col-span-10 w-26 h-8 button"><a href="/bracket?league_id={{ current_league.id }}">View Bracket</a></button>
         {% endif %}
     </div>
 {% endblock %}

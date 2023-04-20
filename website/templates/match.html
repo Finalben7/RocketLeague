@@ -11,7 +11,7 @@
 
     {% if hasWinner %}
     {% else %}
-    <a href="/submitScore?current_league_id={{ current_league_id }}&current_team={{ team0.teamName }}&opponent_team={{ team1.teamName }}" class="lg:col-span-10 p-10"><button type="submit" class="w-26 h-8 button">Submit Score</button></a>
+    <a href="/submitScore?current_league_id={{ current_league_id }}&current_team={{ team0.teamName }}&opponent_team={{ team1.teamName }}&series_id={{ series_id }}" class="lg:col-span-10 p-10"><button type="submit" class="w-26 h-8 button">Submit Score</button></a>
     {% endif %}
     <div class="teams-card">
         <h1>(W - L) {{ team1.teamName }}</h1>

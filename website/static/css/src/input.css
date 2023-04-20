@@ -8,7 +8,7 @@
 
 body {
   font-weight: 400;
-  @apply font-Golos font-normal text-eleventh-blue bg-eleventh-grey;
+  @apply font-Golos font-normal text-white bg-eleventh-grey;
 }
 
 h1 {
@@ -53,19 +53,19 @@ h2 {
 }
 
 .teams-card {
-    @apply bg-white border-eleventh-blue border-4 rounded-md p-5 w-1/3 text-center lg:col-span-10 lg:items-center
+    @apply bg-card-bg rounded-md p-5 w-1/3 text-center lg:col-span-10 lg:items-center
 }
 
 .teams-card-orange {
-    @apply bg-white border-eleventh-orange border-4 rounded-md p-5 w-1/3 text-center lg:col-span-10 lg:items-center
+    @apply bg-card-bg rounded-md p-5 w-1/3 text-center lg:col-span-10 lg:items-center
 }
 
 .player-card {
-    @apply bg-white border-eleventh-blue border-4 rounded-md p-5 w-full text-center lg:col-span-6 lg:items-center
+    @apply bg-card-bg rounded-md p-5 w-full text-center lg:col-span-6 lg:items-center
 }
 
 .team-stat-card {
-  @apply bg-white border-eleventh-blue border-4 rounded-md p-5 w-full text-center lg:col-span-4 lg:row-span-2 lg:col-start-7 lg:row-start-2 lg:items-center
+  @apply bg-card-bg rounded-md p-5 w-full text-center lg:col-span-4 lg:row-span-2 lg:col-start-7 lg:row-start-2 lg:items-center
 }
 
 /* Bracket CSS */
