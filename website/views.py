@@ -91,12 +91,12 @@ def team():
 
         matchups = {}
         for row in teamsList:
-            series_id = row["Series_id"]
+            series_id = row[0]  # Use integer index instead of string index
             matchups[series_id] = {
-                "Team0_id": row["Team0_id"],
-                "Team0_name": row["Team0_name"],
-                "Team1_id": row["Team1_id"],
-                "Team1_name": row["Team1_name"],
+                "Team0_id": row[1],
+                "Team0_name": row[3],
+                "Team1_id": row[2],
+                "Team1_name": row[4],
             }
 
         return render_template('team.html', user=current_user, current_team=team, usernames=usernames, current_league=league, matchups=matchups)

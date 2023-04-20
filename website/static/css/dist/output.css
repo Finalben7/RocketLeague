@@ -803,6 +803,11 @@ video {
   text-transform: uppercase;
 }
 
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
 @font-face {
   font-family: "Golos";
 
@@ -1005,6 +1010,10 @@ h2 {
     grid-row-start: 2;
     align-items: center;
   }
+}
+
+.form-control {
+  background-color: rgba(41, 43, 45, 0.5);
 }
 
 /* Bracket CSS */

@@ -68,6 +68,10 @@ h2 {
   @apply bg-card-bg rounded-md p-5 w-full text-center lg:col-span-4 lg:row-span-2 lg:col-start-7 lg:row-start-2 lg:items-center
 }
 
+.form-control {
+  @apply bg-card-bg
+}
+
 /* Bracket CSS */
 .bracket {
   display: inline-block;
