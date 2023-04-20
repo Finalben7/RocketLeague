@@ -179,7 +179,7 @@ def submitScore():
                 # Get the latest Series.id
                 last_series_id = db.session.query(func.coalesce(func.max(Series.id), 0)).scalar()
 
-                # Count the number of wins each Team.id appears in Stats.winningTeam with the matching League.id
+                # Count the number of wins each Team.id appears in Stats.winningTeam with the matching League.id and round_one = True
                 results = db.session.query(
                     Stats.winningTeam, Stats.Series_id, func.count()
                 ).filter(
@@ -233,7 +233,7 @@ def submitScore():
                 # Get the latest Series.id
                 last_series_id = db.session.query(func.coalesce(func.max(Series.id), 0)).scalar()
 
-                # Count the number of wins each Team.id appears in Stats.winningTeam with the matching League.id
+                # Count the number of wins each Team.id appears in Stats.winningTeam with the matching League.id and round_two = True
                 results = db.session.query(
                     Stats.winningTeam, Stats.Series_id, func.count()
                 ).filter(

@@ -19,8 +19,8 @@
         <div class="relative md:col-span-1"><!--Navigation bar and links-->
           <nav>
             <div class="flex">
-              <img src="../static/placeholder.png" alt="" class="h-20 w-20 lg:h-40 lg:w-40">
-              <h1 class="self-center px-2 lg:my-0">The Underground</h1>
+              <a href="/"><img src="../static/logo.png" alt="" class="h-20 w-20 lg:h-40 lg:w-40"></a>
+              <h1 class="self-center px-2 lg:my-0"></h1>
             </div>
               
             <ul class="py-2">
@@ -30,16 +30,18 @@
             </ul>
 
             <ul class="hidden text-xl py-2 md:text-lg md:list-item" id="mainNav">                   
+              <a href="/">
+                <li class="navButtons">
+                  <span class="ml-6">Home</span>
+                </li>
+              </a>
+  
               <li class="navButtons">
-                <a href="/"><span class="ml-6">Home</span></a>
+                <span class="ml-6">Media</span><!--Youtube, twitch and social links-->
               </li>
   
               <li class="navButtons">
-                <a href="/media"><span class="ml-6">Media</span></a><!--Youtube, twitch and social links-->
-              </li>
-  
-              <li class="navButtons">
-                <a href="/circuitrules"><span class="ml-6">Rules</span></a>
+                <span class="ml-6">Rules</span>
               </li>
   
               <li class="navButtons">
@@ -47,7 +49,7 @@
               </li>
   
               <li class="navButtons">
-                <a href="/learnmore"><span class="ml-6 md:text-base">Learn More</span></a><!--(For future use-) "Made by your community, for your community!"-->
+                <span class="ml-6 md:text-base">Learn More</span><!--(For future use-) "Made by your community, for your community!"-->
               </li>
             </ul>
           </nav>
@@ -60,18 +62,21 @@
             </div>
             <div class="flex justify-center items-center md:justify-end ">
               <ul class="hidden" id="userNav">
-                <li class="userNav">
-                  <a href="/profile"><span class="mr-6">Profile</span></a>
-                </li>
-                <li class="userNav">
-                  <a href="/teams"><span class="mr-6">Teams</span></a>
-                </li>
-                <li class="userNav">
-                  <a href="/bracket"><span class="mr-6">Bracket</span></a>
-                </li>
-                <li class="userNav">
-                  <a href="/logout"><span class="mr-6">Log Out</span></a>
-                </li>
+                <a href="/profile">
+                  <li class="userNav">
+                    <span class="mr-6">Profile</span></a>
+                  </li>
+                </a>
+                <a href="/teams">
+                  <li class="userNav">
+                    <span class="mr-6">Teams</span>
+                  </li>
+                </a>
+                <a href="/logout">
+                  <li class="userNav">
+                    <span class="mr-6">Log Out</span>
+                  </li>
+                </a>
               </ul>
             </div>
           {% else %}

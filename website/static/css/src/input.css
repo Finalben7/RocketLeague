@@ -21,21 +21,21 @@ h2 {
 
 .button{
     background-image: url('../../buttonBG.png');
-    @apply bg-no-repeat bg-contain py-2 px-5 uppercase text-xs font-bold cursor-pointer tracking-wider h-10 hover:text-eleventh-grey;
+    @apply bg-no-repeat bg-contain py-2 px-5 uppercase text-xs font-bold cursor-pointer tracking-wider h-10 hover:text-eleventh-blue;
 }
 
 .navButtons{
     background-image: url('../../linkBG.png');
-    @apply bg-no-repeat bg-contain py-1 my-2 md:h-10 md:w-40 hover:text-eleventh-grey;
+    @apply bg-no-repeat bg-contain py-1 my-2 md:h-10 md:w-40 font-bold hover:text-eleventh-blue;
 }
 
 .userNav{
     background-image: url('../../linkBG.png');
-    @apply bg-no-repeat bg-contain py-1 my-2 h-10 w-40 text-end hover:text-eleventh-grey;
+    @apply bg-no-repeat bg-contain py-1 my-2 h-10 w-40 text-end font-bold hover:text-eleventh-blue;
 }
 
 .success{
-    @apply flex justify-center items-center p-5 cursor-pointer hover:text-eleventh-grey bg-white;
+    @apply flex justify-center items-center p-5 cursor-pointer hover:text-eleventh-blue bg-card-bg;
 }
 
 .error{
@@ -71,9 +71,9 @@ h2 {
 /* Bracket CSS */
 .bracket {
   display: inline-block;
-  position: absolute;
+  position: relative;
   left: 50%;
-  top: 50%;
+  top: 25%;
   transform: translate(-50%, -50%);
   white-space: nowrap;
   font-size: 0;
@@ -95,9 +95,9 @@ h2 {
 }
 .bracket .round .winners > div.matchups .matchup .participants .participant {
   box-sizing: border-box;
-  color: #858585;
+  color: rgba(41, 43, 45, 0.5);
   border-left: 0.25rem solid ;
-  background: white;
+  background: rgba(41, 43, 45, 0.5);
   width: 14rem;
   height: 3rem;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12);
@@ -111,16 +111,13 @@ h2 {
   border-color: #0ACCFF;
 }
 .bracket .round .winners > div.matchups .matchup .participants .participant:not(:last-child) {
-  border-bottom: thin solid #f0f2f2;
+  border-bottom: thin solid rgba(41, 43, 45, 0.5);
 }
 .bracket .round .winners > div.matchups .matchup .participants .participant span {
   margin: 0 1.25rem;
   line-height: 3;
   font-size: 1rem;
   font-family: "Golos";
-}
-.bracket .round .winners > div.connector.filled .line, .bracket .round .winners > div.connector.filled.bottom .merger:after, .bracket .round .winners > div.connector.filled.top .merger:before {
-  border-color: #60c645;
 }
 .bracket .round .winners > div.connector .line, .bracket .round .winners > div.connector .merger {
   box-sizing: border-box;
@@ -129,7 +126,7 @@ h2 {
   vertical-align: top;
 }
 .bracket .round .winners > div.connector .line {
-  border-bottom: thin solid #c0c0c8;
+  border-bottom: thin solid rgba(41, 43, 45, 0.5);
   height: 4rem;
 }
 .bracket .round .winners > div.connector .merger {
@@ -143,7 +140,7 @@ h2 {
   width: 100%;
   height: 50%;
   border: 0 solid;
-  border-color: #c0c0c8;
+  border-color: rgba(41, 43, 45, 0.5);
 }
 .bracket .round .winners > div.connector .merger:before {
   border-right-width: thin;

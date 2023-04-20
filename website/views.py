@@ -99,19 +99,21 @@ def team():
                 "Team1_name": row["Team1_name"],
             }
 
-            return render_template('team.html', user=current_user, current_team=team, usernames=usernames, current_league=league, matchups=matchups)
+        return render_template('team.html', user=current_user, current_team=team, usernames=usernames, current_league=league, matchups=matchups)
 
     if league.isPlayoffs:
 
         # Get highest Series_id from Stats
         seriesQuery = text(f'''
             SELECT * from Stats
-            WHERE League_id = 20 AND
+            WHERE League_id = {league.id} AND
             (Team0_id = 1 or Team1_id = 1)
             ORDER BY Series_id DESC
         ''')
         with db.engine.connect() as conn:
             activeSeries = conn.execute(seriesQuery).first()
+
+        print(activeSeries.Series_id)
 
         if activeSeries.round_one:
 
@@ -172,6 +174,7 @@ def match():
     team0_id = request.args.get('team0_id')
     team1_id = request.args.get('team1_id')
     series_id = request.args.get('series_id')
+    print(series_id)
 
     # Get Team object for each Team
     team0 = Team.query.filter(Team.id == team0_id).first()
@@ -216,18 +219,113 @@ def bracket():
 
     # Check to see if round_one matches have been played
     roundOneQuery = text(f'''
-        SELECT Stats.winningTeam, COUNT(*), Team.teamName
-            FROM Stats
-            JOIN Team ON Stats.winningTeam = Team.id
-            WHERE Stats.League_id = 19
-            AND round_one = 1 AND round_two = 0 AND round_three = 0
-            GROUP BY Stats.winningTeam, Team.teamName
-            HAVING COUNT(*) = 2;
+        SELECT DISTINCT s.Series_id, 
+            COALESCE((SELECT winningTeam 
+                        FROM Stats 
+                        WHERE League_id = {current_league_id} 
+                        AND round_one = 1 
+                        AND Series_id = s.Series_id 
+                        GROUP BY winningTeam 
+                        ORDER BY COUNT(winningTeam) DESC 
+                        LIMIT 1), '') as most_winningTeam,
+            COALESCE(Team.teamName, '') as teamName
+        FROM Stats s
+        LEFT JOIN Team ON Team.id = COALESCE((SELECT winningTeam 
+                                            FROM Stats 
+                                            WHERE League_id = {current_league_id} 
+                                            AND round_one = 1 
+                                            AND Series_id = s.Series_id 
+                                            GROUP BY winningTeam 
+                                            ORDER BY COUNT(winningTeam) DESC 
+                                            LIMIT 1), '')
+        WHERE s.League_id = {current_league_id} 
+        AND s.round_one = 1
+        GROUP BY s.Series_id, Team.teamName
+        ORDER BY s.Series_id ASC;
         ''')
     with db.engine.connect() as conn:
         roundOneResults = conn.execute(roundOneQuery).fetchall()
 
-    
+        print(roundOneResults[0])
+
+    # Add roundOneResults to the existing results list
+    results.extend(roundOneResults)
+
+    # Check to see if round_two matches have been played
+    roundTwoQuery = text(f'''
+        SELECT DISTINCT s.Series_id, 
+            COALESCE((SELECT winningTeam 
+                        FROM Stats 
+                        WHERE League_id = {current_league_id} 
+                        AND round_two = 1 
+                        AND Series_id = s.Series_id 
+                        GROUP BY winningTeam 
+                        ORDER BY COUNT(winningTeam) DESC 
+                        LIMIT 1), '') as most_winningTeam,
+            COALESCE(Team.teamName, '') as teamName
+        FROM Stats s
+        LEFT JOIN Team ON Team.id = COALESCE((SELECT winningTeam 
+                                            FROM Stats 
+                                            WHERE League_id = {current_league_id} 
+                                            AND round_two = 1 
+                                            AND Series_id = s.Series_id 
+                                            GROUP BY winningTeam 
+                                            ORDER BY COUNT(winningTeam) DESC 
+                                            LIMIT 1), '')
+        WHERE s.League_id = {current_league_id} 
+        AND s.round_two = 1
+        GROUP BY s.Series_id, Team.teamName
+        ORDER BY s.Series_id ASC;
+        ''')
+    with db.engine.connect() as conn:
+        roundTwoResults = conn.execute(roundTwoQuery).fetchall()
+
+    if roundTwoResults:
+
+        # Add roundOneResults to the existing results list
+        results.extend(roundTwoResults)
+
+    if not roundTwoResults:
+        empty_list = [" , , ", " , , ", " , ,"]
+        results.extend(empty_list)
+
+    # Check to see if round_three matches have been played
+    roundThreeQuery = text(f'''
+        SELECT DISTINCT s.Series_id, 
+            COALESCE((SELECT winningTeam 
+                        FROM Stats 
+                        WHERE League_id = {current_league_id} 
+                        AND round_three = 1 
+                        AND Series_id = s.Series_id 
+                        GROUP BY winningTeam 
+                        ORDER BY COUNT(winningTeam) DESC 
+                        LIMIT 1), '') as most_winningTeam,
+            COALESCE(Team.teamName, '') as teamName
+        FROM Stats s
+        LEFT JOIN Team ON Team.id = COALESCE((SELECT winningTeam 
+                                            FROM Stats 
+                                            WHERE League_id = {current_league_id} 
+                                            AND round_three = 1 
+                                            AND Series_id = s.Series_id 
+                                            GROUP BY winningTeam 
+                                            ORDER BY COUNT(winningTeam) DESC 
+                                            LIMIT 1), '')
+        WHERE s.League_id = {current_league_id} 
+        AND s.round_three = 1
+        GROUP BY s.Series_id, Team.teamName
+        ORDER BY s.Series_id ASC;
+        ''')
+    with db.engine.connect() as conn:
+        roundThreeResults = conn.execute(roundThreeQuery).fetchall()
+
+    if roundThreeResults:
+
+        # Add roundOneResults to the existing results list
+        results.extend(roundThreeResults)
+
+    if not roundThreeResults:
+        empty_list = [" , , "]
+        results.extend(empty_list)
 
     return render_template('bracket.html', user=current_user, results=results)
 

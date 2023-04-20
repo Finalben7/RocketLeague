@@ -1,4 +1,8 @@
-{% extends "base.html" %} {% block title %}Bracket{% endblock %} {% block content %}
+{% extends "base.html" %} {% block title %} The Underground Creator Cup {% endblock %} {% block content %}
+<div class="grid gap-8 lg:grid-cols-10 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4x">
+  <h1 class="lg:col-span-10 lg:items-center lg:text-6xl">The Underground Creator Cup</h1>
+</div>
+
 <div class="bracket">
   <section class="round quarterfinals">
     <div class="winners">
@@ -47,14 +51,14 @@
       <div class="matchups">
         <div class="matchup">
           <div class="participants">
-            <div class="participant orange"><span></span></div>
-            <div class="participant blue"><span></span></div>
+            <div class="participant orange"><span>{{ results[8][2] }}</span></div>
+            <div class="participant blue"><span>{{ results[11][2] }}</span></div>
           </div>
         </div>
         <div class="matchup">
           <div class="participants">
-            <div class="participant orange"><span></span></div>
-            <div class="participant blue"><span></span></div>
+            <div class="participant orange"><span>{{ results[10][2] }}</span></div>
+            <div class="participant blue"><span>{{ results[9][2] }}</span></div>
           </div>
         </div>
       </div>
@@ -69,8 +73,8 @@
       <div class="matchups">
         <div class="matchup">
           <div class="participants">
-            <div class="participant orange"><span></span></div>
-            <div class="participant blue"><span></span></div>
+            <div class="participant orange"><span>{{ results[12][2] }}</span></div>
+            <div class="participant blue"><span>{{ results[13][2] }}</span></div>
           </div>
         </div>
       </div>
@@ -85,7 +89,7 @@
           <div class="matchups">
             <div class="matchup">
               <div class="participants">
-                <div class="participant orange"><span></span></div>
+                <div class="participant orange"><span>{{ results[14][2] }}</span></div>
               </div>
             </div>
           </div>
