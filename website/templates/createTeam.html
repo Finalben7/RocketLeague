@@ -5,29 +5,33 @@
         <div class="py-2">
         <label for="teamName">Team Name</label>
         <input
+            class="select"
             type="text"
             id="teamName"
             name="teamName"
             placeholder="Enter Team Name"
+            maxlength="20"
         />
         </div>
         <div class="py-2">
             <label for="region">Region</label>
             <select
+                class="select"
                 id="region"
                 name="region">   
                     <option value="naE">NA East</option>
-                    <option value="naW">NA West</option>
-                    <option value="eu">Europe</option>
+                    <option value="naW" disabled>NA West</option>
+                    <option value="eu" disabled>Europe</option>
             </select>
         </div>
         <div class="py-2">
-            <p>{{ user.username }}</p>
-            <p>{{ user.id }}</p>
+            <p class="py-2">Your Username:  {{ user.username }}</p>
+            <p class="py-2">Your Undergound ID:  {{ user.id }}</p>
         </div>
         <div class="py-2">
-        <label for="userOneName">Teammate #1 Underground Username</label>
+        <label for="userOneName">Teammate Underground Username</label>
         <input
+            class="select"
             type="text"
             id="userOneName"
             name="userOneName"
@@ -35,8 +39,9 @@
         />
         </div>
         <div class="py-2">
-        <label for="userOneId">Teammate #1 Underground ID</label>
+        <label for="userOneId">Teammate Underground ID</label>
         <input
+            class="select"
             type="number"
             id="userOneId"
             name="userOneId"

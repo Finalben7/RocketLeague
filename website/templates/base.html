@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -93,8 +93,10 @@
           <div class="grid gap-8 lg:grid-cols-10 justify-items-center">
             <div class="lg:col-span-8">
               <div class="error" role="alert">
-                {{ message }}
-                <span class="text-3xl px-5" aria-hidden="true" onclick="this.parentElement.style.display='none';">&times;</span>
+                <span onclick="this.parentElement.style.display='none';">
+                  {{ message }}
+                  <span class="text-3xl px-5" aria-hidden="true">&times;</span>
+                </span>
               </div>
             </div>
           </div>
@@ -102,8 +104,10 @@
           <div class="grid gap-8 lg:grid-cols-10 justify-items-center">
             <div class="lg:col-span-8">
               <div class="success" role="alert">
-                {{ message }}
-                <span class="text-3xl px-5" aria-hidden="true" onclick="this.parentElement.style.display='none';">&times;</span>
+                <span onclick="this.parentElement.style.display='none';">
+                  {{ message }}
+                  <span class="text-3xl px-5" aria-hidden="true" onclick="this.parentElement.style.display='none';">&times;</span>
+                </span>
               </div>
             </div>
           </div>

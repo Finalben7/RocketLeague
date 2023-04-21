@@ -5,7 +5,7 @@
         <form action="/action_page.php">
             <input class="p-5" type="file" id="myFile" name="filename">
             <br/>
-            <input type="submit" class="button w-26">
+            <input type="submit" class="button w-26" disabled>
         </form>
     </div>
     
@@ -21,7 +21,7 @@
                     <th></th>
                     <th>Game One Winner</th>
                     <td>
-                        <select id="gameOneWinner" name="gameOneWinner">
+                        <select id="gameOneWinner" name="gameOneWinner" class="select">
                             <option value="{{ current_team_dict['teamId'] }}" id="teamName0" form="scoreSubmitForm"> {{ current_team_name }} </option>
                             <option value="{{ opponent_team_dict['teamId'] }}" id="teamName1" form="scoreSubmitForm"> {{ opponent_team_name }} </option>
                         </select>
@@ -33,7 +33,7 @@
                     <th></th>
                     <th>Game Two Winner</th>
                     <td>
-                        <select id="gameTwoWinner" name="gameTwoWinner">
+                        <select id="gameTwoWinner" name="gameTwoWinner" class="select">
                             <option value="{{ current_team_dict['teamId'] }}" id="teamName0" form="scoreSubmitForm"> {{ current_team_name }} </option>
                             <option value="{{ opponent_team_dict['teamId'] }}" id="teamName1" form="scoreSubmitForm"> {{ opponent_team_name }} </option>
                         </select>
@@ -45,7 +45,7 @@
                     <th></th>
                     <th>Game Three Winner</th>
                     <td>
-                        <select id="gameThreeWinner" name="gameThreeWinner">
+                        <select id="gameThreeWinner" name="gameThreeWinner" class="select">
                             <option value="0" id="noGameThree" form="scoreSubmitForm"> No game 3 </option>
                             <option value="{{ current_team_dict['teamId'] }}" id="teamName0" form="scoreSubmitForm"> {{ current_team_name }} </option>
                             <option value="{{ opponent_team_dict['teamId'] }}" id="teamName1" form="scoreSubmitForm"> {{ opponent_team_name }} </option>

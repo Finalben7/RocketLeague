@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from .models import User, Team, TeamPlayers, League, Stats, Series
 from . import db
-from sqlalchemy import text, func
+from sqlalchemy import text, exists, func
 from collections import Counter
 
 views = Blueprint('views', __name__)
@@ -11,6 +11,7 @@ views = Blueprint('views', __name__)
 @views.route('/')
 #@login_required
 def home():
+    print(current_user.profile_image)
     return render_template('index.html', user=current_user)
 
 @views.route('/profile')
@@ -107,7 +108,7 @@ def team():
         seriesQuery = text(f'''
             SELECT * from Stats
             WHERE League_id = {league.id} AND
-            (Team0_id = 1 or Team1_id = 1)
+            (Team0_id = {team_id} or Team1_id = {team_id})
             ORDER BY Series_id DESC
         ''')
         with db.engine.connect() as conn:
@@ -371,20 +372,33 @@ def createTeam():
 def joinQueue():
     # Get current Team.id passed through args
     team_id = request.args.get('current_team')
-    print(team_id)
+
     # Get team object with matching Team.id passed through args
     team = Team.query.filter(Team.id == team_id).first()
-    print(team)
-    # Get the League object associated with the current_team
-    league = League.query.filter(League.team_id == team.id, League.isActive == True).first()
+
+    # Get the User.id's associated with the current Team.id from TeamPlayers
+    roster = TeamPlayers.query.filter(TeamPlayers.teamId == team_id).values(TeamPlayers.userId)
+    roster_ids = [i[0] for i in roster]
+
+    # Get all teams in the queue
+    queued_teams = Team.query.filter_by(rank=team.rank, region=team.region, isQueued=True).all()
+    queued_team_ids = [t.id for t in queued_teams]
+
+    # Get a list of User.id's associated with the Team.ids in the queue
+    queued_user_ids = TeamPlayers.query.filter(TeamPlayers.teamId.in_(queued_team_ids)).values(TeamPlayers.userId)
+    queued_user_ids = [u[0] for u in queued_user_ids]
+
+    # Create set's so they can be cross checked
+    roster_ids_set = set(roster_ids)
+    queued_user_ids_set = set(queued_user_ids)
 
     # Check to see if user who clicked joinQueue is a captain
     if current_user.id != team.teamCaptain:
         flash("Only the captain of the team can join the queue.", category="error")
         return redirect(url_for('views.teams'))
-    # Check to see if team is already in a league with the same rank/region combination    
-    if team and team.isQueued or league: # this is slightly unclear --thomas
-        flash(f"{team.teamName} is already queued or active in this rank and region.", category="error")
+    # Crosscheck User.ids associated with Team.ids already in queue to see if User.id's from the current team already exist in the queue    
+    if roster_ids_set.intersection(queued_user_ids_set):
+        flash(f"You or your teammate are on a different team in the current queue.", category="error")
         return redirect(url_for('views.teams'))
     # If not change isQueued = true
     if team:
@@ -397,6 +411,7 @@ def joinQueue():
 
         # Queue is full, add teams to league
         if count == 8:
+
             # Get all teams in the queue
             queued_teams = Team.query.filter_by(rank=team.rank, region=team.region, isQueued=True).all()
             

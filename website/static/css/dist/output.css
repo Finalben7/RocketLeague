@@ -589,6 +589,10 @@ video {
   width: 8rem;
 }
 
+.w-28 {
+  width: 7rem;
+}
+
 .min-w-full {
   min-width: 100%;
 }
@@ -837,8 +841,8 @@ h2 {
   cursor: pointer;
   background-size: contain;
   background-repeat: no-repeat;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
   padding-left: 1.25rem;
   padding-right: 1.25rem;
   font-size: 0.75rem;
@@ -895,7 +899,13 @@ h2 {
   color: rgb(10 204 255 / var(--tw-text-opacity));
 }
 
+a:hover {
+  --tw-text-opacity: 1;
+  color: rgb(10 204 255 / var(--tw-text-opacity));
+}
+
 .success {
+  margin: 1.25rem;
   display: flex;
   cursor: pointer;
   align-items: center;
@@ -910,6 +920,7 @@ h2 {
 }
 
 .error {
+  margin: 1.25rem;
   display: flex;
   cursor: pointer;
   align-items: center;
@@ -1012,8 +1023,21 @@ h2 {
   }
 }
 
-.form-control {
+.select {
   background-color: rgba(41, 43, 45, 0.5);
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.select::after {
+  background-color: rgba(41, 43, 45, 0.5);
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 90%;
 }
 
 /* Bracket CSS */
@@ -1022,7 +1046,7 @@ h2 {
   display: inline-block;
   position: relative;
   left: 50%;
-  top: 25%;
+  top: 15%;
   transform: translate(-50%, -50%);
   white-space: nowrap;
   font-size: 0;

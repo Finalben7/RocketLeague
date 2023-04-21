@@ -15,9 +15,9 @@ def createTeam():
         captainID = current_user.id
         teamName = request.form.get('teamName')
         teamRegion = request.form.get('region')
-        userOneNameForm = request.form.get('userOneName')
+        # userOneNameForm = request.form.get('userOneName')
         userOneIdForm = request.form.get('userOneId')
-        userOne = User.query.filter_by(username=userOneNameForm, id=userOneIdForm).first()
+        userOne = User.query.filter_by(id=userOneIdForm).first()
         #Validate team members exist
         if userOne is not None:
             #Validate user did not enter themself
@@ -28,11 +28,10 @@ def createTeam():
             rank1 = current_user.rank
             rank2 = userOne.rank
             teamRank = max(rank1, rank2)
-            #Validate the user doesn't already have a team with the exact same region/rank combination
-            teamCheckOne = Team.query.filter(Team.teamCaptain == captainID, Team.region == teamRegion, Team.rank == teamRank).first()
-            teamCheckTwo = Team.query.filter(Team.teamCaptain == userOne.id, Team.region == teamRegion, Team.rank == teamRank).first()
-            if teamCheckOne is not None or teamCheckTwo is not None:
-                flash('You, or your teammate, already have a team in this division', category='error')
+            #Validate the two users don't already have a team together
+            existingTeam = db.session.query(TeamPlayers.teamId).filter(TeamPlayers.userId.in_([captainID, userOne.id])).group_by(TeamPlayers.teamId).having(func.count(TeamPlayers.teamId) == 2).scalar()
+            if existingTeam is not None:
+                flash('You cannot have two teams with the same teammate.', category='error')
                 return render_template('createTeam.html', user=current_user) 
             #Create a new Team with the validated data
             newTeam = Team(teamCaptain=captainID, teamName=teamName, region=teamRegion, rank=teamRank)
