@@ -18,6 +18,13 @@ def createTeam():
         # userOneNameForm = request.form.get('userOneName')
         userOneIdForm = request.form.get('userOneId')
         userOne = User.query.filter_by(id=userOneIdForm).first()
+
+        # Make sure both users have a rank
+        if current_user.rank == None or userOne.rank == None:
+            flash('You or your teammate have not been assigned a rank yet.', category='error')
+            flash('Please wait 24 hours, if this error persists contact support on our discord.', category='error')
+            return render_template('createTeam.html', user=current_user)
+
         #Validate team members exist
         if userOne is not None:
             #Validate user did not enter themself

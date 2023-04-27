@@ -17,11 +17,11 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user:
             if check_password_hash(user.password, password):
-                flash('logged in!', category='success')
+                flash('Logged in!', category='success')
                 login_user(user, remember=True)
                 return redirect(url_for('views.home'))
             else:
-                flash('incorrect user/password, try again', category='error')
+                flash('Incorrect user/password, try again', category='error')
                 
     # print(data)
     return render_template('login.html', user=current_user)
