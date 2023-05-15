@@ -1,0 +1,112 @@
+{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
+    <div class="text-3xl grid gap-8 lg:grid-cols-9 justify-items-center lg:text-xl xl:text-2xl 2xl:text-4xl">
+        <div class="lg:col-span-8 justify-items-center">
+            <h1 class="py-8 tracking-widest">Frequently Asked Questions</h1>
+        </div>
+
+        <div class="lg:col-span-8 justify-items-center">
+            <button class="accordion">Overview</button>
+            <div class="panel text-lg">
+                <p>
+                    <b>The Underground</b> was created to bring exciting and meaningful season based competitions, that only high end organizations currently have access to, to the everyday
+                    ranked warriors. But what does that really look like? Well first you grab a teammate and make a team, this is completely free and all it requires is a <i>Rocket League</i>
+                    account that is linked on <a href="https://rocketleague.tracker.network/"><i>Rocket League Tracker Network</i></a> that has placed in ranked 2v2 (this is how we get your intial rank),
+                    and a <i>Discord</i> account (so you can communicate with your opponents to schedule your matches).
+                </p>
+                <p>
+                    Once you create a team on our site it will be given a rank based off the rosters collective competetive ranks. This rank is specific to that team and you will be relegated or promoted
+                    as a team based on your performances in Underground leagues. After that you head to your team page and join the queue, this is specific to your team rank/region, once the queue is full 
+                    (8 teams) a league will be generated. A league consists of seven matches that must be played within an eight weeks, starting from the day the league is generated. We suggest starting 
+                    from the top of your match list and working your way down but, to make the competition more flexible, it is up to you who and when you play. 
+                </p>
+                <p>
+                    Scheduling is between you and your opponent, find a time that works for everyone and afterwards head back to the website to submit the scores. A league is complete after eight weeks OR
+                    once all scores have been submitted. At this time a single elimination playoff bracket will be generated based off the standings from the season. Here you will be given another match
+                    page and you repeat the same process before. 
+                </p>
+            </div>
+
+            <button class="accordion">Signing Up</button>
+            <div class="panel">
+                <p></p>
+            </div>
+
+            <button class="accordion">Your Profile</button>
+            <div class="panel">
+                <p></p>
+            </div>
+
+            <button class="accordion">Creating A Team</button>
+            <div class="panel">
+                <p></p>
+            </div>
+
+            <button class="accordion">Join Queue</button>
+            <div class="panel">
+                <p></p>
+            </div>
+
+            <button class="accordion">Seasons</button>
+            <div class="panel">
+                <p></p>
+            </div>
+
+            <button class="accordion">Scheduling</button>
+            <div class="panel">
+                <p></p>
+            </div>
+
+            <button class="accordion">Match Details</button>
+            <div class="panel">
+                <p></p>
+            </div>
+
+            <button class="accordion">Score Submission</button>
+            <div class="panel">
+                <p></p>
+            </div>
+
+            <button class="accordion">Playoff Seeding</button>
+            <div class="panel">
+                <p></p>
+            </div>
+
+            <button class="accordion">Single Elimination Playoffs</button>
+            <div class="panel">
+                <p></p>
+            </div>
+
+            <button class="accordion">Forfeits</button>
+            <div class="panel">
+                <p></p>
+            </div>
+
+            <button class="accordion">Score Dispute</button>
+            <div class="panel">
+                <p></p>
+            </div>
+
+            <button class="accordion">Support</button>
+            <div class="panel">
+                <p></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.maxHeight) {
+            panel.style.maxHeight = null;
+            } else {
+            panel.style.maxHeight = panel.scrollHeight + "px";
+            } 
+        });
+    }
+    </script>
+{% endblock %}

@@ -1,20 +1,23 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content %}
 <div class="text-3xl grid gap-8 lg:grid-cols-9 justify-items-center lg:text-xl xl:text-2xl 2xl:text-4xl">
+    
+    <div class="lg:col-span-8 justify-items-center">
+        <h1 class="py-8 tracking-widest">How it works!</h1>
+    </div>
+    
     <div class="lg:col-span-4">
-        <header>
-            <h2 class="flex justify-center py-8">How it works!</h2>
-        </header>
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/avu7EofJz5c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        <iframe width="760" height="515" src="https://www.youtube.com/embed/avu7EofJz5c" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
 
-    <div class="grid content-end lg:col-span-4">
+    <div class="grid content-center lg:col-span-4">
         <ul>
-            <li>- Shit</li>
-            <li>- More shit</li>
-            <li>- More shit</li>
-            <li>- More shit</li>
-            <li>- More shit</li>
-            <li>- More shit</li>
+            <li>- Round robin seasons with playoffs</li>
+            <li>- Team based ranks</li>
+            <li>- 2v2</li>
+            <li>- Free to play</li>
+            <li>- Active community</li>
+            <li>- Custom leagues available</li>
+            <li>- Much more coming soon</li>
         </ul>
         <button class="button mt-4">Join Our Discord!</button>
     </div>
@@ -23,7 +26,7 @@
         <header>
             <h2 class="flex justify-center py-8">Fair and competetive format</h2>
         </header>
-        <img src="../static/placeholder.png" alt=""><!--Image of playoff bracket with text on top displaying features-->
+        <img src="../static/bracket.png" alt=""><!--Image of playoff bracket with text on top displaying features-->
     </div>
 
     <div class="lg:col-span-4">
@@ -31,13 +34,6 @@
             <h2 class="flex justify-center py-8">No third party apps required</h2><!--Assuming we can pull this off-->
         </header>
         <img src="../static/placeholder.png" alt=""><!--Image of match page with message portal with text on top displaying features-->
-    </div>
-
-    <div class="lg:col-span-8">
-        <header>
-            <h2 class="flex justify-center py-8">See it in action!</h2>
-        </header>
-        <img src="../static/placeholder.png"><!--Video made from beta test walking through sign up, match scheduling and game highlights (with casters)-->
     </div>
 </div>
 {% endblock %}

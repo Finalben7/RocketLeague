@@ -1,24 +1,33 @@
 {% extends "base.html" %} {% block title %} {{ team0.teamName }} VS {{ team1.teamName }} {% endblock %} {% block content %}
-<div class="py-6 text-3xl justify-items-center grid gap-8 lg:grid-cols-10 lg:text-xl xl:text-2xl 2xl:text-4x">            
-    <div class="teams-card-orange">
-        <h1>(W - L) {{ team0.teamName }}</h1>
-        <div class="flex justify-between gap-5 pt-4">
-            <img src="../static/placeholder.png" alt="" class="rounded-lg border-4 border-eleventh-orange h-20 w-20">
-            <img src="../static/placeholder.png" alt="" class="rounded-lg border-4 border-eleventh-orange h-20 w-20">
-            <img src="../static/placeholder.png" alt="" class="rounded-lg border-4 border-eleventh-orange h-20 w-20">
+<div class="py-6 text-3xl justify-items-center grid gap-8 lg:grid-cols-9 lg:text-xl xl:text-2xl 2xl:text-4x">            
+    <div class="teams-card">
+        <div class="flex pb-20">
+            <h1>(W - L)</h1>
+            <h1 class="pl-5">{{team0.teamName }}</h1>
+        </div>
+
+        <div class="flex justify-evenly">
+            <img src="../static/placeholder.png" alt="" class="profile-image">
+            <img src="../static/placeholder.png" alt="" class="profile-image">
+            <img src="../static/placeholder.png" alt="" class="profile-image">
         </div>
     </div>
 
     {% if hasWinner %}
     {% else %}
-    <a href="/submitScore?current_league_id={{ current_league_id }}&current_team={{ team0.teamName }}&opponent_team={{ team1.teamName }}&series_id={{ series_id }}" class="lg:col-span-10 p-10"><button type="submit" class="w-26 h-8 button">Submit Score</button></a>
+    <a href="/submitScore?current_league_id={{ current_league_id }}&current_team={{ team0.teamName }}&opponent_team={{ team1.teamName }}&series_id={{ series_id }}" class="lg:col-span-8 p-10"><button type="submit" class="w-26 h-8 button">Submit Score</button></a>
     {% endif %}
+
     <div class="teams-card">
-        <h1>(W - L) {{ team1.teamName }}</h1>
-        <div class="flex justify-between gap-5 pt-4">
-            <img src="../static/placeholder.png" alt="" class="rounded-lg border-4 border-eleventh-blue h-20 w-20">
-            <img src="../static/placeholder.png" alt="" class="rounded-lg border-4 border-eleventh-blue h-20 w-20">
-            <img src="../static/placeholder.png" alt="" class="rounded-lg border-4 border-eleventh-blue h-20 w-20">
+        <div class="flex pb-20">
+            <h1>(W - L)</h1>
+            <h1 class="pl-5">{{team1.teamName }}</h1>
+        </div>
+
+        <div class="flex justify-evenly">
+            <img src="../static/placeholder.png" alt="" class="profile-image">
+            <img src="../static/placeholder.png" alt="" class="profile-image">
+            <img src="../static/placeholder.png" alt="" class="profile-image">
         </div>
     </div>
 </div>

@@ -15,9 +15,15 @@ def createTeam():
         captainID = current_user.id
         teamName = request.form.get('teamName')
         teamRegion = request.form.get('region')
-        # userOneNameForm = request.form.get('userOneName')
+        userOneNameForm = request.form.get('userOneName')
         userOneIdForm = request.form.get('userOneId')
         userOne = User.query.filter_by(id=userOneIdForm).first()
+        print(teamName)
+
+        # Make sure no fields are blank
+        if not teamName or not userOneNameForm or not userOneIdForm:
+            flash('Please fill out all the fields.', category='error')
+            return render_template('createTeam.html', user=current_user)
 
         # Make sure both users have a rank
         if current_user.rank == None or userOne.rank == None:
