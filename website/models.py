@@ -1,9 +1,7 @@
 from . import db
 from flask_login import UserMixin
-from sqlalchemy.sql import func
-import datetime
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, UniqueConstraint, Index, Sequence, BLOB
+from sqlalchemy import ForeignKey, Index
 
 Base = declarative_base()
 
@@ -16,7 +14,7 @@ class User(db.Model,  UserMixin):
     platform = db.Column(db.String(150))
     region = db.Column(db.String(150))
     rank = db.Column(db.Numeric(2, 0), default=15)
-    profile_image = db.Column(db.LargeBinary)
+    profile_image = db.Column(db.String(150))
     banner_image = db.Column(db.LargeBinary)
     Index("userIdIndex", "id", "email", "username" )
 

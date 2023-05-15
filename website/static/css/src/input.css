@@ -62,7 +62,7 @@ a:hover {
 .bannerUserName{
     left: 40%;
     top: 40%;
-    @apply absolute;
+    @apply absolute text-eleventh-grey;
 }
 
 .teamStatSubmitTable{

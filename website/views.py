@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from .models import User, Team, TeamPlayers, League, Stats, Series
-from . import db
+from . import db, images
 from sqlalchemy import text, exists, func
 from collections import Counter
 
@@ -18,8 +18,18 @@ def home():
 def faq():
     return render_template('faq.html', user=current_user)
 
-@views.route('/profile')
+@views.route('/profile', methods=['GET', 'POST'])
 def profile():
+    if request.method == 'POST' and 'profile_image' in request.files:
+        # Save the image file
+        filename = images.save(request.files['profile_image'])
+
+        # Update current_user.profile_image
+        current_user.profile_image = filename
+        db.session.commit()
+        
+        flash("Profile_image saved successfully.")
+        return render_template('profile.html' , user=current_user)
     return render_template('profile.html', user=current_user)
 
 @views.route('/teams')

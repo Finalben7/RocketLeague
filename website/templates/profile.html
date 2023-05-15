@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block title %} {{ user.username }} {% endblock %} {% block content %}
 <div class="grid gap-4 justify-items-center lg:grid-cols-9 lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4xl lg:justify-items-center">
     <div class="py-5 relative text-center lg:col-span-8">
-        <img src="../static/bannerBG.png" alt="" class="w-full h-full">
+        <img src="../static/assets/images/bannerBG.png" alt="" class="w-full h-full">
         <h1 class="bannerUserName">{{ user.username }}</h1>
     </div>
 
@@ -33,10 +33,11 @@
     </div>
 
     <div class="lg:col-span-8">
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST" action="/profile" enctype="multipart/form-data">
             <input type="file" name="profile_image">
-            <button type="submit" class="button" disabled>Upload</button>
+            <button type="submit" class="button">Upload</button>
         </form>
     </div>
+
 </div>
 {% endblock %}

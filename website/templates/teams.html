@@ -2,7 +2,7 @@
     <div class="grid gap-8 lg:grid-cols-9 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4x">
         <h1 class="uppercase lg:col-span-8 lg:items-center p-5">{{ user.username }}'s Teams</h1>             
         {% for team_id, team in teams.items() %} 
-            <div class="teams-card" style="background-image: url(../static/banner.jpg);">
+            <div class="teams-card" style="background-image: url(../static/assets/images/banner.jpg);">
                 <div class="flex pb-20">
                     <h2>(W - L)</h2>
                     <a href="/team?team_id={{ team_id }}"><h1 class="pl-5 hover:text-eleventh-grey text-left lg:col-span-8">{{ team[0] }}</h1></a>
@@ -11,7 +11,7 @@
                 <div class="flex justify-evenly">
                     {% for user in team[1] %}
                         <div class="flex flex-col items-center">
-                            <img src="../static/placeholder.png" alt="" class="rounded-full border-4 h-20 w-20">
+                            <img src="../static/assets/images/placeholder.png" alt="" class="rounded-full border-4 h-20 w-20">
                             <h2 class="pt-5">{{ user }}</h2>
                         </div>
                     {% endfor %}

@@ -19,13 +19,13 @@
         <div class="relative md:col-span-1"><!--Navigation bar and links-->
           <nav>
             <div class="flex">
-              <a href="/"><img src="../static/logo.png" alt="" class="h-32 w-32 lg:h-52 lg:w-52"></a>
+              <a href="/"><img src="../static/assets/images/logo.png" alt="" class="h-32 w-32 lg:h-52 lg:w-52"></a>
               <h1 class="self-center px-2 lg:my-0"></h1>
             </div>
               
             <ul class="py-2">
               <li class="md:hidden">
-                <a href="javascript:void(0);" onclick="mainNavDropdown()"><img src="../static/dropdownBG.png" alt=""></a>
+                <a href="javascript:void(0);" onclick="mainNavDropdown()"><img src="../static/assets/images/dropdownBG.png" alt=""></a>
               </li>
             </ul>
 
@@ -54,7 +54,11 @@
         <main class="px-16 py-6 md:col-span-9">
           {% if user.is_authenticated %}
             <div class="flex justify-center items-center md:justify-end" id="buttons"><!-- Log in/Sign up buttons -->
-              <a href="javascript:void(0);" onclick="userNavDropdown()"><img src="../static/placeholder.png" alt="" class="profile-image z-50"></a><!-- User's profile picture here -->
+              {% if user.profile_image %}
+              <a href="javascript:void(0);" onclick="userNavDropdown()"><img src="../static/uploads/Lemons.jpg" alt="" class="profile-image z-50"></a><!-- User's profile picture here -->
+              {% else %}
+              <a href="javascript:void(0);" onclick="userNavDropdown()"><img src="../static/assets/images/placeholder.png" alt="" class="profile-image z-50"></a><!-- User's profile picture here -->
+              {% endif %}
             </div>
             <div class="flex justify-center items-center md:justify-end ">
               <ul class="hidden" id="userNav">

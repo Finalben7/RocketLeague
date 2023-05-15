@@ -679,10 +679,6 @@ video {
   overflow-x: auto;
 }
 
-.rounded-lg {
-  border-radius: 0.5rem;
-}
-
 .rounded-full {
   border-radius: 9999px;
 }
@@ -793,20 +789,20 @@ video {
   padding-bottom: 2rem;
 }
 
-.pt-4 {
-  padding-top: 1rem;
-}
-
-.pb-5 {
-  padding-bottom: 1.25rem;
-}
-
 .pb-20 {
   padding-bottom: 5rem;
 }
 
 .pl-5 {
   padding-left: 1.25rem;
+}
+
+.pb-5 {
+  padding-bottom: 1.25rem;
+}
+
+.pt-4 {
+  padding-top: 1rem;
 }
 
 .pt-5 {
@@ -991,6 +987,8 @@ a:hover {
   left: 40%;
   top: 40%;
   position: absolute;
+  --tw-text-opacity: 1;
+  color: rgb(49 53 55 / var(--tw-text-opacity));
 }
 
 .teamStatSubmitTable {

@@ -282,11 +282,11 @@ def submitScore():
                 return redirect(url_for('views.teams'))
 
 # Image upload
-@logic.route('/profile', methods=['GET', 'POST'])
-def profile():
-    if request.method == 'POST':
-        profile_image = request.files['profile_image'].read()
-        current_user.profile_image = profile_image
-        db.session.commit()
+# @logic.route('/profile', methods=['GET', 'POST'])
+# def profile():
+#     if request.method == 'POST':
+#         profile_image = request.files['profile_image'].read()
+#         current_user.profile_image = profile_image
+#         db.session.commit()
     
-        return redirect(url_for('views.profile'))
+#         return redirect(url_for('views.profile'))
