@@ -1,51 +1,322 @@
 {% extends "base.html" %} {% block title %} Submit Scores {% endblock %} {% block content %}
-<div class="grid gap-8 lg:grid-cols-9 justify-items-center lg:py-36"><!-- Main content goes inside this div -->
-    <div class="lg:col-span-8 text-center">   
+<div class="grid gap-8 lg:grid-cols-9 justify-items-center"><!-- Main content goes inside this div -->
+    <!-- TODO: Add ability to use replay parser! -->
+    <!-- <div class="lg:col-span-8 text-center">   
         <h1>Upload a replay file here</h1>
         <form action="/action_page.php">
             <input class="p-5" type="file" id="myFile" name="filename">
             <br/>
             <input type="submit" class="button w-26" disabled>
         </form>
-    </div>
+    </div> -->
     
     <div class="lg:col-span-8">
+        <h1 class="col-span-8 text-4xl text-center">{{ current_team_name }} VS {{ opponent_team_name }}</h1>
         <form method="POST" id="scoreSubmitForm">
             <!-- Pass League.id from args -->
             <input type="hidden" name="current_league_id" value="{{ current_league_id }}">
             <input type="hidden" name="series_id" value="{{ series_id }}">
-            <!-- <input type="hidden" name="current_team_id" value="{{ current_team_dict['teamId'] }}">
-            <input type="hidden" name="opponent_team_id" value="{{ opponent_team_dict['teamId'] }}"> -->
-            <table class="teamStatSubmitTable">
+            <input type="hidden" name="current_team_id" value="{{ current_team_dict['teamId'] }}">
+            <!-- <input type="hidden" name="opponent_team_id" value="{{ opponent_team_dict['teamId'] }}"> -->
+            
+            <table class="teamStatSubmitTable"><!-- Game 1 table -->
+                <tbody class="mx-8">
                 <tr>
-                    <th></th>
-                    <th>Game One Winner</th>
+                    <th colspan="6" class="text-3xl py-4">Game 1</th>
+                </tr>
+                <tr><!-- Team 0 -->
+                    <th colspan="6" class="text-2xl">{{ current_team_name }}</th>
+                </tr>
+                <tr>
+                    <th>Username</th>
+                    <th>Score</th>
+                    <th>Goals</th>
+                    <th>Saves</th>
+                    <th>Assists</th>
+                    <th>Shots</th>
+                </tr>
+                <tr>
                     <td>
-                        <select id="gameOneWinner" name="gameOneWinner" class="select">
+                        <select class="select" id="user1" name="user1" required>
+                            <option value="" selected disabled>Select a user</option>
+                            {% for users in current_team_dict['users'] %}
+                            <option value="{{ users.id }}" id="user1">{{ users.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td><input class="select submit" type="number" id="user1Score" name="user1Score" form="scoreSubmitForm" min="0" max="2000"/></td>
+                    <td><input class="select submit" type="number" id="user1Goals" name="user1Goals" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user1Saves" name="user1Saves" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user1Assists" name="user1Assists" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user1Shots" name="user1Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
+                </tr>
+                <tr>
+                    <td>
+                        <select class="select" id="user2" name="user2" required>
+                            <option value="" selected disabled>Select a user</option>
+                            {% for users in current_team_dict['users'] %}
+                            <option value="{{ users.id }}" id="user2">{{ users.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td><input class="select submit" type="number" id="user2Score" name="user2Score" form="scoreSubmitForm" min="0" max="2000"/></td>
+                    <td><input class="select submit" type="number" id="user2Goals" name="user2Goals" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user2Saves" name="user2Saves" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user2Assists" name="user2Assists" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user2Shots" name="user2Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
+                </tr>
+
+                <tr><!-- Team 1 -->
+                    <th colspan="6" class="text-2xl pt-4">{{ opponent_team_name }}</th>
+                </tr>
+                <tr>
+                    <th>Username</th>
+                    <th>Score</th>
+                    <th>Goals</th>
+                    <th>Saves</th>
+                    <th>Assists</th>
+                    <th>Shots</th>
+                </tr>
+                <tr>
+                    <td>
+                        <select class="select" id="user3" name="user3" required>
+                            <option value="" selected disabled>Select a user</option>
+                            {% for users in opponent_team_dict['users'] %}
+                            <option value="{{ users.id }}" id="user3">{{ users.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td><input class="select submit" type="number" id="user3Score" name="user3Score" form="scoreSubmitForm" min="0" max="2000"/></td>
+                    <td><input class="select submit" type="number" id="user3Goals" name="user3Goals" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user3Saves" name="user3Saves" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user3Assists" name="user3Assists" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user3Shots" name="user3Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
+                </tr>
+                <tr>
+                    <td>
+                        <select class="select" id="user4" name="user4" required>
+                            <option value="" selected disabled>Select a user</option>
+                            {% for users in opponent_team_dict['users'] %}
+                            <option value="{{ users.id }}" id="user4">{{ users.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td><input class="select submit" type="number" id="user4Score" name="user4Score" form="scoreSubmitForm" min="0" max="2000"/></td>
+                    <td><input class="select submit" type="number" id="user4Goals" name="user4Goals" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user4Saves" name="user4Saves" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user4Assists" name="user4Assists" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user4Shots" name="user4Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
+                </tr>
+                  
+                <tr><!-- Game 1 winner -->
+                    <th></th>
+                    <th colspan="2" class="text-2xl">Game 1 Winner</th>
+                    <td colspan="2">
+                        <select id="gameOneWinner" name="gameOneWinner" class="select" required>
+                            <option value="" selected disabled>Select a winner</option>
+                            <option value="{{ current_team_dict['teamId'] }}" id="teamName0" form="scoreSubmitForm"> {{ current_team_name }} </option>
+                            <option value="{{ opponent_team_dict['teamId'] }}" id="teamName1" form="scoreSubmitForm"> {{ opponent_team_name }} </option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+
+            <table class="teamStatSubmitTable"><!-- Game 2 table -->
+                <tr>
+                    <th colspan="6" class="text-3xl py-4">Game 2</th>
+                </tr>
+                <tr><!-- Team 0 -->
+                    <th colspan="6" class="text-2xl">{{ current_team_name }}</th>
+                </tr>
+                <tr>
+                    <th>Username</th>
+                    <th>Score</th>
+                    <th>Goals</th>
+                    <th>Saves</th>
+                    <th>Assists</th>
+                    <th>Shots</th>
+                </tr>
+                <tr>
+                    <td>
+                        <select class="select" id="user5" name="user5" required>
+                            <option value="" selected disabled>Select a user</option>
+                            {% for users in current_team_dict['users'] %}
+                            <option value="{{ users.id }}" id="user5">{{ users.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td><input class="select submit" type="number" id="user5Score" name="user5Score" form="scoreSubmitForm" min="0" max="2000"/></td>
+                    <td><input class="select submit" type="number" id="user5Goals" name="user5Goals" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user5Saves" name="user5Saves" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user5Assists" name="user5Assists" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user5Shots" name="user5Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
+                </tr>
+                <tr>
+                    <td>
+                        <select class="select" id="user6" name="user6" required>
+                            <option value="" selected disabled>Select a user</option>
+                            {% for users in current_team_dict['users'] %}
+                            <option value="{{ users.id }}" id="user6">{{ users.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td><input class="select submit" type="number" id="user6Score" name="user6Score" form="scoreSubmitForm" min="0" max="2000"/></td>
+                    <td><input class="select submit" type="number" id="user6Goals" name="user6Goals" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user6Saves" name="user6Saves" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user6Assists" name="user6Assists" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user6Shots" name="user6Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
+                </tr>
+
+                <tr><!-- Team 1 -->
+                    <th colspan="6" class="text-2xl pt-4">{{ opponent_team_name }}</th>
+                </tr>
+                <tr>
+                    <th>Username</th>
+                    <th>Score</th>
+                    <th>Goals</th>
+                    <th>Saves</th>
+                    <th>Assists</th>
+                    <th>Shots</th>
+                </tr>
+                <tr>
+                    <td>
+                        <select class="select" id="user7" name="user7" required>
+                            <option value="" selected disabled>Select a user</option>
+                            {% for users in opponent_team_dict['users'] %}
+                            <option value="{{ users.id }}" id="user7">{{ users.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td><input class="select submit" type="number" id="user7Score" name="user7Score" form="scoreSubmitForm" min="0" max="2000"/></td>
+                    <td><input class="select submit" type="number" id="user7Goals" name="user7Goals" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user7Saves" name="user7Saves" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user7Assists" name="user7Assists" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user7Shots" name="user7Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
+                </tr>
+                <tr>
+                    <td>
+                        <select class="select" id="user8" name="user8" required>
+                            <option value="" selected disabled>Select a user</option>
+                            {% for users in opponent_team_dict['users'] %}
+                            <option value="{{ users.id }}" id="user8">{{ users.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td><input class="select submit" type="number" id="user8Score" name="user8Score" form="scoreSubmitForm" min="0" max="2000"/></td>
+                    <td><input class="select submit" type="number" id="user8Goals" name="user8Goals" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user8Saves" name="user8Saves" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user8Assists" name="user8Assists" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user8Shots" name="user8Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
+                </tr>
+                  
+                <tr><!-- Game 2 winner -->
+                    <th></th>
+                    <th colspan="2" class="text-2xl">Game 2 Winner</th>
+                    <td colspan="2">
+                        <select id="gameTwoWinner" name="gameTwoWinner" class="select" required>
+                            <option value="" selected disabled>Select a winner</option>
                             <option value="{{ current_team_dict['teamId'] }}" id="teamName0" form="scoreSubmitForm"> {{ current_team_name }} </option>
                             <option value="{{ opponent_team_dict['teamId'] }}" id="teamName1" form="scoreSubmitForm"> {{ opponent_team_name }} </option>
                         </select>
                     </td>
                 </tr>
             </table>
-            <table class="teamStatSubmitTable">
+
+            <table class="teamStatSubmitTable"><!-- Game 3 table -->
                 <tr>
-                    <th></th>
-                    <th>Game Two Winner</th>
+                    <th colspan="6" class="text-3xl py-4">Game 3</th>
+                </tr>
+                <tr><!-- Team 0 -->
+                    <th colspan="6" class="text-2xl">{{ current_team_name }}</th>
+                </tr>
+                <tr>
+                    <th>Username</th>
+                    <th>Score</th>
+                    <th>Goals</th>
+                    <th>Saves</th>
+                    <th>Assists</th>
+                    <th>Shots</th>
+                </tr>
+                <tr>
                     <td>
-                        <select id="gameTwoWinner" name="gameTwoWinner" class="select">
-                            <option value="{{ current_team_dict['teamId'] }}" id="teamName0" form="scoreSubmitForm"> {{ current_team_name }} </option>
-                            <option value="{{ opponent_team_dict['teamId'] }}" id="teamName1" form="scoreSubmitForm"> {{ opponent_team_name }} </option>
+                        <select class="select" id="user9" name="user9">
+                            <option value="" selected disabled>Select a user</option>
+                            {% for users in current_team_dict['users'] %}
+                            <option value="{{ users.id }}" id="user9">{{ users.username }}</option>
+                            {% endfor %}
                         </select>
                     </td>
+                    <td><input class="select submit" type="number" id="user9Score" name="user9Score" form="scoreSubmitForm" min="0" max="2000"/></td>
+                    <td><input class="select submit" type="number" id="user9Goals" name="user9Goals" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user9Saves" name="user9Saves" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user9Assists" name="user9Assists" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user9Shots" name="user9Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
                 </tr>
-            </table>
-            <table class="teamStatSubmitTable">
                 <tr>
-                    <th></th>
-                    <th>Game Three Winner</th>
                     <td>
-                        <select id="gameThreeWinner" name="gameThreeWinner" class="select">
+                        <select class="select" id="user10" name="user10">
+                            <option value="" selected disabled>Select a user</option>
+                            {% for users in current_team_dict['users'] %}
+                            <option value="{{ users.id }}" id="user10">{{ users.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td><input class="select submit" type="number" id="user10Score" name="user10Score" form="scoreSubmitForm" min="0" max="2000"/></td>
+                    <td><input class="select submit" type="number" id="user10Goals" name="user10Goals" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user10Saves" name="user10Saves" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user10Assists" name="user10Assists" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user10Shots" name="user10Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
+                </tr>
+
+                <tr><!-- Team 1 -->
+                    <th colspan="6" class="text-2xl pt-4">{{ opponent_team_name }}</th>
+                </tr>
+                <tr>
+                    <th>Username</th>
+                    <th>Score</th>
+                    <th>Goals</th>
+                    <th>Saves</th>
+                    <th>Assists</th>
+                    <th>Shots</th>
+                </tr>
+                <tr>
+                    <td>
+                        <select class="select" id="user11" name="user11">
+                            <option value="" selected disabled>Select a user</option>
+                            {% for users in opponent_team_dict['users'] %}
+                            <option value="{{ users.id }}" id="user11">{{ users.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td><input class="select submit" type="number" id="user11Score" name="user11Score" form="scoreSubmitForm" min="0" max="2000"/></td>
+                    <td><input class="select submit" type="number" id="user11Goals" name="user11Goals" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user11Saves" name="user11Saves" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user11Assists" name="user11Assists" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user11Shots" name="user11Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
+                </tr>
+                <tr>
+                    <td>
+                        <select class="select" id="user12" name="user12">
+                            <option value="" selected disabled>Select a user</option>
+                            {% for users in opponent_team_dict['users'] %}
+                            <option value="{{ users.id }}" id="user12">{{ users.username }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td><input class="select submit" type="number" id="user12Score" name="user12Score" form="scoreSubmitForm" min="0" max="2000"/></td>
+                    <td><input class="select submit" type="number" id="user12Goals" name="user12Goals" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user12Saves" name="user12Saves" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user12Assists" name="user12Assists" form="scoreSubmitForm" min="0" max="20"/></td>
+                    <td><input class="select submit" type="number" id="user12Shots" name="user12Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
+                </tr>
+                  
+                <tr><!-- Game 3 winner -->
+                    <th></th>
+                    <th colspan="2" class="text-2xl">Game 3 Winner</th>
+                    <td colspan="2">
+                        <select id="gameThreeWinner" name="gameThreeWinner" class="select" required>
+                            <option value="" selected disabled>Select a winner</option>
                             <option value="0" id="noGameThree" form="scoreSubmitForm"> No game 3 </option>
                             <option value="{{ current_team_dict['teamId'] }}" id="teamName0" form="scoreSubmitForm"> {{ current_team_name }} </option>
                             <option value="{{ opponent_team_dict['teamId'] }}" id="teamName1" form="scoreSubmitForm"> {{ opponent_team_name }} </option>
@@ -53,160 +324,11 @@
                     </td>
                 </tr>
             </table>
-        </div>
-
-        <div class="lg:col-span-8">
-            <button type="submit" class="w-26 h-10 button">Submit</button>
-        </div>
-
-
-
-
-
-        <!--<option value="{{ current_team_dict['teamId'] }}" id="teamName0" form="scoreSubmitForm"> {{ current_team_name }} </option>
-            <option value="{{ opponent_team_dict['teamId'] }}" id="teamName1" form="scoreSubmitForm"> {{ opponent_team_name }} </option>-->
-
-
-
-
-
-        <!-- FOR FUTURE USE 
-            <form method="POST" id="scoreSubmitForm">  
-            <table class="teamStatSubmitTable">
-                <tr>
-                    <th></th>
-                    <th>Winning Team Name</th>
-                    <td>
-                        <select id="gameOneWinner" name="gameOneWinner">
-                            <option value="{{ current_team_name }}" id="teamName0" form="scoreSubmitForm"> {{ current_team_name }} </option>
-                            <option value="{{ opponent_team_name }}" id="teamName1" form="scoreSubmitForm"> {{ opponent_team_name }} </option>
-                        </select>
-                    </td>
-                    <th>Score</th>
-                    <td><input type="number" id="teamName0Score" name="teamName0Score" form="scoreSubmitForm" min="0" max="20"/></td>
-                    <th></th>
-                </tr>
-                <tr>
-                    <th>Username</th>
-                    <th>Score</th>
-                    <th>Goals</th>
-                    <th>Saves</th>
-                    <th>Assists</th>
-                    <th>Shots</th>
-                </tr>
-                <tr>
-                    <td>
-                        <select id="userName0" name="userName0">
-                            <option value="userName0" id="userName0">{{ username }}</option>
-                        </select>
-                    </td>
-                    <td><input type="number" id="userName0Score" name="userName0Score" form="scoreSubmitForm" min="0" max="20"/></td>
-                    <td><input type="number" id="userName0Goals" name="userName0Goals" form="scoreSubmitForm" min="0" max="2000"/></td>
-                    <td><input type="number" id="userName0Saves" name="userName0Saves" form="scoreSubmitForm" min="0" max="20"/></td>
-                    <td><input type="number" id="userName0Assists" name="userName0Assists" form="scoreSubmitForm" min="0" max="20"/></td>
-                    <td><input type="number" id="userName0Shots" name="userName0Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
-                </tr>
-                <tr>
-                    <td>
-                        <select id="userName1" name="userName1">
-                            <option value="userName1" id="userName1">{{ username }}</option>
-                        </select>
-                    </td>
-                    <td><input type="number" id="userName1Score" name="userName1Score" form="scoreSubmitForm" min="0" max="20"/></td>
-                    <td><input type="number" id="userName1Goals" name="userName1Goals" form="scoreSubmitForm" min="0" max="2000"/></td>
-                    <td><input type="number" id="userName1Saves" name="userName1Saves" form="scoreSubmitForm" min="0" max="20"/></td>
-                    <td><input type="number" id="userName1Assists" name="userName1Assists" form="scoreSubmitForm" min="0" max="20"/></td>
-                    <td><input type="number" id="userName1Shots" name="userName1Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
-                </tr>
-                <tr>
-                    <td>
-                        <select id="userName" name="userName">
-                            <option value="userName0" id="userName0"> {{ user.username }} </option>
-                            <option value="userName1" id="userName1"> {{ user.username }} </option>
-                            <option value="userName2" id="userName2"> {{ user.username }} </option>
-                            <option value="userName3" id="userName3"> {{ user.username }} </option>
-                            <option value="userName4" id="userName4"> {{ user.username }} </option>
-                            <option value="userName5" id="userName5"> {{ user.username }} </option>
-                        </select>
-                    </td>
-                    <td><input type="number" id="userName2Score" name="userName2Score" form="scoreSubmitForm" min="0" max="20"/></td>
-                    <td><input type="number" id="userName2Goals" name="userName2Goals" form="scoreSubmitForm" min="0" max="2000"/></td>
-                    <td><input type="number" id="userName2Saves" name="userName2Saves" form="scoreSubmitForm" min="0" max="20"/></td>
-                    <td><input type="number" id="userName2Assists" name="userName2Assists" form="scoreSubmitForm" min="0" max="20"/></td>
-                    <td><input type="number" id="userName2Shots" name="userName2Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
-                </tr>
-            </table>
-    </div>
-
-    <div class="lg:col-span-8">  
-            <table class="teamStatSubmitTable">
-                <tr>
-                    <th></th>
-                    <th>Team Name</th>
-                    <td>
-                        <select id="teamName1" name="teamName1">
-                            <option value="teamName1" id="teamName1"> {{ opponent_team_name }} </option>
-                        </select>
-                    </td>
-                    <th>Team Score</th>
-                    <td><input type="number" id="teamName1Score" name="teamName1Score" form="scoreSubmitForm" min="0" max="20"/></td>
-                    <th></th>
-                </tr>
-                <tr>
-                    <th>Username</th>
-                    <th>Score</th>
-                    <th>Goals</th>
-                    <th>Saves</th>
-                    <th>Assists</th>
-                    <th>Shots</th>
-                </tr>
-                <tr>
-                    <td>
-                        <select id="userName2" name="userName2">
-                            <option value="userName2" id="userName2">{{ username }}</option>
-                        </select>
-                    </td>
-                    <td><input type="number" id="userName0Score" name="userName0Score" form="scoreSubmitForm" min="0" max="20"/></td>
-                    <td><input type="number" id="userName0Goals" name="userName0Goals" form="scoreSubmitForm" min="0" max="2000"/></td>
-                    <td><input type="number" id="userName0Saves" name="userName0Saves" form="scoreSubmitForm" min="0" max="20"/></td>
-                    <td><input type="number" id="userName0Assists" name="userName0Assists" form="scoreSubmitForm" min="0" max="20"/></td>
-                    <td><input type="number" id="userName0Shots" name="userName0Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
-                </tr>
-                <tr>
-                    <td>
-                        <select id="userName3" name="userName3">
-                            <option value="userName3" id="userName3">{{ username }}</option>
-                        </select>
-                    </td>
-                    <td><input type="number" id="userName1Score" name="userName1Score" form="scoreSubmitForm" min="0" max="20"/></td>
-                    <td><input type="number" id="userName1Goals" name="userName1Goals" form="scoreSubmitForm" min="0" max="2000"/></td>
-                    <td><input type="number" id="userName1Saves" name="userName1Saves" form="scoreSubmitForm" min="0" max="20"/></td>
-                    <td><input type="number" id="userName1Assists" name="userName1Assists" form="scoreSubmitForm" min="0" max="20"/></td>
-                    <td><input type="number" id="userName1Shots" name="userName1Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
-                </tr>
-                <tr>
-                    <td>
-                        <select id="userName" name="userName">
-                            <option value="userName0" id="userName0"> {{ user.username }} </option>
-                            <option value="userName1" id="userName1"> {{ user.username }} </option>
-                            <option value="userName2" id="userName2"> {{ user.username }} </option>
-                            <option value="userName3" id="userName3"> {{ user.username }} </option>
-                            <option value="userName4" id="userName4"> {{ user.username }} </option>
-                            <option value="userName5" id="userName5"> {{ user.username }} </option>
-                        </select>
-                    </td>
-                    <td><input type="number" id="userName2Score" name="userName2Score" form="scoreSubmitForm" min="0" max="20"/></td>
-                    <td><input type="number" id="userName2Goals" name="userName2Goals" form="scoreSubmitForm" min="0" max="2000"/></td>
-                    <td><input type="number" id="userName2Saves" name="userName2Saves" form="scoreSubmitForm" min="0" max="20"/></td>
-                    <td><input type="number" id="userName2Assists" name="userName2Assists" form="scoreSubmitForm" min="0" max="20"/></td>
-                    <td><input type="number" id="userName2Shots" name="userName2Shots" form="scoreSubmitForm" min="0" max="20"/></td>               
-                </tr>
-            </table>
     </div>
 
     <div class="lg:col-span-8">
-        <button type="submit" class="w-26 h-10 button">Submit</button>
+        <button type="submit" class="button">Submit</button>
     </div>
-    </form>   -->
+    </form>
 </div>
 {% endblock %}

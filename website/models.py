@@ -15,7 +15,6 @@ class User(db.Model,  UserMixin):
     region = db.Column(db.String(150))
     rank = db.Column(db.Numeric(2, 0), default=15)
     profile_image = db.Column(db.String(150))
-    banner_image = db.Column(db.LargeBinary)
     Index("userIdIndex", "id", "email", "username" )
 
 class Team(db.Model):
@@ -26,6 +25,8 @@ class Team(db.Model):
     region = db.Column(db.String(150))
     teamCaptain = db.Column(db.Integer, ForeignKey("User.id"))
     isQueued = db.Column(db.Boolean, default=0)
+    team_logo = db.Column(db.String(150))
+    team_banner = db.Column(db.String(150))
 
 class League(db.Model):
     __tablename__ = 'League'
@@ -50,14 +51,19 @@ class Stats(db.Model):
     round_one = db.Column(db.Boolean, default=0)
     round_two = db.Column(db.Boolean, default=0)
     round_three = db.Column(db.Boolean, default=0)
-    # userId = db.Column(db.Integer, ForeignKey("User.id"))
-    # score = db.Column(db.Numeric(4, 0))
-    # goals = db.Column(db.Numeric(2, 0))
-    # assists = db.Column(db.Numeric(2, 0))
-    # saves = db.Column(db.Numeric(2, 0))
-    # shots = db.Column(db.Numeric(2, 0))
 
 class TeamPlayers(db.Model):
     __tablename__ = 'TeamPlayers'
     userId = db.Column(db.Integer, ForeignKey("User.id"), primary_key=True)
     teamId = db.Column(db.Integer, ForeignKey("Team.id"), primary_key=True)
+
+class UserStats(db.Model):
+    __tablename__ = 'UserStats'
+    id = db.Column(db.Integer, primary_key=True)
+    Series_id = db.Column(db.Integer, ForeignKey("Series.id"))
+    User_id = db.Column(db.Integer, ForeignKey("User.id"))
+    score = db.Column(db.Numeric(4, 0))
+    goals = db.Column(db.Numeric(2, 0))
+    assists = db.Column(db.Numeric(2, 0))
+    saves = db.Column(db.Numeric(2, 0))
+    shots = db.Column(db.Numeric(2, 0))

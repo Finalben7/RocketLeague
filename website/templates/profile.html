@@ -34,7 +34,12 @@
 
     <div class="lg:col-span-8">
         <form method="POST" action="/profile" enctype="multipart/form-data">
-            <input type="file" name="profile_image">
+            <label for="imageConfirm" class="text-base">I understand that images containing NSFW content are not allowed and may result in a ban on my account. </label>
+            <input type="checkbox" name="imageConfirm" required>
+            <br>
+            <p class="text-base">Please visit the <a href="/faq">FAQ</a> page for more information about profile image restrictions.</p>
+            <br>
+            <input type="file" name="profile_image" accept=".jpg, .jpeg, .png" required>
             <button type="submit" class="button">Upload</button>
         </form>
     </div>

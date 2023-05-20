@@ -1,22 +1,44 @@
-{% extends "base.html" %} {% block title %} {{ user.username }}'s Teams {% endblock %} {% block content %}
+{% extends "base.html" %}
+{% block title %} {{ user.username }}'s Teams {% endblock %}
+{% block content %}
     <div class="grid gap-8 lg:grid-cols-9 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4x">
-        <h1 class="uppercase lg:col-span-8 lg:items-center p-5">{{ user.username }}'s Teams</h1>             
-        {% for team_id, team in teams.items() %} 
-            <div class="teams-card" style="background-image: url(../static/assets/images/banner.jpg);">
-                <div class="flex pb-20">
-                    <h2>(W - L)</h2>
-                    <a href="/team?team_id={{ team_id }}"><h1 class="pl-5 hover:text-eleventh-grey text-left lg:col-span-8">{{ team[0] }}</h1></a>
+        <h1 class="uppercase lg:col-span-8 lg:items-center p-5">{{ user.username }}'s Teams</h1>
+        {% for team_id, team in teams.items() %}
+            {% if team.team_banner %}
+            <div class="teams-card" style="background-repeat: no-repeat; background-size: 100% 100%; background-image:url({{ url_for('static', filename='uploads/' + team.team_banner) }}) ;">
+            {% else %}
+            <div class="teams-card" style="background-repeat: no-repeat; background-size: 100% 100%; background-image:url(../static/assets/images/banner.jpg);">
+            {% endif %}
+                <div class="grid grid-cols-2 pb-20">
+                    <div class="flex">
+                        {% if team.team_logo %}
+                        <img src="{{ url_for('static', filename='uploads/' + team.team_logo) }}" alt="Team logo" class="rounded-full border-4 h-20 w-20">
+                        {% else %}
+                        <img src="../static/assets/images/placeholder.png" alt="Team logo" class="rounded-full border-4 h-20 w-20">
+                        {% endif %}
+                        <h2>(W - L)</h2>
+                        <h1 class="pl-5 text-left lg:col-span-8">{{ team.team_name }}</h1>
+                    </div>
+                    <div class="text-end text-sm">
+                        {% if user.id == team.team_captain %}
+                        <a href="/editTeam?team_id={{ team_id }}">Edit Team</a>
+                        {% endif %}
+                    </div>
                 </div>
-
                 <div class="flex justify-evenly">
-                    {% for user in team[1] %}
+                    {% for user in team.users %}
                         <div class="flex flex-col items-center">
-                            <img src="../static/assets/images/placeholder.png" alt="" class="rounded-full border-4 h-20 w-20">
-                            <h2 class="pt-5">{{ user }}</h2>
+                            {% if user.profile_image %}
+                            <img src="{{ url_for('static', filename='uploads/' + user.profile_image) }}" alt="Profile Image" class="rounded-full border-4 h-20 w-20">
+                            {% else %}
+                            <img src="../static/assets/images/placeholder.png" alt="Profile Image" class="rounded-full border-4 h-20 w-20">
+                            {% endif %}
+                            <h2 class="pt-5">{{ user.username }}</h2>
                         </div>
                     {% endfor %}
                 </div>
             </div>
+            <a href="/team?team_id={{ team_id }}" class="lg:col-span-8"><button type="submit" class="button">Team Page</button></a>
         {% endfor %}
         <a href="/createTeam" class="lg:col-span-8"><button type="submit" class="button">Create New Team</button></a>
     </div>

@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from .models import User, Team, TeamPlayers, Stats, Series, League
+from .models import User, Team, TeamPlayers, Stats, Series, League, UserStats
 from . import db
 from flask_login import current_user
 from sqlalchemy import text, update, and_, or_, func
@@ -65,6 +65,9 @@ def createTeam():
 @logic.route('/submitScore', methods=['GET', 'POST'])
 def submitScore():
     if request.method == 'POST':
+        # Get current Team.id from form
+        team_id = request.form.get('current_team_id')
+
         # Get Team.id's from form
         winners = [int(request.form.get('gameOneWinner')), int(request.form.get('gameTwoWinner')), int(request.form.get('gameThreeWinner'))]
 
@@ -85,14 +88,69 @@ def submitScore():
         # Get League.id, Series_id and Team.id's from args
         current_league_id = request.form['current_league_id']
         series_id = request.form['series_id']
-        # current_team_id = request.form['current_team_id']
-        # opponent_team_id = request.form['opponent_team_id']
 
         # WHERE clause for update queries
         where_clause = Stats.Series_id == series_id
 
         # Check if there are exactly 2 or 3 winners
         if len(winners) in [2, 3]:
+            #Define # of users based on # of games played
+            num_users = 8 if len([x for x in winners if x != 0]) == 2 else 12
+
+            # Check to make sure players are not duplicated per game
+            gameOne = [int(request.form.get('user1')), int(request.form.get('user2')), int(request.form.get('user3')), int(request.form.get('user4'))]
+            gameTwo = [int(request.form.get('user5')), int(request.form.get('user6')), int(request.form.get('user7')), int(request.form.get('user8'))]
+            
+            if len(gameOne) != len(set(gameOne)) or len(gameTwo != len(set(gameTwo))):
+                flash("One user has been selected for two stat lines, please correct this error.", category="error")
+                return redirect(request.referrer)   
+            
+            if num_users == 12:
+                gameThree = [int(request.form.get('user9')), int(request.form.get('user10')), int(request.form.get('user11')), int(request.form.get('user12'))]
+                if len(gameThree) != len(set(gameThree)):
+                    flash("One user has been selected for two stat lines, please correct this error.", category="error")
+                    return redirect(request.referrer)
+
+            # Get data for each user from form
+            for i in range(num_users + 1):
+                user_id_key = f'user{i}'
+                user_score_key = f'user{i}Score'
+                user_goals_key = f'user{i}Goals'
+                user_saves_key = f'user{i}Saves'
+                user_assists_key = f'user{i}Assists'
+                user_shots_key = f'user{i}Shots'
+
+                if (
+                    user_id_key not in request.form or
+                    user_score_key not in request.form or
+                    user_goals_key not in request.form or
+                    user_saves_key not in request.form or
+                    user_assists_key not in request.form or
+                    user_shots_key not in request.form
+                ):
+                    continue
+
+                user_id = int(request.form.get(user_id_key))
+                score = int(request.form.get(user_score_key))
+                goals = int(request.form.get(user_goals_key))
+                saves = int(request.form.get(user_saves_key))
+                assists = int(request.form.get(user_assists_key))
+                shots = int(request.form.get(user_shots_key))
+
+                # Create object to pass to db
+                user_stats = UserStats(
+                    Series_id=series_id,
+                    User_id=user_id,
+                    score=score,
+                    goals=goals,
+                    saves=saves,
+                    assists=assists,
+                    shots=shots
+                )
+
+                # Add the user stats to the database session
+                db.session.add(user_stats)
+
             # Get the rows to update
             stats_to_update = db.session.query(Stats).filter(where_clause).limit(len(winners)).all()
 
@@ -171,7 +229,7 @@ def submitScore():
                 print("Round 1 matches created!")
                 db.session.commit()
                 flash("Results submitted!", category="success")
-                return redirect(url_for('views.teams'))
+                return redirect(url_for('views.team', team_id=team_id))
             
             # Check to see if all of playoffs round_one series have been played
             playoffsRoundOneIsComplete = all(series.winningTeam is not None for series in roundOneSeries)
@@ -225,7 +283,7 @@ def submitScore():
                     n-=1
                 print("Round 2 matches created!")
                 db.session.commit()
-                return redirect(url_for('views.teams'))
+                return redirect(url_for('views.team', team_id=team_id))
 
             # Check to see if all of playoffs round_two series have been played
             playoffsRoundTwoIsComplete = all(series.winningTeam is not None for series in roundTwoSeries)
@@ -275,18 +333,12 @@ def submitScore():
                         db.session.add(stat)
                 print("Round 3 matches created!")
                 db.session.commit()
-                return redirect(url_for('views.teams'))
+                return redirect(url_for('views.team', team_id=team_id))
 
             else:
                 flash("Results submitted!", category="success")
-                return redirect(url_for('views.teams'))
-
-# Image upload
-# @logic.route('/profile', methods=['GET', 'POST'])
-# def profile():
-#     if request.method == 'POST':
-#         profile_image = request.files['profile_image'].read()
-#         current_user.profile_image = profile_image
-#         db.session.commit()
-    
-#         return redirect(url_for('views.profile'))
+                return redirect(url_for('views.team', team_id=team_id))
+            
+# Function to handle UserStat entries
+def InsertStats(User0):
+    print(User0)

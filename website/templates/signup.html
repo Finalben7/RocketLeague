@@ -10,6 +10,7 @@
             id="email"
             name="email"
             placeholder="Enter email"
+            required
         />
         </div>
         <div class="py-2">
@@ -20,14 +21,27 @@
             id="username"
             name="username"
             placeholder="Enter username"
+            required
         />
         </div>
+        <div class="py-2 text-base">
+            <label for="usernameConfirm">I confirm this username matches my in game username and is linked with an RL Tracker account.</label>
+            <input
+                type="checkbox"
+                class="select"
+                id="usernameConfirm"
+                name="usernameConfirm"
+                required
+            />
+            <p>Please visit the <a href="/faq">FAQ</a> page for more information about account requirements.</p>
+            </div>
         <div class="py-2">
         <label for="platform">Platform</label>
         <select
             type="platform"
             class="select"
             id="platform"
+            required
             name="platform">   
                 <option value="steam">Steam</option>
                 <option value="epic">Epic</option>
@@ -55,6 +69,7 @@
             id="password1"
             name="password1"
             placeholder="Enter password"
+            required
         />
         </div>
         <div class="py-2">
@@ -65,10 +80,11 @@
             id="password2"
             name="password2"
             placeholder="Confirm password"
+            required
         />
         </div>
         <br />
-        <div class="flex justify-center justify-items-center">
+        <div class="flex justify-center">
         <button type="submit" class="button">Submit</button>
         </div>
     </form>

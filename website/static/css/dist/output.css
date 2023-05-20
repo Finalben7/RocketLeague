@@ -537,6 +537,19 @@ video {
   z-index: 50;
 }
 
+.col-span-8 {
+  grid-column: span 8 / span 8;
+}
+
+.row-start-4 {
+  grid-row-start: 4;
+}
+
+.mx-8 {
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
 .ml-6 {
   margin-left: 1.5rem;
 }
@@ -551,6 +564,10 @@ video {
 
 .mt-4 {
   margin-top: 1rem;
+}
+
+.mb-5 {
+  margin-bottom: 1.25rem;
 }
 
 .block {
@@ -581,20 +598,16 @@ video {
   height: 8rem;
 }
 
-.h-8 {
-  height: 2rem;
-}
-
 .h-full {
   height: 100%;
 }
 
-.h-10 {
-  height: 2.5rem;
-}
-
 .h-20 {
   height: 5rem;
+}
+
+.h-8 {
+  height: 2rem;
 }
 
 .w-32 {
@@ -625,6 +638,10 @@ video {
   --tw-border-spacing-x: 0.5rem;
   --tw-border-spacing-y: 0.5rem;
   border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .flex-col {
@@ -677,6 +694,10 @@ video {
 
 .overflow-x-auto {
   overflow-x: auto;
+}
+
+.rounded-xl {
+  border-radius: 0.75rem;
 }
 
 .rounded-full {
@@ -784,6 +805,11 @@ video {
   padding-bottom: 1.25rem;
 }
 
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
 .py-8 {
   padding-top: 2rem;
   padding-bottom: 2rem;
@@ -797,12 +823,16 @@ video {
   padding-left: 1.25rem;
 }
 
+.pt-4 {
+  padding-top: 1rem;
+}
+
 .pb-5 {
   padding-bottom: 1.25rem;
 }
 
-.pt-4 {
-  padding-top: 1rem;
+.pb-8 {
+  padding-bottom: 2rem;
 }
 
 .pt-5 {
@@ -817,6 +847,10 @@ video {
   text-align: center;
 }
 
+.text-end {
+  text-align: end;
+}
+
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
@@ -825,6 +859,11 @@ video {
 .text-3xl {
   font-size: 1.875rem;
   line-height: 2.25rem;
+}
+
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
 }
 
 .text-lg {
@@ -840,6 +879,11 @@ video {
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
+}
+
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
 }
 
 .uppercase {
@@ -954,10 +998,12 @@ a:hover {
   margin: 1.25rem;
   display: flex;
   cursor: pointer;
-  align-items: center;
   justify-content: center;
+  border-radius: 0.75rem;
   background-color: rgba(41, 43, 45, 0.5);
   padding: 1.25rem;
+  font-size: 1.875rem;
+  line-height: 2.25rem;
 }
 
 .success:hover {
@@ -969,18 +1015,19 @@ a:hover {
   margin: 1.25rem;
   display: flex;
   cursor: pointer;
-  align-items: center;
   justify-content: center;
-  --tw-bg-opacity: 1;
-  background-color: rgb(248 113 113 / var(--tw-bg-opacity));
+  border-radius: 0.75rem;
+  background-color: rgba(41, 43, 45, 0.5);
   padding: 1.25rem;
+  font-size: 1.875rem;
+  line-height: 2.25rem;
   --tw-text-opacity: 1;
-  color: rgb(49 53 55 / var(--tw-text-opacity));
+  color: rgb(248 113 113 / var(--tw-text-opacity));
 }
 
 .error:hover {
   --tw-text-opacity: 1;
-  color: rgb(10 204 255 / var(--tw-text-opacity));
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .bannerUserName{
@@ -991,29 +1038,10 @@ a:hover {
   color: rgb(49 53 55 / var(--tw-text-opacity));
 }
 
-.teamStatSubmitTable {
-  border-collapse: separate;
-  --tw-border-spacing-x: 1.25rem;
-  --tw-border-spacing-y: 1.25rem;
-  border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
-  text-align: center;
-}
-
-@media (min-width: 1024px) {
-  .teamStatSubmitTable {
-    grid-column: span 8 / span 8;
-    --tw-border-spacing-x: 2.5rem;
-    --tw-border-spacing-y: 2.5rem;
-    border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
-  }
-}
-
 .teams-card {
   width: 50%;
   border-radius: 0.75rem;
   background-color: rgba(41, 43, 45, 0.5);
-  background-size: contain;
-  background-repeat: no-repeat;
   padding: 1.25rem;
   text-align: center;
 }
@@ -1058,10 +1086,47 @@ a:hover {
   }
 }
 
+.team-stat-row {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding-top: 1rem;
+}
+
 .select {
   background-color: rgba(41, 43, 45, 0.5);
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.teamStatSubmitTable{
+  border: 4px solid rgba(41, 43, 45, 0.5);
+  margin: 2rem;
+  border-collapse: collapse;
+  --tw-border-spacing-x: 1.25rem;
+  --tw-border-spacing-y: 1.25rem;
+  border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
+  text-align: center;
+}
+
+@media (min-width: 1024px) {
+  .teamStatSubmitTable {
+    grid-column: span 8 / span 8;
+    --tw-border-spacing-x: 2.5rem;
+    --tw-border-spacing-y: 2.5rem;
+    border-spacing: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
+  }
+}
+
+.tbody {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.submit {
+  width: 3rem;
+  text-align: center;
 }
 
 .select::after {
@@ -1250,11 +1315,6 @@ a:hover {
   transition: max-height 0.2s ease-out;
 }
 
-.hover\:text-eleventh-grey:hover {
-  --tw-text-opacity: 1;
-  color: rgb(49 53 55 / var(--tw-text-opacity));
-}
-
 @media (min-width: 640px) {
   .sm\:-mx-6 {
     margin-left: -1.5rem;
@@ -1337,12 +1397,12 @@ a:hover {
     width: 13rem;
   }
 
-  .lg\:grid-cols-10 {
-    grid-template-columns: repeat(10, minmax(0, 1fr));
-  }
-
   .lg\:grid-cols-9 {
     grid-template-columns: repeat(9, minmax(0, 1fr));
+  }
+
+  .lg\:grid-cols-10 {
+    grid-template-columns: repeat(10, minmax(0, 1fr));
   }
 
   .lg\:items-center {

@@ -52,11 +52,11 @@ a:hover {
 }
 
 .success{
-    @apply flex justify-center items-center p-5 m-5 cursor-pointer hover:text-eleventh-blue bg-eleventh-bg;
+    @apply flex justify-center text-3xl p-5 m-5 cursor-pointer rounded-xl bg-eleventh-bg hover:text-eleventh-blue;
 }
 
 .error{
-    @apply flex justify-center items-center p-5 m-5 cursor-pointer hover:text-eleventh-blue bg-red-400 text-eleventh-grey;
+    @apply flex justify-center text-3xl p-5 m-5 cursor-pointer rounded-xl bg-eleventh-bg hover:text-white text-red-400;
 }
 
 .bannerUserName{
@@ -65,12 +65,8 @@ a:hover {
     @apply absolute text-eleventh-grey;
 }
 
-.teamStatSubmitTable{
-    @apply border-separate border-spacing-5 text-center lg:col-span-8 lg:border-spacing-10;
-}
-
 .teams-card {
-    @apply bg-eleventh-bg rounded-xl p-5 w-1/2 text-center lg:col-span-8 lg:items-center bg-contain bg-no-repeat;
+  @apply bg-eleventh-bg rounded-xl p-5 w-1/2 text-center lg:col-span-8 lg:items-center;
 }
 
 .player-card {
@@ -81,8 +77,25 @@ a:hover {
   @apply bg-eleventh-bg rounded-xl p-5 w-full text-center lg:col-span-3 lg:row-span-2 lg:col-start-6 lg:row-start-2 lg:items-center;
 }
 
+.team-stat-row {
+  @apply flex flex-col justify-between gap-5 pt-4;
+}
+
 .select {
   @apply bg-eleventh-bg text-white;
+}
+
+.teamStatSubmitTable{
+  border: 4px solid rgba(41, 43, 45, 0.5);
+  @apply  border-collapse border-spacing-5 text-center m-8 lg:col-span-8 lg:border-spacing-10;
+}
+
+.tbody {
+  @apply px-8;
+}
+
+.submit {
+  @apply w-12 text-center;
 }
 
 .select::after {

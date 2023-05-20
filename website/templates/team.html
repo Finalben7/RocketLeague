@@ -1,73 +1,98 @@
-{% extends "base.html" %} {% block title %} {{ user.username }}'s Teams {% endblock %} {% block content %}
+{% extends "base.html" %} {% block title %} {{ current_team.teamName }} {% endblock %} {% block content %}
     <div class="grid gap-8 relative lg:grid-cols-9 justify-items-center lg:text-xl xl:text-2xl 2xl:text-4x">
-        <img src="../static/assets/images/banner.jpg" class="pb-5 w-full lg:col-span-8"/>
+        {% if current_team.team_banner %}<!-- Check for team banner, render placeholder if none -->
+        <img src="{{ url_for('static', filename='uploads/' + current_team.team_banner) }}" class="rounded-xl mb-5 w-full lg:col-span-8"/>
+        {% else %}
+        <img src="../static/assets/images/banner.jpg" class="rounded-xl mb-5 w-full lg:col-span-8"/>
+        {% endif %}
+        {% if current_team.team_logo %}<!-- Check for team logo, render placeholder if none -->
+        <img src="{{ url_for('static', filename='uploads/' + current_team.team_logo) }}" class="absolute top-8 left-8 rounded-full border-4 h-20 w-20">
+        {% else %}
         <img src="../static/assets/images/placeholder.png" class="absolute top-8 left-8 rounded-full border-4 h-20 w-20">
+        {% endif %}
 
         {% if current_league is none and current_team.isQueued == false %}
-        <a href="/joinQueue?current_team={{ current_team.id }}" class="lg:col-span-8"><button type="submit" class="button">Join Queue</button></a>
-        <h1 class="lg:col-span-8 lg:items-center">Queue: {{ numberInQueue }}/8</h1>
+        <div class="text-center items-center row-start-4 lg:col-span-9">
+            <a href="/joinQueue?current_team={{ current_team.id }}" class="lg:col-span-8"><button type="submit" class="button">Join Queue</button></a>
+            <h1 class="lg:col-span-8 pt-4">Queue: {{ numberInQueue }}/8</h1>
+        </div>
         {% endif %}
 
         {% if current_league is none and current_team.isQueued %}
-        <h1 class="lg:col-span-8 lg:items-center">Your team is in the queue, you will be notified when your bracket is generated.</h1>
-        <h1 class="lg:col-span-8 lg:items-center">Queue: {{ numberInQueue }} /8</h1>card
+        <div class="text-center items-center row-start-4 lg:col-span-9">
+            <h1 class="lg:col-span-8 lg:items-center">Queue: {{ numberInQueue }} / 8</h1>
+            <h1 class="lg:col-span-8 lg:items-center pt-4">Your team is in the queue, you will be notified when your league is generated.</h1>          
+        </div>
         <!-- TODO: Add function to leave queue to this button! <a href="/leaveQueue?current_team={{ current_team.id }}" class="lg:col-span-8"><button type="submit" class="w-26 h-8 button">Leave Queue</button> -->
         {% endif %}
-            {% for user in usernames %}
+            {% for user in players %}
             <div class="player-card">
                     <div class="flex justify-between gap-5 items-center">
-                            <img src="../static/assets/images/placeholder.png" alt="" class="rounded-full border-4 h-20 w-20">
-                            <h2 class="w-44">{{ user }}</h2>
-                            <h3>Goals</h3>
-                            <h3>Saves</h3>
-                            <h3>Assists</h3>
+                        {% if user.profile_image %}
+                        <img src="{{ url_for('static', filename='uploads/' + user.profile_image) }}" alt="Profile Image" class="rounded-full border-4 h-20 w-20">
+                        {% else %}
+                        <img src="../static/assets/images/placeholder.png" alt="Profile Image" class="rounded-full border-4 h-20 w-20">
+                        {% endif %}
+                        <h1 class="w-44 text-3xl">{{ user.username }}</h1>
+                        <h3>Goals</h3>
+                        <h4>7</h4>
+                        <h3>Saves</h3>
+                        <h4>9</h4>
+                        <h3>Assists</h3>
+                        <h4>4</h4>
                     </div>
             </div>
             {% endfor %}
 
-        {% if current_league.isActive and current_league.isPlayoffs == 0 %}
-        <div class="team-stat-card">
-            <h1>{{ current_team.teamName }}</h1>
-            <div class="flex justify-between gap-5 pt-4">
-                <h3>Goals</h3>
-                <h3>Saves</h3>
-                <h3>Assists</h3>
+            <div class="team-stat-card">
+                <h1  class="text-3xl">{{ current_team.teamName }}</h1>
+                <div class="flex justify-evenly">
+                <div class="team-stat-row">
+                    <h3>Goals</h3>
+                    <h4>12</h4>
+                    <h3>Saves</h3>
+                    <h4>22</h4>
+                </div>
+    
+                <div class="team-stat-row">
+                    <h3>Series Record</h3>
+                    <h4>7 - 0</h4>
+                    <h3>Match Record</h3>
+                    <h4>14 - 5</h4>
+                </div>
             </div>
-        </div>
+            </div>
 
+        {% if current_league.isActive and current_league.isPlayoffs == 0 %}
         <h1 class="lg:col-span-8 lg:items-center">Matches</h1>
         {% for match_num, match_details in matchups.items() %}
             <div class="teams-card">
-                <a href ="/match?current_league={{ current_league.id }}&team0_id={{ match_details['Team0_id'] }}&team1_id={{ match_details['Team1_id'] }}&series_id={{ match_num }}" class="lg:col-span-8"><h1 class="pb-5">{{ match_num }}</h1></a>
+                <h1 class="pb-5 text-3xl">{{ match_num }}</h1>
                 <div class="flex justify-between gap-5">
                     <h2>{{ match_details['Team0_name'] }}</h2>
                     <h2>{{ match_details['Team1_name'] }}</h2>
                 </div>
             </div>
+
+            <a href ="/match?current_league={{ current_league.id }}&team0_id={{ match_details['Team0_id'] }}&team1_id={{ match_details['Team1_id'] }}&series_id={{ match_num }}" class="lg:col-span-8"><button type="submit" class="button">Match Page</button></a>
         {% endfor %}
         {% endif %}
 
-        {% if current_league.isPlayoffs %}
-        <div class="team-stat-card">
-            <h1>{{ current_team.teamName }}</h1>
-            <div class="flex justify-between gap-5 pt-4">
-                <h3>Goals</h3>
-                <h3>Saves</h3>
-                <h3>Assists</h3>
-            </div>
-        </div>
-        
+        {% if current_league.isPlayoffs %}   
         <h1 class="lg:col-span-8 lg:items-center">It's playoff time!</h1>
 
         <div class="teams-card">
-            <a href ="/match?current_league={{ current_league.id }}&team0_id={{ playoffSeries['Team0_id'] }}&team1_id={{ playoffSeries['Team1_id'] }}&series_id={{ playoffSeries['Series_id'] }}" class="lg:col-span-8"><h1 class="pb-5">{{ round_name }}</h1></a>
+            <h1 class="pb-8 text-3xl lg:col-span-8">{{ round_name }}</h1>
             <div class="flex justify-between gap-5">
                 <h2>{{ playoffSeries['Team0_name'] }}</h2>
                 <h2>{{ playoffSeries['Team1_name'] }}</h2>
             </div>
         </div>
 
-        <a href="/bracket?league_id={{ current_league.id }}" class="lg:col-span-8"><button type="submit" class="button">View Bracket</button></a>
+        <div class="flex gap-8 lg:col-span-8">
+            <a href ="/match?current_league={{ current_league.id }}&team0_id={{ playoffSeries['Team0_id'] }}&team1_id={{ playoffSeries['Team1_id'] }}&series_id={{ playoffSeries['Series_id'] }}" class="lg:col-span-8"><button type="submit" class="button">Match Page</button></a>
+            <a href="/bracket?league_id={{ current_league.id }}" class="lg:col-span-8"><button type="submit" class="button">View Bracket</button></a>
+        </div>
         {% endif %}
     </div>
 {% endblock %}

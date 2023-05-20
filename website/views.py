@@ -4,6 +4,7 @@ from .models import User, Team, TeamPlayers, League, Stats, Series
 from . import db, images
 from sqlalchemy import text, exists, func
 from collections import Counter
+import os
 
 views = Blueprint('views', __name__)
 
@@ -21,22 +22,41 @@ def faq():
 @views.route('/profile', methods=['GET', 'POST'])
 def profile():
     if request.method == 'POST' and 'profile_image' in request.files:
-        # Save the image file
-        filename = images.save(request.files['profile_image'])
+        # Get the file to check it's size
+        file = request.files['profile_image']
 
-        # Update current_user.profile_image
-        current_user.profile_image = filename
-        db.session.commit()
-        
-        flash("Profile_image saved successfully.")
-        return render_template('profile.html' , user=current_user)
+        # Move the file pointer to the end
+        file.seek(0, os.SEEK_END)
+
+        # Get the current position of the file pointer, which represents the file size
+        file_size = file.tell()
+
+        # Reset the file pointer to the beginning
+        file.seek(0)
+
+        if file_size > 0:
+            # Set max file size in bytes
+            max_size = 2 * 1024 * 1024  # 2MB
+
+            if file_size > max_size:         
+                flash("File size cannot exceed 2MB!", category="error")
+                return render_template('profile.html' , user=current_user)
+            else:
+                # Save the image file
+                filename = images.save(request.files['profile_image'])
+
+                # Update current_user.profile_image
+                current_user.profile_image = filename
+                db.session.commit()
+            flash("Profile_image saved successfully.", category="success")
+            return render_template('profile.html' , user=current_user)
     return render_template('profile.html', user=current_user)
 
 @views.route('/teams')
 def teams():
     #Find all usernames from each teamId associated with the current_user.id's teamId's (that's a mouthful)
     query = text(f'''
-        SELECT u.username, t.teamName, t.id
+        SELECT u.username, u.profile_image, t.teamName, t.id, t.teamCaptain, t.team_logo, t.team_banner
         FROM User u
         INNER JOIN TeamPlayers tp ON u.id = tp.userId
         INNER JOIN Team t ON tp.teamId = t.id
@@ -53,11 +73,19 @@ def teams():
         # Store the results in a nested dictionary to make it easier to access with Jinja
         team_users = {}
         for team in teams:
-            team_name = team[1]
-            team_id = team[2]
+            team_id = team[3]
             if team_id not in team_users:
-                team_users[team_id] = (team_name, [])
-            team_users[team_id][1].append(team[0])
+                team_users[team_id] = {
+                    'team_name': team[2],
+                    'team_captain': team[4],
+                    'team_logo': team[5],
+                    'team_banner': team[6],
+                    'users': []
+                }
+            team_users[team_id]['users'].append({
+                'username': team[0],
+                'profile_image': team[1]
+            })
 
     # Pass team.id, team.teamName and their associated user.usernames to be rendered
     return render_template('teams.html', user=current_user, teams=team_users)
@@ -70,8 +98,6 @@ def team():
     team = Team.query.filter(Team.id == team_id).first()
     # Get the players for the team
     players = User.query.join(TeamPlayers).join(Team).filter(Team.id == team_id).all()
-    # Get a list of usernames for the players
-    usernames = [player.username for player in players]
     # Get the League object associated with the current_team
     league = League.query.filter(League.team_id == team.id, League.isActive == True).first()
 
@@ -89,7 +115,7 @@ def team():
         numberInQueue = len(filteredTeams)
 
         # Render the team page template and pass in the team and players objects
-        return render_template('team.html', user=current_user, current_team=team, usernames=usernames, numberInQueue=numberInQueue, current_league=league)
+        return render_template('team.html', user=current_user, current_team=team, numberInQueue=numberInQueue, current_league=league, players=players)
     if league.isPlayoffs == 0:
 
         # Get all seasone matchups from Stats table associated with the League.id and Team.id
@@ -114,7 +140,7 @@ def team():
                 "Team1_name": row[4],
             }
 
-        return render_template('team.html', user=current_user, current_team=team, usernames=usernames, current_league=league, matchups=matchups)
+        return render_template('team.html', user=current_user, current_team=team, current_league=league, matchups=matchups, players=players)
 
     if league.isPlayoffs:
 
@@ -127,8 +153,6 @@ def team():
         ''')
         with db.engine.connect() as conn:
             activeSeries = conn.execute(seriesQuery).first()
-
-        print(activeSeries.Series_id)
 
         if activeSeries.round_one:
 
@@ -145,7 +169,7 @@ def team():
 
             round_name = "Quarter-Finals"
 
-            return render_template('team.html', user=current_user, current_team=team, usernames=usernames, current_league=league, playoffSeries=playoffSeries, round_name=round_name)
+            return render_template('team.html', user=current_user, current_team=team, current_league=league, playoffSeries=playoffSeries, round_name=round_name, players=players)
         
         if activeSeries.round_two:
 
@@ -162,7 +186,7 @@ def team():
 
             round_name = "Semi-Finals"
 
-            return render_template('team.html', user=current_user, current_team=team, usernames=usernames, current_league=league, playoffSeries=playoffSeries, round_name=round_name)
+            return render_template('team.html', user=current_user, current_team=team, current_league=league, playoffSeries=playoffSeries, round_name=round_name, players=players)
         
         if activeSeries.round_three:
 
@@ -179,7 +203,7 @@ def team():
 
             round_name = "Championship"
 
-            return render_template('team.html', user=current_user, current_team=team, usernames=usernames, current_league=league, playoffSeries=playoffSeries, round_name=round_name)
+            return render_template('team.html', user=current_user, current_team=team, current_league=league, playoffSeries=playoffSeries, round_name=round_name, players=players)
 
 
 @views.route('/match') #TODO: Get usernames, use profile image, team logo and team banner to pass to template
@@ -189,7 +213,6 @@ def match():
     team0_id = request.args.get('team0_id')
     team1_id = request.args.get('team1_id')
     series_id = request.args.get('series_id')
-    print(series_id)
 
     # Get Team object for each Team
     team0 = Team.query.filter(Team.id == team0_id).first()
@@ -205,7 +228,6 @@ def match():
     with db.engine.connect() as conn:
         series = conn.execute(query).fetchall()
     
-    # Check to see if scores have already been submitted
     hasWinner = False
     for row in series:
         if row.winningTeam is not None:
@@ -260,8 +282,6 @@ def bracket():
         ''')
     with db.engine.connect() as conn:
         roundOneResults = conn.execute(roundOneQuery).fetchall()
-
-        print(roundOneResults[0])
 
     # Add roundOneResults to the existing results list
     results.extend(roundOneResults)
@@ -360,9 +380,9 @@ def submitScore():
     current_team_users = User.query.join(TeamPlayers).filter_by(teamId=current_team.id).all()
     opponent_team_users = User.query.join(TeamPlayers).filter_by(teamId=opponent_team.id).all()
 
-    # # Store Team.id with User.usernames inside
-    current_team_dict = {'teamId': current_team.id, 'usernames': [user.username for user in current_team_users]}
-    opponent_team_dict = {'teamId': opponent_team.id, 'usernames': [user.username for user in opponent_team_users]}
+    # # Store Team.id with Users object inside
+    current_team_dict = {'teamId': current_team.id, 'users': current_team_users}
+    opponent_team_dict = {'teamId': opponent_team.id, 'users': opponent_team_users}
 
     return render_template('submitScore.html',
                                 user=current_user,
@@ -478,3 +498,81 @@ def joinQueue():
         flash("Unable to find the specified team.", category="error")
 
     return redirect(url_for('views.teams'))
+
+@views.route('/editTeam', methods=['GET', 'POST'])
+#@login_required
+def editTeam():
+    # Get Team.id from args to pass back to template
+    team_id = request.args.get('team_id')
+
+    if request.method == 'POST':
+        # Set max file size in bytes
+        max_size = 2 * 1024 * 1024  # 2MB
+
+        # Check if team logo is uploaded
+        if 'team_logo' in request.files:
+            # Get the file to check it's size
+            logo_file = request.files['team_logo']
+
+            # Move the file pointer to the end
+            logo_file.seek(0, os.SEEK_END)
+
+            # Get the current position of the file pointer, which represents the file size
+            logo_size = logo_file.tell()
+
+            # Reset the file pointer to the beginning
+            logo_file.seek(0)
+
+            if logo_size > 0:
+                if logo_size > max_size:         
+                    flash("File size cannot exceed 2MB!", category="error")
+                    return render_template('editTeam.html', user=current_user)
+                else:
+                    # Get Team.id from form
+                    team_id = request.form['team_id']
+
+                    # Get team object with matching Team.id passed through args
+                    team = Team.query.filter(Team.id == team_id).first()
+
+                    # Save the image file
+                    filename = images.save(request.files['team_logo'])
+
+                    # Update team.team_logo
+                    team.team_logo = filename
+                    db.session.commit()
+                flash("Team logo saved successfully.", category="success")
+                return redirect(url_for('views.teams'))
+        # Check if team banner is uploaded
+        if 'team_banner' in request.files:
+            # Get the file to check it's size
+            banner_file = request.files['team_banner']
+
+            # Move the file pointer to the end
+            banner_file.seek(0, os.SEEK_END)
+
+            # Get the current position of the file pointer, which represents the file size
+            banner_size = banner_file.tell()
+
+            # Reset the file pointer to the beginning
+            banner_file.seek(0)
+
+            if banner_size > 0:
+                if banner_size > max_size:         
+                    flash("File size cannot exceed 2MB!", category="error")
+                    return render_template('editTeam.html', user=current_user)
+                else:
+                    # Get Team.id from form
+                    team_id = request.form['team_id']
+
+                    # Get team object with matching Team.id passed through args
+                    team = Team.query.filter(Team.id == team_id).first()
+
+                    # Save the image file
+                    filename = images.save(request.files['team_banner'])
+
+                    # Update team.team_banner
+                    team.team_banner = filename
+                    db.session.commit()
+                flash("Team banner saved successfully.", category="success")
+                return redirect(url_for('views.teams'))
+    return render_template('editTeam.html', user=current_user, team_id=team_id)
