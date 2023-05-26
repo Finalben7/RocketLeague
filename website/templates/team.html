@@ -21,9 +21,10 @@
         {% if current_league is none and current_team.isQueued %}
         <div class="text-center items-center row-start-4 lg:col-span-9">
             <h1 class="lg:col-span-8 lg:items-center">Queue: {{ numberInQueue }} / 8</h1>
-            <h1 class="lg:col-span-8 lg:items-center pt-4">Your team is in the queue, you will be notified when your league is generated.</h1>          
+            <h1 class="lg:col-span-8 lg:items-center pt-4">Your team is in the queue, you will be notified when your league is generated.</h1>
+            <a href="/leaveQueue?current_team={{ current_team.id }}" class="pt-4 lg:col-span-8"><button type="submit" class="button">Leave Queue</button></a>     
         </div>
-        <!-- TODO: Add function to leave queue to this button! <a href="/leaveQueue?current_team={{ current_team.id }}" class="lg:col-span-8"><button type="submit" class="w-26 h-8 button">Leave Queue</button> -->
+        
         {% endif %}
             {% for user in players %}
             <div class="player-card">
@@ -65,16 +66,16 @@
 
         {% if current_league.isActive and current_league.isPlayoffs == 0 %}
         <h1 class="lg:col-span-8 lg:items-center">Matches</h1>
-        {% for match_num, match_details in matchups.items() %}
+        {% for series_id, match_details in matchups.items() %}
             <div class="teams-card">
-                <h1 class="pb-5 text-3xl">{{ match_num }}</h1>
+                <h1 class="pb-5 text-3xl">Match</h1>
                 <div class="flex justify-between gap-5">
                     <h2>{{ match_details['Team0_name'] }}</h2>
                     <h2>{{ match_details['Team1_name'] }}</h2>
                 </div>
             </div>
 
-            <a href ="/match?current_league={{ current_league.id }}&team0_id={{ match_details['Team0_id'] }}&team1_id={{ match_details['Team1_id'] }}&series_id={{ match_num }}" class="lg:col-span-8"><button type="submit" class="button">Match Page</button></a>
+            <a href ="/match?current_league={{ current_league.id }}&team0_id={{ match_details['Team0_id'] }}&team1_id={{ match_details['Team1_id'] }}&series_id={{ series_id }}" class="lg:col-span-8"><button type="submit" class="button">Match Page</button></a>
         {% endfor %}
         {% endif %}
 

@@ -16,7 +16,7 @@
         <div class="py-2">
         <label for="username">Username</label>
         <input
-            type="username"
+            type="text"
             class="select"
             id="username"
             name="username"
@@ -34,11 +34,10 @@
                 required
             />
             <p>Please visit the <a href="/faq">FAQ</a> page for more information about account requirements.</p>
-            </div>
+        </div>
         <div class="py-2">
         <label for="platform">Platform</label>
         <select
-            type="platform"
             class="select"
             id="platform"
             required
@@ -47,12 +46,13 @@
                 <option value="epic">Epic</option>
                 <option value="xbox">Xbox</option>
                 <option value="ps">Playstation</option>
+                <option value="switch">Nintendo Switch</option>
         </select>
         </div>
         <div class="py-2">
             <label for="region">Region</label>
             <select
-                type="region"
+                type="text"
                 class="select"
                 id="region"
                 name="region">   
@@ -60,7 +60,18 @@
                     <option value="naW">NA West</option>
                     <option value="eu">Europe</option>
             </select>
-            </div>
+        </div>
+        <div class="py-2">
+            <label for="discord">Discord</label>
+            <input
+                type="text"
+                class="select"
+                id="discord"
+                name="discord"
+                placeholder="Discord #0000"
+                required
+            />
+        </div>
         <div class="py-2">
         <label for="password1">Password</label>
         <input
@@ -84,6 +95,17 @@
         />
         </div>
         <br />
+        <div class="py-2 text-base">
+            <label for="usernameConfirm">I have read the smurfing policy and understand the implications of using a smurf account.</label>
+            <input
+                type="checkbox"
+                class="select"
+                id="usernameConfirm"
+                name="usernameConfirm"
+                required
+            />
+            <p>Please visit the <a href="/faq">FAQ</a> page for more information about our smurfing policy.</p>
+        </div>
         <div class="flex justify-center">
         <button type="submit" class="button">Submit</button>
         </div>

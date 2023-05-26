@@ -12,6 +12,7 @@ class User(db.Model,  UserMixin):
     password = db.Column(db.String(150))
     username = db.Column(db.String(150), unique=True)
     platform = db.Column(db.String(150))
+    discord = db.Column(db.String(150))
     region = db.Column(db.String(150))
     rank = db.Column(db.Numeric(2, 0), default=15)
     profile_image = db.Column(db.String(150))

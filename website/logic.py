@@ -18,7 +18,6 @@ def createTeam():
         userOneNameForm = request.form.get('userOneName')
         userOneIdForm = request.form.get('userOneId')
         userOne = User.query.filter_by(id=userOneIdForm).first()
-        print(teamName)
 
         # Make sure no fields are blank
         if not teamName or not userOneNameForm or not userOneIdForm:
@@ -65,11 +64,21 @@ def createTeam():
 @logic.route('/submitScore', methods=['GET', 'POST'])
 def submitScore():
     if request.method == 'POST':
-        # Get current Team.id from form
+        # Get current Team.id, League.id, Series_id from form
         team_id = request.form.get('current_team_id')
+        current_league_id = request.form['current_league_id']
+        series_id = request.form['series_id']
 
         # Get Team.id's from form
         winners = [int(request.form.get('gameOneWinner')), int(request.form.get('gameTwoWinner')), int(request.form.get('gameThreeWinner'))]
+
+        # Get current Series object
+        current_series = Stats.query.filter_by(Series_id=series_id).first()
+
+        # Check to see if score have already been submitted
+        if current_series.winningTeam is not None:
+            flash("Scores have already been submitted for this match.", category="error")
+            return redirect(request.referrer)
 
         # Check to make sure that all three values are not the same
         if len(set(winners)) == 1:
@@ -85,10 +94,6 @@ def submitScore():
         winnerCount = Counter(winners)
         seriesWinner = winnerCount.most_common(1)[0][0]
 
-        # Get League.id, Series_id and Team.id's from args
-        current_league_id = request.form['current_league_id']
-        series_id = request.form['series_id']
-
         # WHERE clause for update queries
         where_clause = Stats.Series_id == series_id
 
@@ -101,7 +106,7 @@ def submitScore():
             gameOne = [int(request.form.get('user1')), int(request.form.get('user2')), int(request.form.get('user3')), int(request.form.get('user4'))]
             gameTwo = [int(request.form.get('user5')), int(request.form.get('user6')), int(request.form.get('user7')), int(request.form.get('user8'))]
             
-            if len(gameOne) != len(set(gameOne)) or len(gameTwo != len(set(gameTwo))):
+            if len(gameOne) != len(set(gameOne)) or len(gameTwo) != len(set(gameTwo)):
                 flash("One user has been selected for two stat lines, please correct this error.", category="error")
                 return redirect(request.referrer)   
             
@@ -189,6 +194,7 @@ def submitScore():
             with db.engine.connect() as conn:
                 roundOneSeries = conn.execute(roundOneQuery).fetchall()
 
+            print("1", seasonIsComplete, roundOneSeries)
             if seasonIsComplete and not roundOneSeries:
 
                 # Change isPlayoffs = True for all teams with matching current League.id
@@ -244,7 +250,8 @@ def submitScore():
             with db.engine.connect() as conn:
                 roundTwoSeries = conn.execute(roundTwoQuery).fetchall()
 
-            if playoffsRoundOneIsComplete and not roundTwoSeries:
+            print("2", roundOneSeries, playoffsRoundOneIsComplete, roundTwoSeries)
+            if roundOneSeries and playoffsRoundOneIsComplete and not roundTwoSeries:
 
                 # Get the latest Series.id
                 last_series_id = db.session.query(func.coalesce(func.max(Series.id), 0)).scalar()
@@ -283,6 +290,7 @@ def submitScore():
                     n-=1
                 print("Round 2 matches created!")
                 db.session.commit()
+                flash("Results submitted!", category="success")
                 return redirect(url_for('views.team', team_id=team_id))
 
             # Check to see if all of playoffs round_two series have been played
@@ -298,7 +306,8 @@ def submitScore():
             with db.engine.connect() as conn:
                 roundThreeSeries = conn.execute(roundThreeQuery).fetchall()
 
-            if playoffsRoundTwoIsComplete and not roundThreeSeries:
+            print("3", roundTwoSeries, playoffsRoundTwoIsComplete, roundThreeSeries)
+            if roundTwoSeries and playoffsRoundTwoIsComplete and not roundThreeSeries:
 
                 # Get the latest Series.id
                 last_series_id = db.session.query(func.coalesce(func.max(Series.id), 0)).scalar()
@@ -333,12 +342,9 @@ def submitScore():
                         db.session.add(stat)
                 print("Round 3 matches created!")
                 db.session.commit()
+                flash("Results submitted!", category="success")
                 return redirect(url_for('views.team', team_id=team_id))
 
             else:
                 flash("Results submitted!", category="success")
                 return redirect(url_for('views.team', team_id=team_id))
-            
-# Function to handle UserStat entries
-def InsertStats(User0):
-    print(User0)

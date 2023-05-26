@@ -1,10 +1,11 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
-from .models import User, Team, TeamPlayers, League, Stats, Series
+from .models import User, Team, TeamPlayers, League, Stats, Series, UserStats
 from . import db, images
 from sqlalchemy import text, exists, func
 from collections import Counter
 import os
+from urllib.parse import quote
 
 views = Blueprint('views', __name__)
 
@@ -118,20 +119,42 @@ def team():
         return render_template('team.html', user=current_user, current_team=team, numberInQueue=numberInQueue, current_league=league, players=players)
     if league.isPlayoffs == 0:
 
-        # Get all seasone matchups from Stats table associated with the League.id and Team.id
-        query = text(f'''
+        # Get all season matchups from Stats table associated with the League.id and Team.id
+        matchupQuery = text(f'''
             SELECT DISTINCT s.Series_id, s.Team0_id, s.Team1_id, t1.teamName AS Team0_name, t2.teamName AS Team1_name
                 FROM Stats s 
                 JOIN Team t1 ON s.Team0_id = t1.id 
                 JOIN Team t2 ON s.Team1_id = t2.id 
                 WHERE s.League_id = {league.id} AND round_one = 0 AND round_two = 0 and round_three = 0 AND (s.Team0_id = {team.id} OR s.Team1_id = {team.id});
-        ''').columns(Stats.Series_id, Stats.Team0_id, Stats.Team1_id)
+        ''')
 
         with db.engine.connect() as conn:
-            teamsList = conn.execute(query).fetchall()
+            matchList = conn.execute(matchupQuery).fetchall()
+
+        # Get the Series_id's from the above query
+        series_ids = [row[0] for row in matchList]
+
+        statsQuery = text(f'''
+            SELECT UserStats.User_id,
+                    ROUND(AVG(UserStats.score), 1) AS avg_score,
+                    ROUND(AVG(UserStats.goals), 1) AS avg_goals,
+                    ROUND(AVG(UserStats.assists), 1) AS avg_assists,
+                    ROUND(AVG(UserStats.saves), 1) AS avg_saves,
+                    ROUND(AVG(UserStats.shots), 1) AS avg_shots
+                FROM UserStats
+                INNER JOIN TeamPlayers ON UserStats.User_id = TeamPlayers.userId
+                WHERE TeamPlayers.teamId = :team_id
+                AND UserStats.Series_id IN :series_ids
+                GROUP BY UserStats.User_id;
+        ''')
+
+        with db.engine.connect() as conn:
+            statsList = conn.execute(statsQuery, team_id=team_id, series_ids=series_ids).fetchall()
+
+        print(statsList[0])
 
         matchups = {}
-        for row in teamsList:
+        for row in matchList:
             series_id = row[0]  # Use integer index instead of string index
             matchups[series_id] = {
                 "Team0_id": row[1],
@@ -368,13 +391,13 @@ def bracket():
 def submitScore():
     # Get League.id and Team.teamNames from args
     current_league_id = request.args.get('current_league_id')
-    current_team_name = request.args.get('current_team')
-    opponent_team_name = request.args.get('opponent_team')
+    current_team = request.args.get('current_team')
+    opponent_team = request.args.get('opponent_team')
     series_id = request.args.get('series_id')
 
     # Get Team from db with matching teamNames
-    current_team = Team.query.filter_by(teamName=current_team_name).first()
-    opponent_team = Team.query.filter_by(teamName=opponent_team_name).first()
+    current_team = Team.query.filter_by(id=current_team).first()
+    opponent_team = Team.query.filter_by(id=opponent_team).first()
 
     # # Get Users associated with Team.Id's from TeamPlayes
     current_team_users = User.query.join(TeamPlayers).filter_by(teamId=current_team.id).all()
@@ -386,8 +409,8 @@ def submitScore():
 
     return render_template('submitScore.html',
                                 user=current_user,
-                                current_team_name=current_team_name,
-                                opponent_team_name=opponent_team_name,
+                                current_team_name=current_team.teamName,
+                                opponent_team_name=opponent_team.teamName,
                                 current_team_dict=current_team_dict,
                                 opponent_team_dict=opponent_team_dict,
                                 current_league_id=current_league_id,
@@ -410,10 +433,6 @@ def joinQueue():
     # Get team object with matching Team.id passed through args
     team = Team.query.filter(Team.id == team_id).first()
 
-    # Get the User.id's associated with the current Team.id from TeamPlayers
-    roster = TeamPlayers.query.filter(TeamPlayers.teamId == team_id).values(TeamPlayers.userId)
-    roster_ids = [i[0] for i in roster]
-
     # Get all teams in the queue
     queued_teams = Team.query.filter_by(rank=team.rank, region=team.region, isQueued=True).all()
     queued_team_ids = [t.id for t in queued_teams]
@@ -422,18 +441,21 @@ def joinQueue():
     queued_user_ids = TeamPlayers.query.filter(TeamPlayers.teamId.in_(queued_team_ids)).values(TeamPlayers.userId)
     queued_user_ids = [u[0] for u in queued_user_ids]
 
+    current_team = TeamPlayers.query.filter(TeamPlayers.teamId == team_id).all()
+    current_team_ids = [u.userId for u in current_team]
+
     # Create set's so they can be cross checked
-    roster_ids_set = set(roster_ids)
     queued_user_ids_set = set(queued_user_ids)
+    current_team_ids_set = set(current_team_ids)
 
     # Check to see if user who clicked joinQueue is a captain
     if current_user.id != team.teamCaptain:
         flash("Only the captain of the team can join the queue.", category="error")
-        return redirect(url_for('views.teams'))
+        return redirect(url_for('views.team', team_id=team_id))
     # Crosscheck User.ids associated with Team.ids already in queue to see if User.id's from the current team already exist in the queue    
-    if roster_ids_set.intersection(queued_user_ids_set):
+    if current_team_ids_set.intersection(queued_user_ids_set):
         flash(f"You or your teammate are on a different team in the current queue.", category="error")
-        return redirect(url_for('views.teams'))
+        return redirect(url_for('views.team', team_id=team_id))
     # If not change isQueued = true
     if team:
         team.isQueued = True
@@ -497,7 +519,23 @@ def joinQueue():
         # Handle the case where no matching team is found
         flash("Unable to find the specified team.", category="error")
 
-    return redirect(url_for('views.teams'))
+    return redirect(url_for('views.team', team_id=team_id))
+
+@views.route('/leaveQueue')
+def leaveQueue():
+    # Get current Team.id passed through args
+    team_id = request.args.get('current_team')
+
+    # Get team object with matching Team.id passed through args
+    team = Team.query.filter(Team.id == team_id).first()
+
+    # Set isQueued to false to remove team from queue
+    team.isQueued = 0 
+
+    db.session.commit()
+
+    flash("Your team has been removed from the queue.", category="success")
+    return redirect(url_for('views.team', team_id=team_id))
 
 @views.route('/editTeam', methods=['GET', 'POST'])
 #@login_required

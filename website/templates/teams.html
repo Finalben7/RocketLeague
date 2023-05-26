@@ -10,13 +10,12 @@
             <div class="teams-card" style="background-repeat: no-repeat; background-size: 100% 100%; background-image:url(../static/assets/images/banner.jpg);">
             {% endif %}
                 <div class="grid grid-cols-2 pb-20">
-                    <div class="flex">
+                    <div class="flex items-center">
                         {% if team.team_logo %}
                         <img src="{{ url_for('static', filename='uploads/' + team.team_logo) }}" alt="Team logo" class="rounded-full border-4 h-20 w-20">
                         {% else %}
                         <img src="../static/assets/images/placeholder.png" alt="Team logo" class="rounded-full border-4 h-20 w-20">
                         {% endif %}
-                        <h2>(W - L)</h2>
                         <h1 class="pl-5 text-left lg:col-span-8">{{ team.team_name }}</h1>
                     </div>
                     <div class="text-end text-sm">
