@@ -28,19 +28,25 @@
         {% endif %}
             {% for user in players %}
             <div class="player-card">
-                    <div class="flex justify-between gap-5 items-center">
+                    <div class="flex justify-between gap-4 items-center">
                         {% if user.profile_image %}
-                        <img src="{{ url_for('static', filename='uploads/' + user.profile_image) }}" alt="Profile Image" class="rounded-full border-4 h-20 w-20">
+                        <img src="{{ url_for('static', filename='uploads/' + user.profile_image) }}" alt="Profile Image" class="profile-image">
                         {% else %}
-                        <img src="../static/assets/images/placeholder.png" alt="Profile Image" class="rounded-full border-4 h-20 w-20">
+                        <img src="../static/assets/images/placeholder.png" alt="Profile Image" class="profile-image">
                         {% endif %}
-                        <h1 class="w-44 text-3xl">{{ user.username }}</h1>
+                        <h1 class="w-48 mr-4 text-3xl">{{ user.username }}</h1>
                         <h3>Goals</h3>
-                        <h4>7</h4>
+                        {% if user.goals %}
+                        <h4>{{ user.goals }}</h4>
+                        {% endif %}
                         <h3>Saves</h3>
-                        <h4>9</h4>
+                        {% if user.saves %}
+                        <h4>{{ user.saves }}</h4>
+                        {% endif %}
                         <h3>Assists</h3>
-                        <h4>4</h4>
+                        {% if user.assists %}
+                        <h4>{{ user.assists }}</h4>
+                        {% endif %}
                     </div>
             </div>
             {% endfor %}
@@ -49,17 +55,23 @@
                 <h1  class="text-3xl">{{ current_team.teamName }}</h1>
                 <div class="flex justify-evenly">
                 <div class="team-stat-row">
+                    <h3>Series Record</h3>
+                    <h4>{{ current_team.seriesWins }} - {{ current_team.seriesLosses }}</h4>
                     <h3>Goals</h3>
-                    <h4>12</h4>
-                    <h3>Saves</h3>
-                    <h4>22</h4>
+                    {% if players[0].total_goals %}
+                    {% set teamGoals = ((players[0].total_goals + players[1].total_goals) / players[0].games_played) | round(1)  %}
+                    <h4>{{ teamGoals }}</h4>
+                    {% endif %}
                 </div>
     
                 <div class="team-stat-row">
-                    <h3>Series Record</h3>
-                    <h4>7 - 0</h4>
                     <h3>Match Record</h3>
-                    <h4>14 - 5</h4>
+                    <h4>{{ current_team.gameWins }} - {{ current_team.gameLosses }}</h4>
+                    <h3>Saves</h3>
+                    {% if players[0].total_saves %}
+                    {% set teamSaves = ((players[0].total_saves + players[1].total_saves) / players[0].games_played) | round(1)  %}
+                    <h4>{{ teamSaves }}</h4>
+                    {% endif %}
                 </div>
             </div>
             </div>
@@ -68,18 +80,22 @@
         <h1 class="lg:col-span-8 lg:items-center">Matches</h1>
         {% for series_id, match_details in matchups.items() %}
             <div class="teams-card">
-                <h1 class="pb-5 text-3xl">Match</h1>
+                <h1 class="pb-5 text-3xl">Match {{ match_details['Match_num'] }}</h1>
                 <div class="flex justify-between gap-5">
                     <h2>{{ match_details['Team0_name'] }}</h2>
+                    {% if match_details['Team0_wins'] != 0 or match_details['Team1_wins'] != 0 %}
+                    <h3>{{ match_details['Team0_wins'] }}</h3>
+                    <h3>{{ match_details['Team1_wins'] }}</h3>
+                    {% endif %}
                     <h2>{{ match_details['Team1_name'] }}</h2>
                 </div>
             </div>
 
-            <a href ="/match?current_league={{ current_league.id }}&team0_id={{ match_details['Team0_id'] }}&team1_id={{ match_details['Team1_id'] }}&series_id={{ series_id }}" class="lg:col-span-8"><button type="submit" class="button">Match Page</button></a>
+            <a href ="/match?current_league={{ current_league.id }}&series_id={{ series_id }}&team_id={{ team_id }}" class="lg:col-span-8"><button type="submit" class="button">Match Page</button></a>
         {% endfor %}
         {% endif %}
 
-        {% if current_league.isPlayoffs %}   
+        {% if current_league.isPlayoffs %} 
         <h1 class="lg:col-span-8 lg:items-center">It's playoff time!</h1>
 
         <div class="teams-card">
@@ -91,7 +107,7 @@
         </div>
 
         <div class="flex gap-8 lg:col-span-8">
-            <a href ="/match?current_league={{ current_league.id }}&team0_id={{ playoffSeries['Team0_id'] }}&team1_id={{ playoffSeries['Team1_id'] }}&series_id={{ playoffSeries['Series_id'] }}" class="lg:col-span-8"><button type="submit" class="button">Match Page</button></a>
+            <a href ="/match?current_league={{ current_league.id }}&series_id={{ playoffSeries['Series_id'] }}" class="lg:col-span-8"><button type="submit" class="button">Match Page</button></a>
             <a href="/bracket?league_id={{ current_league.id }}" class="lg:col-span-8"><button type="submit" class="button">View Bracket</button></a>
         </div>
         {% endif %}

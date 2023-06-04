@@ -1,11 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_login import login_required, current_user
+from flask_login import current_user
 from .models import User, Team, TeamPlayers, League, Stats, Series, UserStats
 from . import db, images
-from sqlalchemy import text, exists, func
-from collections import Counter
+from sqlalchemy import text, func
 import os
-from urllib.parse import quote
 
 views = Blueprint('views', __name__)
 
@@ -101,6 +99,65 @@ def team():
     players = User.query.join(TeamPlayers).join(Team).filter(Team.id == team_id).all()
     # Get the League object associated with the current_team
     league = League.query.filter(League.team_id == team.id, League.isActive == True).first()
+    # Get the average stats of the current roster for the current league
+    playersQuery = text(f'''
+            SELECT us.User_id, u.username, round(avg(goals), 1) as goals, round(avg(assists), 1) as assists, round(avg(saves), 1) as saves, sum(goals) as total_goals, sum(saves) as total_saves, count(*) as games_played, u.profile_image
+            FROM UserStats us
+            JOIN TeamPlayers tp ON us.User_id = tp.userId
+            JOIN League l ON tp.teamId = l.team_id
+            JOIN (
+            SELECT distinct Series_id
+            FROM Stats
+            WHERE League_id = {league.id}
+            GROUP BY Series_id
+            ) s ON us.Series_id = s.Series_id
+            JOIN User u ON us.User_id = u.id
+            WHERE l.id = {league.id} AND us.User_id IN ({", ".join(str(player.id) for player in players)})
+            GROUP BY us.User_id, u.username, u.profile_image
+        ''')
+    
+    print(players[0])
+
+    with db.engine.connect() as conn:
+        results = conn.execute(playersQuery).fetchall()
+        if results:
+            players = results
+
+    # Get Team record
+    recordQuery = text(f'''
+        SELECT
+            (SELECT
+                SUM(CASE WHEN seriesWinner = {team.id} THEN 1 ELSE 0 END)
+                FROM Series
+                WHERE id IN (
+                    SELECT DISTINCT Series_id
+                    FROM Stats
+                    WHERE League_id = {league.id})
+            ) AS seriesWins,
+            (SELECT
+                SUM(CASE WHEN seriesLoser = {team.id} THEN 1 ELSE 0 END)
+                FROM Series
+                WHERE id IN (
+                    SELECT DISTINCT Series_id
+                    FROM Stats
+                    WHERE League_id = {league.id})
+            ) AS seriesLosses,
+            COUNT(CASE WHEN winningTeam = {team.id} THEN 1 END) AS gameWins,
+            COUNT(CASE WHEN winningTeam <> {team.id} THEN 1 END) AS gameLosses
+        FROM Stats
+        WHERE League_id = {league.id}
+            AND (Team0_id = {team.id} OR Team1_id = {team.id})
+            AND winningTeam IS NOT NULL;
+    ''')
+
+    with db.engine.connect() as conn:
+        record = conn.execute(recordQuery).first()
+
+    # Assign the wins and losses to the team object
+    team.seriesWins = record.seriesWins
+    team.seriesLosses = record.seriesLosses
+    team.gameWins = record.gameWins
+    team.gameLosses = record.gameLosses
 
     # Check if team isActive, if not render joinQueue button and numberInQueue
     if league is None:
@@ -109,61 +166,49 @@ def team():
             FROM Team t
             WHERE t.isQueued = 1
         ''')
+
         with db.engine.connect() as conn:
             teamsList = conn.execute(query).fetchall()
+
         # Filter out teams that don't match current teams rank and region
         filteredTeams = [t for t in teamsList if ((t.rank == team.rank) and (t.region == team.region) and (t.isQueued))]
         numberInQueue = len(filteredTeams)
 
         # Render the team page template and pass in the team and players objects
-        return render_template('team.html', user=current_user, current_team=team, numberInQueue=numberInQueue, current_league=league, players=players)
+        return render_template('team.html', user=current_user, team_id=team_id, current_team=team, numberInQueue=numberInQueue, current_league=league, players=players)
     if league.isPlayoffs == 0:
 
         # Get all season matchups from Stats table associated with the League.id and Team.id
         matchupQuery = text(f'''
-            SELECT DISTINCT s.Series_id, s.Team0_id, s.Team1_id, t1.teamName AS Team0_name, t2.teamName AS Team1_name
-                FROM Stats s 
-                JOIN Team t1 ON s.Team0_id = t1.id 
-                JOIN Team t2 ON s.Team1_id = t2.id 
-                WHERE s.League_id = {league.id} AND round_one = 0 AND round_two = 0 and round_three = 0 AND (s.Team0_id = {team.id} OR s.Team1_id = {team.id});
+            SELECT s.Series_id, s.Team0_id, s.Team1_id, t1.teamName AS Team0_name, t2.teamName AS Team1_name,
+                COUNT(CASE WHEN s.winningTeam = s.Team0_id THEN 1 END) AS Team0_wins,
+                COUNT(CASE WHEN s.winningTeam = s.Team1_id THEN 1 END) AS Team1_wins
+            FROM Stats s
+            JOIN Team t1 ON s.Team0_id = t1.id
+            JOIN Team t2 ON s.Team1_id = t2.id
+            WHERE s.League_id = {league.id} AND round_one = 0 AND round_two = 0 AND round_three = 0 AND (s.Team0_id = {team_id} OR s.Team1_id = {team_id})
+            GROUP BY s.Series_id, s.Team0_id, s.Team1_id, t1.teamName, t2.teamName;
         ''')
 
         with db.engine.connect() as conn:
             matchList = conn.execute(matchupQuery).fetchall()
 
-        # Get the Series_id's from the above query
-        series_ids = [row[0] for row in matchList]
-
-        statsQuery = text(f'''
-            SELECT UserStats.User_id,
-                    ROUND(AVG(UserStats.score), 1) AS avg_score,
-                    ROUND(AVG(UserStats.goals), 1) AS avg_goals,
-                    ROUND(AVG(UserStats.assists), 1) AS avg_assists,
-                    ROUND(AVG(UserStats.saves), 1) AS avg_saves,
-                    ROUND(AVG(UserStats.shots), 1) AS avg_shots
-                FROM UserStats
-                INNER JOIN TeamPlayers ON UserStats.User_id = TeamPlayers.userId
-                WHERE TeamPlayers.teamId = :team_id
-                AND UserStats.Series_id IN :series_ids
-                GROUP BY UserStats.User_id;
-        ''')
-
-        with db.engine.connect() as conn:
-            statsList = conn.execute(statsQuery, team_id=team_id, series_ids=series_ids).fetchall()
-
-        print(statsList[0])
-
+        match_num = 1
         matchups = {}
         for row in matchList:
             series_id = row[0]  # Use integer index instead of string index
             matchups[series_id] = {
+                "Match_num": match_num,
                 "Team0_id": row[1],
                 "Team0_name": row[3],
+                "Team0_wins": row[5],
                 "Team1_id": row[2],
                 "Team1_name": row[4],
+                "Team1_wins": row[6]
             }
+            match_num = match_num + 1
 
-        return render_template('team.html', user=current_user, current_team=team, current_league=league, matchups=matchups, players=players)
+        return render_template('team.html', user=current_user, team_id=team_id, current_team=team, current_league=league, matchups=matchups, players=players)
 
     if league.isPlayoffs:
 
@@ -192,7 +237,7 @@ def team():
 
             round_name = "Quarter-Finals"
 
-            return render_template('team.html', user=current_user, current_team=team, current_league=league, playoffSeries=playoffSeries, round_name=round_name, players=players)
+            return render_template('team.html', user=current_user, team_id=team_id, current_team=team, current_league=league, playoffSeries=playoffSeries, round_name=round_name, players=players)
         
         if activeSeries.round_two:
 
@@ -209,7 +254,7 @@ def team():
 
             round_name = "Semi-Finals"
 
-            return render_template('team.html', user=current_user, current_team=team, current_league=league, playoffSeries=playoffSeries, round_name=round_name, players=players)
+            return render_template('team.html', user=current_user, team_id=team_id, current_team=team, current_league=league, playoffSeries=playoffSeries, round_name=round_name, players=players)
         
         if activeSeries.round_three:
 
@@ -226,38 +271,115 @@ def team():
 
             round_name = "Championship"
 
-            return render_template('team.html', user=current_user, current_team=team, current_league=league, playoffSeries=playoffSeries, round_name=round_name, players=players)
+            return render_template('team.html', user=current_user, team_id=team_id, current_team=team, current_league=league, playoffSeries=playoffSeries, round_name=round_name, players=players)
 
 
 @views.route('/match') #TODO: Get usernames, use profile image, team logo and team banner to pass to template
 def match():
     # Get both Team.id's and League.id from args for current matchup
+    team_id = request.args.get('team_id')
+    print(team_id)
     current_league_id = request.args.get('current_league')
-    team0_id = request.args.get('team0_id')
-    team1_id = request.args.get('team1_id')
     series_id = request.args.get('series_id')
 
-    # Get Team object for each Team
-    team0 = Team.query.filter(Team.id == team0_id).first()
-    team1 = Team.query.filter(Team.id == team1_id).first()
+    # Get object from Series table
+    series = Series.query.filter_by(id=series_id).first()
 
-    # Check to see if scores have already been submitted
-    query = text(f'''
-        SELECT * FROM Stats 
-			WHERE League_id = {current_league_id} AND 
-			Series_id = {series_id}
+    # Get Teams and rosters for the current Series.id
+    teamsQuery = text(f'''
+        SELECT * FROM (
+            SELECT l.team_id, t.teamName,
+                COALESCE(subquery.wins, 0) AS seriesWins,
+                COALESCE(subquery3.gameWins, 0) AS gameWins,
+                COALESCE(subquery2.losses, 0) AS seriesLosses,
+                COALESCE(subquery4.gameLosses, 0) AS gameLosses,
+                t.team_logo, t.team_banner
+            FROM League l
+            LEFT JOIN (
+                SELECT s.seriesWinner, COUNT(s.seriesWinner) AS wins
+                FROM Series s
+                WHERE s.id IN (SELECT Series_id FROM Stats WHERE League_id = {current_league_id})
+                GROUP BY s.seriesWinner
+            ) AS subquery ON l.team_id = subquery.seriesWinner
+            LEFT JOIN (
+                SELECT s.seriesLoser, COUNT(s.seriesLoser) AS losses
+                FROM Series s
+                WHERE s.id IN (SELECT Series_id FROM Stats WHERE League_id = {current_league_id})
+                GROUP BY s.seriesLoser
+            ) AS subquery2 ON l.team_id = subquery2.seriesLoser
+            LEFT JOIN (
+                SELECT s.winningTeam, COUNT(s.winningTeam) AS gameWins
+                FROM Stats s
+                WHERE s.League_id = {current_league_id}
+                GROUP BY s.winningTeam
+            ) AS subquery3 ON l.team_id = subquery3.winningTeam
+            LEFT JOIN (
+                SELECT s.losingTeam, COUNT(s.losingTeam) AS gameLosses
+                FROM Stats s
+                WHERE s.League_id = {current_league_id}
+                GROUP BY s.losingTeam
+            ) AS subquery4 ON l.team_id = subquery4.losingTeam
+            JOIN Team t ON l.team_id = t.id
+            WHERE l.id = {current_league_id} AND 
+            l.team_id IN (SELECT Team1_id FROM Stats WHERE Series_id = {series.id}) OR
+            l.team_id IN (SELECT Team0_id FROM Stats WHERE Series_id = {series.id})
+        ) AS subquery5
+        GROUP BY team_id     
+    ''')
+    
+    userQuery = text(f'''
+        SELECT tp.teamId, u.username, u.profile_image
+        FROM TeamPlayers tp
+        JOIN Team t ON tp.teamId = t.id
+        JOIN User u ON tp.userId = u.id
+        WHERE tp.teamId IN (SELECT Team0_id FROM Stats WHERE Series_id = {series.id})
+        OR tp.teamId IN (SELECT Team1_id FROM Stats WHERE Series_id = {series.id});          
+    ''')
+    
+    # Query to get Users stat lines for the specific Series.id
+    userStatsQuery = text(f'''
+        SELECT u.id, u.username, us.score, us.goals, us.assists, us.saves, us.shots, u.profile_image
+        FROM UserStats us
+        JOIN User u ON us.User_id = u.id
+        WHERE Series_id = {series.id}
     ''')
 
-    with db.engine.connect() as conn:
-        series = conn.execute(query).fetchall()
+    stats = ()
     
-    hasWinner = False
-    for row in series:
-        if row.winningTeam is not None:
-            hasWinner = True
-            break
+    with db.engine.connect() as conn:
+        teams = conn.execute(teamsQuery).all()
+        users =conn.execute(userQuery).all()
+        if series.seriesWinner:
+            stats = conn.execute(userStatsQuery).all()
 
-    return render_template('match.html', user=current_user, team0=team0, team1=team1, current_league_id=current_league_id, hasWinner=hasWinner, series_id=series_id)
+    team_stats = {}
+    for team in teams:
+        teamId = team.team_id
+        team_stats[teamId] = {
+            'teamName': team.teamName,
+            'seriesWins': team.seriesWins,
+            'gameWins': team.gameWins,
+            'seriesLosses': team.seriesLosses,
+            'gameLosses': team.gameLosses,
+            'team_logo': team.team_logo,
+            'team_banner': team.team_banner,
+            'users': []
+        }
+
+    # Update the loop below to use team_stats instead of teams
+    for user in users:
+        teamId = user.teamId
+        user_data = {
+            'username': user.username,
+            'profile_image': user.profile_image
+        }
+        team_stats[teamId]['users'].append(user_data)
+
+    first_team_id = list(team_stats.keys())[0]
+    second_team_id = list(team_stats.keys())[1]
+    teamNames = [team_stats[first_team_id]['teamName'], team_stats[second_team_id]['teamName']]
+
+    return render_template('match.html', user=current_user, current_league_id=current_league_id, series=series, team_stats=team_stats, stats=stats, teamNames=teamNames, team_id=team_id)
 
 @views.route('/bracket')
 def bracket():
@@ -389,11 +511,18 @@ def bracket():
 
 @views.route('/submitScore')
 def submitScore():
-    # Get League.id and Team.teamNames from args
+    # Get League.id and Team.id from args
+    team_id = request.args.get('team_id')
     current_league_id = request.args.get('current_league_id')
-    current_team = request.args.get('current_team')
-    opponent_team = request.args.get('opponent_team')
     series_id = request.args.get('series_id')
+
+    print(team_id)
+
+    # Get the Stats object for specific Series.id
+    series = Stats.query.filter_by(Series_id=series_id).first()
+
+    current_team = series.Team0_id
+    opponent_team = series.Team1_id
 
     # Get Team from db with matching teamNames
     current_team = Team.query.filter_by(id=current_team).first()
@@ -409,6 +538,7 @@ def submitScore():
 
     return render_template('submitScore.html',
                                 user=current_user,
+                                team_id=team_id,
                                 current_team_name=current_team.teamName,
                                 opponent_team_name=opponent_team.teamName,
                                 current_team_dict=current_team_dict,
@@ -419,7 +549,112 @@ def submitScore():
 
 @views.route('/league')
 def league():
-    return render_template('league.html', user=current_user)
+    # Get Team.id from args
+    team_id = request.args.get('team_id')
+    # Get the League object associated with the current_team
+    league = League.query.filter(League.team_id == team_id, League.isActive == True).first()
+
+    # Query to get Team Users and their respective info
+    query = text(f'''
+        SELECT * FROM (
+        SELECT ROW_NUMBER() OVER (ORDER BY subquery.wins DESC, subquery3.gameWins DESC) AS place,
+            l.team_id, t.teamName,
+            COALESCE(subquery.wins, 0) AS seriesWins,
+            COALESCE(subquery3.gameWins, 0) AS gameWins,
+            COALESCE(subquery2.losses, 0) AS seriesLosses,
+            COALESCE(subquery4.gameLosses, 0) AS gameLosses,
+            t.team_logo, t.team_banner
+        FROM League l
+        LEFT JOIN (
+            SELECT s.seriesWinner, COUNT(s.seriesWinner) AS wins
+            FROM Series s
+            WHERE s.id IN (SELECT Series_id FROM Stats WHERE League_id = {league.id})
+            GROUP BY s.seriesWinner
+        ) AS subquery ON l.team_id = subquery.seriesWinner
+        LEFT JOIN (
+            SELECT s.seriesLoser, COUNT(s.seriesLoser) AS losses
+            FROM Series s
+            WHERE s.id IN (SELECT Series_id FROM Stats WHERE League_id = {league.id})
+            GROUP BY s.seriesLoser
+        ) AS subquery2 ON l.team_id = subquery2.seriesLoser
+        LEFT JOIN (
+            SELECT s.winningTeam, COUNT(s.winningTeam) AS gameWins
+            FROM Stats s
+            WHERE s.League_id = {league.id}
+            GROUP BY s.winningTeam
+        ) AS subquery3 ON l.team_id = subquery3.winningTeam
+        LEFT JOIN (
+            SELECT s.losingTeam, COUNT(s.losingTeam) AS gameLosses
+            FROM Stats s
+            WHERE s.League_id = {league.id}
+            GROUP BY s.losingTeam
+        ) AS subquery4 ON l.team_id = subquery4.losingTeam
+        JOIN Team t ON l.team_id = t.id
+        WHERE l.id = {league.id}
+    ) AS subquery5
+    ORDER BY place;
+    ''')
+
+    # Query to get Users for the specific League.id along with a sum of all of their UserStats and a count of how many games they've played
+    userStatsQuery = text(f'''
+        SELECT tp.teamId, tp.userId, u.username, u.profile_image,
+            (SELECT COALESCE(SUM(us.score), 0) FROM UserStats us WHERE us.User_id = tp.userId AND us.Series_id IN (SELECT Series_id FROM Stats WHERE League_id = {league.id})) AS score,
+            (SELECT COALESCE(SUM(us.goals), 0) FROM UserStats us WHERE us.User_id = tp.userId AND us.Series_id IN (SELECT Series_id FROM Stats WHERE League_id = {league.id})) AS goals,
+            (SELECT COALESCE(SUM(us.assists), 0) FROM UserStats us WHERE us.User_id = tp.userId AND us.Series_id IN (SELECT Series_id FROM Stats WHERE League_id = {league.id})) AS assists,
+            (SELECT COALESCE(SUM(us.saves), 0) FROM UserStats us WHERE us.User_id = tp.userId AND us.Series_id IN (SELECT Series_id FROM Stats WHERE League_id = {league.id})) AS saves,
+            (SELECT COALESCE(SUM(us.shots), 0) FROM UserStats us WHERE us.User_id = tp.userId AND us.Series_id IN (SELECT Series_id FROM Stats WHERE League_id = {league.id})) AS shots,
+            (SELECT COUNT(*) FROM UserStats us WHERE us.User_id = tp.userId AND us.Series_id IN (SELECT Series_id FROM Stats WHERE League_id = {league.id})) AS games_played
+            FROM League l
+            JOIN TeamPlayers tp ON l.team_id = tp.teamId
+            JOIN User u ON tp.userId = u.id
+            WHERE l.id = {league.id}
+            ORDER BY goals DESC;
+    ''')
+
+    with db.engine.connect() as conn:
+        league = conn.execute(query).fetchall()
+        userStats = conn.execute(userStatsQuery).fetchall()
+
+    saves_sort = sorted(userStats, key=lambda x: x.saves, reverse=True)
+    most_saves = saves_sort[0]
+
+    assists_sort = sorted(userStats, key=lambda x: x.assists, reverse=True)
+    most_assists = assists_sort[0]
+
+    # Create team dictionaries and nest respective User dictionaries inside
+    place = 1
+    team_stats = {}
+    for team in league:
+        team_id = team.team_id
+        team_stats[team_id] = {
+            'place': place,
+            'teamName': team.teamName,
+            'seriesWins': team.seriesWins,
+            'gameWins': team.gameWins,
+            'seriesLosses': team.seriesLosses,
+            'gameLosses': team.gameLosses,
+            'team_logo': team.team_logo,
+            'team_banner': team.team_banner,
+            'users': []
+        }
+        place = place + 1
+
+    for user in userStats:
+        team_id = user.teamId
+        user_data = {
+            'userId': user.userId,
+            'username': user.username,
+            'profile_image': user.profile_image,
+            'score': user.score,
+            'goals': user.goals,
+            'assists': user.assists,
+            'saves': user.saves,
+            'shots': user.shots,
+            'games_played': user.games_played
+        }
+        team_stats[team_id]['users'].append(user_data)
+
+    return render_template('league.html', user=current_user, team_stats=team_stats, userStats=userStats, most_saves=most_saves, most_assists=most_assists)
 
 @views.route('/createTeam')
 def createTeam():

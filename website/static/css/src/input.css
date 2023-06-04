@@ -85,6 +85,67 @@ a:hover {
   @apply bg-eleventh-bg text-white;
 }
 
+.league-card {
+  @apply bg-eleventh-bg rounded-xl p-5 w-full text-center lg:col-span-6 lg:items-center;
+}
+
+.card {
+  background-color: #232323;
+  transition: 0.4s ease-out;
+  border-radius: 12px;
+}
+.card:hover {
+  transform: translateY(0px);
+  cursor: pointer;
+}
+.card:hover:before {
+  opacity: 1;
+}
+.card:hover .info {
+  opacity: 1;
+  transform: translateY(0px);
+}
+.test:hover {
+  filter: blur(10px);
+}
+.card:before {
+  content: "";
+  position: absolute;
+  display: block;
+  width: inherit;
+  height: 100%;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 0;
+  transition: 0.5s;
+  opacity: 0;
+}
+.card .info {
+  position: absolute;
+  text-align: center;
+  bottom: 25%;
+  z-index: 0;
+  opacity: 0;
+  transform: translateY(0px);
+  transition: 0.5s;
+}
+
+.league-highlights {
+  @apply grid justify-items-center bg-eleventh-bg rounded-xl p-5 w-full text-center lg:col-span-2 lg:col-start-7;
+}
+
+.scorer {
+  @apply lg:row-start-1;
+}
+
+.saves {
+  @apply lg:row-start-2;
+}
+
+.assists {
+  @apply lg:row-start-3;
+}
+
 .teamStatSubmitTable{
   border: 4px solid rgba(41, 43, 45, 0.5);
   @apply  border-collapse border-spacing-5 text-center m-8 lg:col-span-8 lg:border-spacing-10;

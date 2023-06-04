@@ -1,129 +1,108 @@
 {% extends "base.html" %} {% block title %}League Name{% endblock %} {% block content %}
-<div class="py-6 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4x">
-    <div class="flex flex-col">
-        <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div class="py-2 inline-block min-w-full sm:px-6 lg:px-8">
-                <div class="overflow-hidden">
-                    <table class="min-w-full text-center border-separate border-spacing-2 border border-slate-500">
-                        <thead class="text-sm">
-                            <tr><th colspan="11" class="text-2xl">League Name</th></tr>
-                            <tr>
-                                <th>Team Name</th>
-                                <th>Series Record W/L</th>
-                                <th>Matches Record W/L</th>
-                                <th>Goals</th>
-                                <th>Goals Allowed</th>
-                                <th>Assisted Goal Percentage</th>
-                                <th>Saves Per Game</th>
-                                <th>Demolitions Per Game</th>
-                                <th>Player To Watch <!-- The player with the highest score average --></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="bg-red-400">
-                                <td>Team 1</td>
-                                <td>#/#</td>
-                                <td>#/#</td>
-                                <td>#</td>
-                                <td>#</td>
-                                <td>%</td>
-                                <td>#</td>
-                                <td>#</td>
-                                <td>Username</td>
-                            </tr>
-
-                            <tr class="bg-blue-400">
-                                <td>Team 2</td>
-                                <td>#/#</td>
-                                <td>#/#</td>
-                                <td>#</td>
-                                <td>#</td>
-                                <td>%</td>
-                                <td>#</td>
-                                <td>#</td>
-                                <td>Username</td>
-                            </tr>
-
-                            <tr class="bg-green-400">
-                                <td>Team 3</td>
-                                <td>#/#</td>
-                                <td>#/#</td>
-                                <td>#</td>
-                                <td>#</td>
-                                <td>%</td>
-                                <td>#</td>
-                                <td>#</td>
-                                <td>Username</td>
-                            </tr>
-
-                            <tr class="bg-yellow-400">
-                                <td>Team 4</td>
-                                <td>#/#</td>
-                                <td>#/#</td>
-                                <td>#</td>
-                                <td>#</td>
-                                <td>%</td>
-                                <td>#</td>
-                                <td>#</td>
-                                <td>Username</td>
-                            </tr>
-
-                            <tr class="bg-purple-400">
-                                <td>Team 5</td>
-                                <td>#/#</td>
-                                <td>#/#</td>
-                                <td>#</td>
-                                <td>#</td>
-                                <td>%</td>
-                                <td>#</td>
-                                <td>#</td>
-                                <td>Username</td>
-                            </tr>
-
-                            <tr class="bg-fuchsia-400">
-                                <td>Team 6</td>
-                                <td>#/#</td>
-                                <td>#/#</td>
-                                <td>#</td>
-                                <td>#</td>
-                                <td>%</td>
-                                <td>#</td>
-                                <td>#</td>
-                                <td>Username</td>
-                            </tr>
-
-                            <tr class="bg-zinc-500">
-                                <td>Team 7</td>
-                                <td>#/#</td>
-                                <td>#/#</td>
-                                <td>#</td>
-                                <td>#</td>
-                                <td>%</td>
-                                <td>#</td>
-                                <td>#</td>
-                                <td>Username</td>
-                            </tr>
-
-                            <tr class="bg-orange-400">
-                                <td>Team 8</td>
-                                <td>#/#</td>
-                                <td>#/#</td>
-                                <td>#</td>
-                                <td>#</td>
-                                <td>%</td>
-                                <td>#</td>
-                                <td>#</td>
-                                <td>Username</td>
-                            </tr>
-                        </tbody>
-                    </table>
+    <div class="grid gap-8 lg:grid-cols-9 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4x">
+        {% for team_id, team_data in team_stats.items() %}
+        <div class="league-card">
+            <div class="flex items-center">
+                <h3 class="pr-4">{{ team_data.place }}</h3>
+                <div class="card">
+                    {% if team_data.team_logo %}
+                    <img src="{{ url_for('static', filename='uploads/' + team_data.team_logo) }}" alt="Team logo" class="test rounded-xl h-80 w-96">
+                    {% else %}
+                    <img src="../static/assets/images/placeholder.png" class="rounded-xl h-80 w-96">
+                    {% endif %}
+                    <div class="info">
+                        {% for user in team_data.users %}
+                        <div class="flex items-center py-2">
+                            {% if user.profile_image %}
+                            <img src="{{ url_for('static', filename='uploads/' + user.profile_image) }}" alt="Team logo" class="profile-image mx-4">
+                            {% else %}
+                            <img src="../static/assets/images/logo.png" class="profile-image mx-4">
+                            {% endif %}
+                            <h3>{{ user.username }}</h3>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
+            
+                <table class="w-3/4">
+                    <tr>
+                        <th colspan="5" class="pb-8">{{ team_data.teamName }}</th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Series Record</th>
+                        <th></th>
+                        <th colspan="2">Match Record</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="pb-8">{{ team_data.seriesWins }} - {{ team_data.seriesLosses }}</td>
+                        <td></td>
+                        <td colspan="2" class="pb-8">{{ team_data.gameWins}} - {{ team_data.gameLosses }}</td>
+                    </tr>
+                    <tr>
+                        <th>Score</th>
+                        <th>Goals</th>
+                        <th>Saves</th>
+                        <th>Assists</th>
+                        <th>Shots</th>
+                    </tr>
+                    <tr>
+                        {% if team_data['users'][0]['games_played']%}
+                        {% set avg_score = ((team_data['users'][0]['score'] + team_data['users'][1]['score']) / team_data['users'][0]['games_played']) | round(0) %}
+                        <td>{{ avg_score }}</td>
+                        {% set avg_goals = ((team_data['users'][0]['goals'] + team_data['users'][1]['goals']) / team_data['users'][0]['games_played']) | round(1) %}
+                        <td>{{ avg_goals }}</td>
+                        {% set avg_saves = ((team_data['users'][0]['saves'] + team_data['users'][1]['saves']) / team_data['users'][0]['games_played']) | round(1) %}
+                        <td>{{ avg_saves }}</td>
+                        {% set avg_assists = ((team_data['users'][0]['assists'] + team_data['users'][1]['assists']) / team_data['users'][0]['games_played']) | round(1) %}
+                        <td>{{ avg_assists }}</td>
+                        {% set avg_shots = ((team_data['users'][0]['shots'] + team_data['users'][1]['shots']) / team_data['users'][0]['games_played']) | round(1) %}
+                        <td>{{ avg_shots }}</td>
+                        {% else %}
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        {% endif %}
+                    </tr>
+                </table>
             </div>
         </div>
-    </div>
-</div>
+        {% endfor %}
 
-<div class="bg-zinc-700 py-6 text-3xl justify-items-center grid gap-8 lg:grid-cols-10 lg:text-xl xl:text-2xl 2xl:text-4x"><!-- TODO: Create calendat that show 7 weeks from league creation date and put's confirmed matches on-->
-<h1>Calendar</h1>
-</div>
+        <div class="league-highlights scorer">
+            <h3>Top Scorer</h3>
+            {% if userStats[0].profile_image %}
+            <img src="{{ url_for('static', filename='uploads/' + userStats[0].profile_image) }}" class="profile-image">
+            {% else %}
+            <img src="../static/assets/images/logo.png" class="profile-image">
+            {% endif %}
+            <h3>{{ userStats[0].username }}</h3>
+            {% set avg_goals = (userStats[0].goals / userStats[0].games_played) | round(1) %}
+            <h3>{{ avg_goals }}</h3>
+        </div>
+
+        <div class="league-highlights saves">
+            <h3>Top Goalkeeper</h3>
+            {% if most_saves.profile_image %}
+            <img src="{{ url_for('static', filename='uploads/' + most_saves.profile_image) }}" class="profile-image">
+            {% else %}
+            <img src="../static/assets/images/logo.png" class="profile-image">
+            {% endif %}
+            <h3>{{ most_saves.username }}</h3>
+            {% set avg_saves = (most_saves.saves / most_saves.games_played) | round(1) %}
+            <h3>{{ avg_saves }}</h3>
+        </div>
+
+        <div class="league-highlights assists">
+            <h3>Tactician</h3>
+            {% if most_assists.profile_image %}
+            <img src="{{ url_for('static', filename='uploads/' + most_assists.profile_image) }}" class="profile-image">
+            {% else %}
+            <img src="../static/assets/images/logo.png" class="profile-image">
+            {% endif %}
+            <h3>{{ most_assists.username }}</h3>
+            {% set avg_assists = (most_assists.assists / most_assists.games_played) | round(1) %}
+            <h3>{{ avg_assists }}</h3>
+        </div>
 {% endblock %}

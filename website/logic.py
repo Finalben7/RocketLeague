@@ -65,15 +65,29 @@ def createTeam():
 def submitScore():
     if request.method == 'POST':
         # Get current Team.id, League.id, Series_id from form
-        team_id = request.form.get('current_team_id')
+        team_id = request.form.get('team_id')
         current_league_id = request.form['current_league_id']
         series_id = request.form['series_id']
 
-        # Get Team.id's from form
-        winners = [int(request.form.get('gameOneWinner')), int(request.form.get('gameTwoWinner')), int(request.form.get('gameThreeWinner'))]
+        print(team_id)
 
         # Get current Series object
         current_series = Stats.query.filter_by(Series_id=series_id).first()
+
+        # Get both Team.id's associated with the current series
+        team0 = current_series.Team0_id
+        team1 = current_series.Team1_id
+
+        # Get game winners Team.id's from form
+        winners = [int(request.form.get('gameOneWinner')), int(request.form.get('gameTwoWinner')), int(request.form.get('gameThreeWinner'))]
+
+        # Create a list of Team.id's for each game loss being the opposite of the values in winners
+        losers = []
+        for winner in winners:
+            if winner == team0:
+                losers.append(team1)
+            elif winner == team1:
+                losers.append(team0)
 
         # Check to see if score have already been submitted
         if current_series.winningTeam is not None:
@@ -84,15 +98,23 @@ def submitScore():
         if len(set(winners)) == 1:
             flash("One team cannot win all 3 games in a best of 3, please try again.", category="error")
             return redirect(request.referrer)
+
+        # Check to see if a tie was submitted
+        if winners[0] != winners[1] and winners[2] == 0:
+            flash("You submitted a tie.", category="error")
+            return redirect(request.referrer)
         
         # Check if game 3 has a winner for no reason
         if winners[0] == winners[1] and winners[2] != 0:
             flash("Game 3 cannot have a winner if the series is over after two games.", category="error")
             return redirect(request.referrer)
 
-        # # Get the series winner
+        # Get the series winner
         winnerCount = Counter(winners)
         seriesWinner = winnerCount.most_common(1)[0][0]
+
+        # Determine the series loser
+        seriesLoser = current_series.Team0_id if current_series.Team1_id == seriesWinner else current_series.Team1_id
 
         # WHERE clause for update queries
         where_clause = Stats.Series_id == series_id
@@ -163,12 +185,14 @@ def submitScore():
             for i, stat in enumerate(stats_to_update):
                 if winners[i] != 0:
                     stat.winningTeam = winners[i]
+                    stat.losingTeam = losers[i]
 
             # Get Series to update
             series = Series.query.filter(Series.id == stats_to_update[0].Series_id).first()
 
-            # Update seriesWinner in Series table
+            # Update Series table
             series.seriesWinner = seriesWinner
+            series.seriesLoser = seriesLoser
 
             db.session.commit()
 

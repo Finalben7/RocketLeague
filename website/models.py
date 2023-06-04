@@ -40,6 +40,7 @@ class Series(db.Model):
     __tablename__ = 'Series'
     id = db.Column(db.Integer, primary_key=True)
     seriesWinner = db.Column(db.Integer, ForeignKey("Team.id"))
+    seriesLoser = db.Column(db.Integer, ForeignKey("Team.id"))
 
 class Stats(db.Model):
     __tablename__ = 'Stats'
@@ -49,6 +50,7 @@ class Stats(db.Model):
     Team0_id = db.Column(db.Integer, ForeignKey("Team.id"))
     Team1_id = db.Column(db.Integer, ForeignKey("Team.id"))
     winningTeam = db.Column(db.Integer, ForeignKey("Team.id"))
+    losingTeam = db.Column(db.Integer, ForeignKey("Team.id"))
     round_one = db.Column(db.Boolean, default=0)
     round_two = db.Column(db.Boolean, default=0)
     round_three = db.Column(db.Boolean, default=0)
