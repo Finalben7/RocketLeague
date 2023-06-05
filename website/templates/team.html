@@ -77,19 +77,20 @@
             </div>
 
         {% if current_league.isActive and current_league.isPlayoffs == 0 %}
-        <h1 class="lg:col-span-8 lg:items-center">Matches</h1>
         {% for series_id, match_details in matchups.items() %}
-            <div class="teams-card">
-                <h1 class="pb-5 text-3xl">Match {{ match_details['Match_num'] }}</h1>
-                <div class="flex justify-between gap-5">
-                    <h2>{{ match_details['Team0_name'] }}</h2>
-                    {% if match_details['Team0_wins'] != 0 or match_details['Team1_wins'] != 0 %}
-                    <h3>{{ match_details['Team0_wins'] }}</h3>
-                    <h3>{{ match_details['Team1_wins'] }}</h3>
-                    {% endif %}
-                    <h2>{{ match_details['Team1_name'] }}</h2>
-                </div>
-            </div>
+        <h1 class="text-3xl lg:col-span-8">Match {{ match_details['Match_num'] }}</h1>
+        <div class="flex w-3/4 justify-between gap-5 lg:col-span-8">
+            <h2>{{ match_details['Team0_name'] }}</h2>
+            {% if match_details['Team0_wins'] != 0 or match_details['Team1_wins'] != 0 %}
+            <h3>{{ match_details['Team0_wins'] }}</h3>
+            <h3>{{ match_details['Team1_wins'] }}</h3>
+            {% endif %}
+            <h2>{{ match_details['Team1_name'] }}</h2>
+        </div>
+        <div class="teams-card">
+            <img src="../static/assets/images/banner.jpg" class="split-bg float-right"/>
+            <img src="../static/uploads/Finalben7.jpg" class="split-bg"/>
+        </div>
 
             <a href ="/match?current_league={{ current_league.id }}&series_id={{ series_id }}&team_id={{ team_id }}" class="lg:col-span-8"><button type="submit" class="button">Match Page</button></a>
         {% endfor %}
@@ -107,7 +108,7 @@
         </div>
 
         <div class="flex gap-8 lg:col-span-8">
-            <a href ="/match?current_league={{ current_league.id }}&series_id={{ playoffSeries['Series_id'] }}" class="lg:col-span-8"><button type="submit" class="button">Match Page</button></a>
+            <a href ="/match?current_league={{ current_league.id }}&series_id={{ playoffSeries['Series_id'] }}&team_id={{ team_id }}" class="lg:col-span-8"><button type="submit" class="button">Match Page</button></a>
             <a href="/bracket?league_id={{ current_league.id }}" class="lg:col-span-8"><button type="submit" class="button">View Bracket</button></a>
         </div>
         {% endif %}

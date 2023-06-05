@@ -2,9 +2,9 @@
 <div class="py-6 text-3xl justify-items-center grid gap-8 lg:grid-cols-9 lg:text-xl xl:text-2xl 2xl:text-4x">            
     {% for team_id, team_data in team_stats.items() %}
     {% if team_data.team_banner %}
-    <div class="teams-card" style="background-repeat: no-repeat; background-size: 100% 100%; background-image:url({{ url_for('static', filename='uploads/' + team_data.team_banner) }}) ;">
+    <div class="teams-card p-5" style="background-repeat: no-repeat; background-size: 100% 100%; background-image:url({{ url_for('static', filename='uploads/' + team_data.team_banner) }}) ;">
     {% else %}
-    <div class="teams-card">
+    <div class="teams-card p-5">
     {% endif %}
         <div class="flex pb-20">
             <h1>({{ team_data.seriesWins }} - {{ team_data.seriesLosses }})</h1>
@@ -27,6 +27,175 @@
     {% endfor %}
 
     {% if series.seriesWinner %}
+    {% set i = 0 %}
+    <h1 class="text-3xl pt-5 lg:col-span-8">Game 1</h1>
+    <table class="teamStatSubmitTable w-3/4">
+        <tr>
+            {% set team0goals = stats[0].goals + stats[1].goals %}
+            <th colspan="6">{{ teamNames[0] }}  {{ team0goals }}</th>
+        </tr>
+        <tr>
+            <th>Username</th>
+            <th>Score</th>
+            <th>Goals</th>
+            <th>Saves</th>
+            <th>Assists</th>
+            <th>Shots</th>
+        </tr>
+        <tr>
+            <th>{{ stats[i].username }}</th>
+            <td>{{ stats[i].score }}</td>
+            <td>{{ stats[i].goals }}</td>
+            <td>{{ stats[i].assists }}</td>
+            <td>{{ stats[i].saves }}</td>
+            <td>{{ stats[i].shots }}</td>
+        </tr>
+        {% set i = i + 1 %}
+        <tr>
+            <th>{{ stats[i].username }}</th>
+            <td>{{ stats[i].score }}</td>
+            <td>{{ stats[i].goals }}</td>
+            <td>{{ stats[i].assists }}</td>
+            <td>{{ stats[i].saves }}</td>
+            <td>{{ stats[i].shots }}</td>
+        </tr>
+        {% set i = i + 1 %}
+        <tr>
+            {% set team1goals = stats[2].goals + stats[3].goals %}
+            <th colspan="6">{{ teamNames[1] }}  {{ team1goals }}</th>
+        </tr>
+        <tr>
+            <th>{{ stats[i].username }}</th>
+            <td>{{ stats[i].score }}</td>
+            <td>{{ stats[i].goals }}</td>
+            <td>{{ stats[i].assists }}</td>
+            <td>{{ stats[i].saves }}</td>
+            <td>{{ stats[i].shots }}</td>
+        </tr>
+        {% set i = i + 1 %}
+        <tr>
+            <th>{{ stats[i].username }}</th>
+            <td>{{ stats[i].score }}</td>
+            <td>{{ stats[i].goals }}</td>
+            <td>{{ stats[i].assists }}</td>
+            <td>{{ stats[i].saves }}</td>
+            <td>{{ stats[i].shots }}</td>
+        </tr>
+    </table>
+
+    <h1 class="text-3xl pt-5 lg:col-span-8">Game 2</h1>
+    <table class="teamStatSubmitTable w-3/4">
+        {% set i = i + 1 %}
+        <tr>
+            {% set team0goals = stats[4].goals + stats[5].goals %}
+            <th colspan="6">{{ teamNames[0] }}  {{ team0goals }}</th>
+        </tr>
+        <tr>
+            <th>Username</th>
+            <th>Score</th>
+            <th>Goals</th>
+            <th>Saves</th>
+            <th>Assists</th>
+            <th>Shots</th>
+        </tr>
+        <tr>
+            <th>{{ stats[i].username }}</th>
+            <td>{{ stats[i].score }}</td>
+            <td>{{ stats[i].goals }}</td>
+            <td>{{ stats[i].assists }}</td>
+            <td>{{ stats[i].saves }}</td>
+            <td>{{ stats[i].shots }}</td>
+        </tr>
+        {% set i = i + 1 %}
+        <tr>
+            <th>{{ stats[i].username }}</th>
+            <td>{{ stats[i].score }}</td>
+            <td>{{ stats[i].goals }}</td>
+            <td>{{ stats[i].assists }}</td>
+            <td>{{ stats[i].saves }}</td>
+            <td>{{ stats[i].shots }}</td>
+        </tr>
+        {% set i = i + 1 %}
+        <tr>
+            {% set team1goals = stats[6].goals + stats[7].goals %}
+            <th colspan="6">{{ teamNames[1] }}  {{ team1goals }}</th>
+        </tr>
+        <tr>
+            <th>{{ stats[i].username }}</th>
+            <td>{{ stats[i].score }}</td>
+            <td>{{ stats[i].goals }}</td>
+            <td>{{ stats[i].assists }}</td>
+            <td>{{ stats[i].saves }}</td>
+            <td>{{ stats[i].shots }}</td>
+        </tr>
+        {% set i = i + 1 %}
+        <tr>
+            <th>{{ stats[i].username }}</th>
+            <td>{{ stats[i].score }}</td>
+            <td>{{ stats[i].goals }}</td>
+            <td>{{ stats[i].assists }}</td>
+            <td>{{ stats[i].saves }}</td>
+            <td>{{ stats[i].shots }}</td>
+        </tr>
+    </table>
+    {% if stats[8] %}
+    <h1 class="text-3xl pt-5 lg:col-span-8">Game 3</h1>
+    <table class="teamStatSubmitTable w-3/4">
+        {% set i = i + 1 %}
+        <tr>
+            {% set team0goals = stats[8].goals + stats[9].goals %}
+            <th colspan="6">{{ teamNames[0] }}  {{ team0goals }}</th>
+        </tr>
+        <tr>
+            <th>Username</th>
+            <th>Score</th>
+            <th>Goals</th>
+            <th>Saves</th>
+            <th>Assists</th>
+            <th>Shots</th>
+        </tr>
+        <tr>
+            <th>{{ stats[i].username }}</th>
+            <td>{{ stats[i].score }}</td>
+            <td>{{ stats[i].goals }}</td>
+            <td>{{ stats[i].assists }}</td>
+            <td>{{ stats[i].saves }}</td>
+            <td>{{ stats[i].shots }}</td>
+        </tr>
+        {% set i = i + 1 %}
+        <tr>
+            <th>{{ stats[i].username }}</th>
+            <td>{{ stats[i].score }}</td>
+            <td>{{ stats[i].goals }}</td>
+            <td>{{ stats[i].assists }}</td>
+            <td>{{ stats[i].saves }}</td>
+            <td>{{ stats[i].shots }}</td>
+        </tr>
+        {% set i = i + 1 %}
+        <tr>
+            {% set team1goals = stats[10].goals + stats[11].goals %}
+            <th colspan="6">{{ teamNames[1] }}  {{ team1goals }}</th>
+        </tr>
+        <tr>
+            <th>{{ stats[i].username }}</th>
+            <td>{{ stats[i].score }}</td>
+            <td>{{ stats[i].goals }}</td>
+            <td>{{ stats[i].assists }}</td>
+            <td>{{ stats[i].saves }}</td>
+            <td>{{ stats[i].shots }}</td>
+        </tr>
+        {% set i = i + 1 %}
+        <tr>
+            <th>{{ stats[i].username }}</th>
+            <td>{{ stats[i].score }}</td>
+            <td>{{ stats[i].goals }}</td>
+            <td>{{ stats[i].assists }}</td>
+            <td>{{ stats[i].saves }}</td>
+            <td>{{ stats[i].shots }}</td>
+        </tr>
+    </table>
+    {% else %}
+    {% endif %}
     {% else %}
     <a href="/submitScore?current_league_id={{ current_league_id }}&series_id={{ series.id }}&team_id={{ team_id }}" class="lg:col-span-8 p-10"><button type="submit" class="button">Submit Score</button></a>
     {% endif %}

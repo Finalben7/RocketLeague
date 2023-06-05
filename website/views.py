@@ -115,8 +115,6 @@ def team():
             WHERE l.id = {league.id} AND us.User_id IN ({", ".join(str(player.id) for player in players)})
             GROUP BY us.User_id, u.username, u.profile_image
         ''')
-    
-    print(players[0])
 
     with db.engine.connect() as conn:
         results = conn.execute(playersQuery).fetchall()
@@ -278,7 +276,6 @@ def team():
 def match():
     # Get both Team.id's and League.id from args for current matchup
     team_id = request.args.get('team_id')
-    print(team_id)
     current_league_id = request.args.get('current_league')
     series_id = request.args.get('series_id')
 
@@ -338,7 +335,7 @@ def match():
     
     # Query to get Users stat lines for the specific Series.id
     userStatsQuery = text(f'''
-        SELECT u.id, u.username, us.score, us.goals, us.assists, us.saves, us.shots, u.profile_image
+        SELECT  u.username, us.score, us.goals, us.assists, us.saves, us.shots
         FROM UserStats us
         JOIN User u ON us.User_id = u.id
         WHERE Series_id = {series.id}
@@ -515,8 +512,6 @@ def submitScore():
     team_id = request.args.get('team_id')
     current_league_id = request.args.get('current_league_id')
     series_id = request.args.get('series_id')
-
-    print(team_id)
 
     # Get the Stats object for specific Series.id
     series = Stats.query.filter_by(Series_id=series_id).first()

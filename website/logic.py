@@ -69,8 +69,6 @@ def submitScore():
         current_league_id = request.form['current_league_id']
         series_id = request.form['series_id']
 
-        print(team_id)
-
         # Get current Series object
         current_series = Stats.query.filter_by(Series_id=series_id).first()
 
@@ -218,7 +216,6 @@ def submitScore():
             with db.engine.connect() as conn:
                 roundOneSeries = conn.execute(roundOneQuery).fetchall()
 
-            print("1", seasonIsComplete, roundOneSeries)
             if seasonIsComplete and not roundOneSeries:
 
                 # Change isPlayoffs = True for all teams with matching current League.id
@@ -256,7 +253,6 @@ def submitScore():
                         db.session.add(stat)
                     m+=1
                     n-=1
-                print("Round 1 matches created!")
                 db.session.commit()
                 flash("Results submitted!", category="success")
                 return redirect(url_for('views.team', team_id=team_id))
@@ -274,7 +270,6 @@ def submitScore():
             with db.engine.connect() as conn:
                 roundTwoSeries = conn.execute(roundTwoQuery).fetchall()
 
-            print("2", roundOneSeries, playoffsRoundOneIsComplete, roundTwoSeries)
             if roundOneSeries and playoffsRoundOneIsComplete and not roundTwoSeries:
 
                 # Get the latest Series.id
@@ -312,7 +307,6 @@ def submitScore():
                         db.session.add(stat)
                     m+=1
                     n-=1
-                print("Round 2 matches created!")
                 db.session.commit()
                 flash("Results submitted!", category="success")
                 return redirect(url_for('views.team', team_id=team_id))
@@ -330,7 +324,6 @@ def submitScore():
             with db.engine.connect() as conn:
                 roundThreeSeries = conn.execute(roundThreeQuery).fetchall()
 
-            print("3", roundTwoSeries, playoffsRoundTwoIsComplete, roundThreeSeries)
             if roundTwoSeries and playoffsRoundTwoIsComplete and not roundThreeSeries:
 
                 # Get the latest Series.id
@@ -364,7 +357,6 @@ def submitScore():
                         stat.Team1_id = results[1][0]
                         stat.round_three = True
                         db.session.add(stat)
-                print("Round 3 matches created!")
                 db.session.commit()
                 flash("Results submitted!", category="success")
                 return redirect(url_for('views.team', team_id=team_id))
