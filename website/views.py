@@ -100,62 +100,63 @@ def team():
     # Get the League object associated with the current_team
     league = League.query.filter(League.team_id == team.id, League.isActive == True).first()
     # Get the average stats of the current roster for the current league
-    playersQuery = text(f'''
-            SELECT us.User_id, u.username, round(avg(goals), 1) as goals, round(avg(assists), 1) as assists, round(avg(saves), 1) as saves, sum(goals) as total_goals, sum(saves) as total_saves, count(*) as games_played, u.profile_image
-            FROM UserStats us
-            JOIN TeamPlayers tp ON us.User_id = tp.userId
-            JOIN League l ON tp.teamId = l.team_id
-            JOIN (
-            SELECT distinct Series_id
+    if league:
+        playersQuery = text(f'''
+                SELECT us.User_id, u.username, round(avg(goals), 1) as goals, round(avg(assists), 1) as assists, round(avg(saves), 1) as saves, sum(goals) as total_goals, sum(saves) as total_saves, count(*) as games_played, u.profile_image
+                FROM UserStats us
+                JOIN TeamPlayers tp ON us.User_id = tp.userId
+                JOIN League l ON tp.teamId = l.team_id
+                JOIN (
+                SELECT distinct Series_id
+                FROM Stats
+                WHERE League_id = {league.id}
+                GROUP BY Series_id
+                ) s ON us.Series_id = s.Series_id
+                JOIN User u ON us.User_id = u.id
+                WHERE l.id = {league.id} AND us.User_id IN ({", ".join(str(player.id) for player in players)})
+                GROUP BY us.User_id, u.username, u.profile_image
+            ''')
+
+        with db.engine.connect() as conn:
+            results = conn.execute(playersQuery).fetchall()
+            if results:
+                players = results
+
+        # Get Team record
+        recordQuery = text(f'''
+            SELECT
+                (SELECT
+                    SUM(CASE WHEN seriesWinner = {team.id} THEN 1 ELSE 0 END)
+                    FROM Series
+                    WHERE id IN (
+                        SELECT DISTINCT Series_id
+                        FROM Stats
+                        WHERE League_id = {league.id})
+                ) AS seriesWins,
+                (SELECT
+                    SUM(CASE WHEN seriesLoser = {team.id} THEN 1 ELSE 0 END)
+                    FROM Series
+                    WHERE id IN (
+                        SELECT DISTINCT Series_id
+                        FROM Stats
+                        WHERE League_id = {league.id})
+                ) AS seriesLosses,
+                COUNT(CASE WHEN winningTeam = {team.id} THEN 1 END) AS gameWins,
+                COUNT(CASE WHEN winningTeam <> {team.id} THEN 1 END) AS gameLosses
             FROM Stats
             WHERE League_id = {league.id}
-            GROUP BY Series_id
-            ) s ON us.Series_id = s.Series_id
-            JOIN User u ON us.User_id = u.id
-            WHERE l.id = {league.id} AND us.User_id IN ({", ".join(str(player.id) for player in players)})
-            GROUP BY us.User_id, u.username, u.profile_image
+                AND (Team0_id = {team.id} OR Team1_id = {team.id})
+                AND winningTeam IS NOT NULL;
         ''')
 
-    with db.engine.connect() as conn:
-        results = conn.execute(playersQuery).fetchall()
-        if results:
-            players = results
+        with db.engine.connect() as conn:
+            record = conn.execute(recordQuery).first()
 
-    # Get Team record
-    recordQuery = text(f'''
-        SELECT
-            (SELECT
-                SUM(CASE WHEN seriesWinner = {team.id} THEN 1 ELSE 0 END)
-                FROM Series
-                WHERE id IN (
-                    SELECT DISTINCT Series_id
-                    FROM Stats
-                    WHERE League_id = {league.id})
-            ) AS seriesWins,
-            (SELECT
-                SUM(CASE WHEN seriesLoser = {team.id} THEN 1 ELSE 0 END)
-                FROM Series
-                WHERE id IN (
-                    SELECT DISTINCT Series_id
-                    FROM Stats
-                    WHERE League_id = {league.id})
-            ) AS seriesLosses,
-            COUNT(CASE WHEN winningTeam = {team.id} THEN 1 END) AS gameWins,
-            COUNT(CASE WHEN winningTeam <> {team.id} THEN 1 END) AS gameLosses
-        FROM Stats
-        WHERE League_id = {league.id}
-            AND (Team0_id = {team.id} OR Team1_id = {team.id})
-            AND winningTeam IS NOT NULL;
-    ''')
-
-    with db.engine.connect() as conn:
-        record = conn.execute(recordQuery).first()
-
-    # Assign the wins and losses to the team object
-    team.seriesWins = record.seriesWins
-    team.seriesLosses = record.seriesLosses
-    team.gameWins = record.gameWins
-    team.gameLosses = record.gameLosses
+        # Assign the wins and losses to the team object
+        team.seriesWins = record.seriesWins
+        team.seriesLosses = record.seriesLosses
+        team.gameWins = record.gameWins
+        team.gameLosses = record.gameLosses
 
     # Check if team isActive, if not render joinQueue button and numberInQueue
     if league is None:
