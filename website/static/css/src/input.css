@@ -59,14 +59,14 @@ a:hover {
     @apply flex justify-center text-3xl p-5 m-5 cursor-pointer rounded-xl bg-eleventh-bg hover:text-white text-red-400;
 }
 
-.bannerUserName{
-    left: 40%;
-    top: 40%;
-    @apply absolute text-eleventh-grey;
+.bannerlogo{
+    left: 3%;
+    top: 5%;
+    @apply absolute;
 }
 
 .teams-card {
-  @apply bg-eleventh-bg rounded-xl w-3/4 text-center lg:col-span-8 lg:items-center;
+  @apply rounded-xl w-3/4 text-center lg:col-span-8 lg:items-center;
 }
 
 .player-card {

@@ -3,7 +3,7 @@
         {% if current_team.team_banner %}<!-- Check for team banner, render placeholder if none -->
         <img src="{{ url_for('static', filename='uploads/' + current_team.team_banner) }}" class="rounded-xl mb-5 w-full lg:col-span-8"/>
         {% else %}
-        <img src="../static/assets/images/banner.jpg" class="rounded-xl mb-5 w-full lg:col-span-8"/>
+        <img src="../static/assets/images/bannerBG.png" class="rounded-xl mb-5 w-full lg:col-span-8"/>
         {% endif %}
         {% if current_team.team_logo %}<!-- Check for team logo, render placeholder if none -->
         <img src="{{ url_for('static', filename='uploads/' + current_team.team_logo) }}" class="absolute top-8 left-8 rounded-full border-4 h-20 w-20">
@@ -88,8 +88,16 @@
             <h2>{{ match_details['Team1_name'] }}</h2>
         </div>
         <div class="teams-card">
-            <img src="../static/assets/images/banner.jpg" class="split-bg float-right"/>
-            <img src="../static/uploads/Finalben7.jpg" class="split-bg"/>
+            {% if match_details['Team1_banner'] %}
+            <img src="{{ url_for('static', filename='uploads/' + match_details['Team1_banner']) }}" class="split-bg float-right"/>
+            {% else %}
+            <img src="../static/assets/images/bannerBG.png" class="split-bg float-right"/>
+            {% endif %}
+            {% if match_details['Team0_banner'] %}
+            <img src="{{ url_for('static', filename='uploads/' + match_details['Team0_banner']) }}" class="split-bg"/>
+            {% else %}
+            <img src="../static/assets/images/bannerBG.png" class="split-bg"/>
+            {% endif %}
         </div>
 
             <a href ="/match?current_league={{ current_league.id }}&series_id={{ series_id }}&team_id={{ team_id }}" class="lg:col-span-8"><button type="submit" class="button">Match Page</button></a>

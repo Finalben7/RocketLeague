@@ -20,32 +20,29 @@
                 id="region"
                 name="region">   
                     <option value="naE">NA East</option>
-                    <option value="naW" disabled>NA West</option>
-                    <option value="eu" disabled>Europe</option>
+                    <option value="naW">NA West</option>
+                    <option value="eu">Europe</option>
             </select>
         </div>
         <div class="py-2">
-            <p class="py-2">Your Username:  {{ user.username }}</p>
-            <p class="py-2">Your Undergound ID:  {{ user.id }}</p>
-        </div>
-        <div class="py-2">
-        <label for="userOneName">Teammate Underground Username</label>
+        <label for="userOneName">Teammates Underground Username</label>
         <input
             class="select"
             type="text"
             id="userOneName"
             name="userOneName"
-            placeholder="Enter a teammates username here"
+            placeholder="Username"
         />
         </div>
         <div class="py-2">
-        <label for="userOneId">Teammate Underground ID</label>
+        <label for="userOneId">Teammates Underground ID</label>
         <input
             class="select"
             type="number"
             id="userOneId"
             name="userOneId"
-            placeholder="Enter a teammates Underground ID here"
+            min="1"
+            placeholder="ID"
         />
         </div>
         <br />

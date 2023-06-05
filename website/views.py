@@ -180,7 +180,8 @@ def team():
         matchupQuery = text(f'''
             SELECT s.Series_id, s.Team0_id, s.Team1_id, t1.teamName AS Team0_name, t2.teamName AS Team1_name,
                 COUNT(CASE WHEN s.winningTeam = s.Team0_id THEN 1 END) AS Team0_wins,
-                COUNT(CASE WHEN s.winningTeam = s.Team1_id THEN 1 END) AS Team1_wins
+                COUNT(CASE WHEN s.winningTeam = s.Team1_id THEN 1 END) AS Team1_wins,
+                t1.team_banner, t2.team_banner
             FROM Stats s
             JOIN Team t1 ON s.Team0_id = t1.id
             JOIN Team t2 ON s.Team1_id = t2.id
@@ -200,9 +201,11 @@ def team():
                 "Team0_id": row[1],
                 "Team0_name": row[3],
                 "Team0_wins": row[5],
+                "Team0_banner": row[7],
                 "Team1_id": row[2],
                 "Team1_name": row[4],
-                "Team1_wins": row[6]
+                "Team1_wins": row[6],
+                "Team1_banner": row[8]
             }
             match_num = match_num + 1
 

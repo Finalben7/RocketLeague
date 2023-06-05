@@ -611,8 +611,12 @@ video {
   height: 20rem;
 }
 
-.h-full {
-  height: 100%;
+.h-96 {
+  height: 24rem;
+}
+
+.h-3\/4 {
+  height: 75%;
 }
 
 .h-20 {
@@ -981,18 +985,15 @@ a:hover {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
-.bannerUserName{
-  left: 40%;
-  top: 40%;
+.bannerlogo{
+  left: 3%;
+  top: 5%;
   position: absolute;
-  --tw-text-opacity: 1;
-  color: rgb(49 53 55 / var(--tw-text-opacity));
 }
 
 .teams-card {
   width: 75%;
   border-radius: 0.75rem;
-  background-color: rgba(41, 43, 45, 0.5);
   text-align: center;
 }
 
