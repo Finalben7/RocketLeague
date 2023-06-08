@@ -218,28 +218,84 @@ def submitScore():
 
             if seasonIsComplete and not roundOneSeries:
 
-                # Change isPlayoffs = True for all teams with matching current League.id
-                db.session.query(League).filter(League.id == current_league_id).update({"isPlayoffs": True})
-                db.session.commit()
+                # Query to get Teams and their wins/losses by League.id
+                standingsQuery = text(f'''
+                    SELECT * FROM (
+                    SELECT ROW_NUMBER() OVER (ORDER BY subquery.wins DESC, subquery3.gameWins DESC) AS place,
+                        l.team_id, t.teamName,
+                        COALESCE(subquery.wins, 0) AS seriesWins,
+                        COALESCE(subquery3.gameWins, 0) AS gameWins,
+                        COALESCE(subquery2.losses, 0) AS seriesLosses,
+                        COALESCE(subquery4.gameLosses, 0) AS gameLosses,
+                        t.team_logo, t.team_banner
+                    FROM League l
+                    LEFT JOIN (
+                        SELECT s.seriesWinner, COUNT(s.seriesWinner) AS wins
+                        FROM Series s
+                        WHERE s.id IN (SELECT Series_id FROM Stats WHERE League_id = {current_league_id} AND round_one = 0 AND round_two = 0 AND round_three = 0)
+                        GROUP BY s.seriesWinner
+                    ) AS subquery ON l.team_id = subquery.seriesWinner
+                    LEFT JOIN (
+                        SELECT s.seriesLoser, COUNT(s.seriesLoser) AS losses
+                        FROM Series s
+                        WHERE s.id IN (SELECT Series_id FROM Stats WHERE League_id = {current_league_id} AND round_one = 0 AND round_two = 0 AND round_three = 0)
+                        GROUP BY s.seriesLoser
+                    ) AS subquery2 ON l.team_id = subquery2.seriesLoser
+                    LEFT JOIN (
+                        SELECT s.winningTeam, COUNT(s.winningTeam) AS gameWins
+                        FROM Stats s
+                        WHERE s.League_id = {current_league_id} AND round_one = 0 AND round_two = 0 AND round_three = 0
+                        GROUP BY s.winningTeam
+                    ) AS subquery3 ON l.team_id = subquery3.winningTeam
+                    LEFT JOIN (
+                        SELECT s.losingTeam, COUNT(s.losingTeam) AS gameLosses
+                        FROM Stats s
+                        WHERE s.League_id = {current_league_id} AND round_one = 0 AND round_two = 0 AND round_three = 0
+                        GROUP BY s.losingTeam
+                    ) AS subquery4 ON l.team_id = subquery4.losingTeam
+                    JOIN Team t ON l.team_id = t.id
+                    WHERE l.id = {current_league_id}
+                ) AS subquery5
+                ORDER BY place;
+                ''')
 
-                # Count the number of wins each Team.id appears in Stats.winningTeam with the matching League.id
-                results = db.session.query(
-                    Stats.winningTeam, func.count()
-                ).filter(
-                    Stats.League_id == current_league_id,
-                    Stats.winningTeam.isnot(None)
-                ).group_by(
-                    Stats.winningTeam
-                ).order_by(func.count().desc()
-                ).all()
+                with db.engine.connect() as conn:
+                    season_results = conn.execute(standingsQuery).fetchall()
+
+                # Change isPlayoffs = True for all teams with matching current League.id
+                e = 0 
+                for f in range(1,7):
+                    db.session.query(League).filter(League.id == current_league_id, League.team_id.in_(season_results[e][1])).update({"isPlayoffs": True})
+
+                # Remove teams in last two places from the League
+                db.session.query(League).filter(League.id == current_league_id, League.team_id.in_([season_results[6][1], season_results[7][1]])).update({"isActive": False})
 
                 # Get the latest Series.id
                 last_series_id = db.session.query(func.coalesce(func.max(Series.id), 0)).scalar()
 
-                # Create matches in Stats table for each round_one matchup
-                m = 0
-                n = 7
-                for i in range(1,5):
+                # Add a series win for seed 1 & 2 to simulate bye week
+                b = 0
+                for c in range(1,3):
+                    bye_series = Series()
+                    bye_series.id = last_series_id + c
+                    db.session.add(bye_series)
+                    for d in range(1,3):
+                        bye_stat = Stats()
+                        bye_stat.League_id = current_league_id
+                        bye_stat.Series_id = bye_series.id
+                        bye_stat.winningTeam = season_results[b][1]
+                        bye_stat.round_one = True
+                        db.session.add(bye_stat)
+                    b+=1
+                db.session.commit()
+
+                # Get the latest Series.id
+                last_series_id = db.session.query(func.coalesce(func.max(Series.id), 0)).scalar()
+
+                # Create matches in Stats table for the round_one matchup
+                m = 2
+                n = 5
+                for i in range(1,3):
                     series = Series()
                     series.id = last_series_id + i
                     db.session.add(series)
@@ -247,13 +303,14 @@ def submitScore():
                         stat = Stats()
                         stat.League_id = current_league_id
                         stat.Series_id = series.id
-                        stat.Team0_id = results[m][0]
-                        stat.Team1_id = results[n][0]
+                        stat.Team0_id = season_results[m][1]
+                        stat.Team1_id = season_results[n][1]
                         stat.round_one = True
                         db.session.add(stat)
                     m+=1
                     n-=1
                 db.session.commit()
+
                 flash("Results submitted!", category="success")
                 return redirect(url_for('views.team', team_id=team_id))
             
@@ -276,8 +333,8 @@ def submitScore():
                 last_series_id = db.session.query(func.coalesce(func.max(Series.id), 0)).scalar()
 
                 # Count the number of wins each Team.id appears in Stats.winningTeam with the matching League.id and round_one = True
-                results = db.session.query(
-                    Stats.winningTeam, Stats.Series_id, func.count()
+                round_one_results = db.session.query(
+                    Stats.Series_id, Stats.winningTeam, Stats.losingTeam, func.count()
                 ).filter(
                     Stats.League_id == current_league_id,
                     Stats.winningTeam.isnot(None),
@@ -292,7 +349,7 @@ def submitScore():
 
                 # Create matches in Stats table for each round_two matchup
                 m = 0
-                n = 3
+                n = 2
                 for i in range(1,3):
                     series = Series()
                     series.id = last_series_id + i
@@ -301,12 +358,16 @@ def submitScore():
                         stat = Stats()
                         stat.League_id = current_league_id
                         stat.Series_id = series.id
-                        stat.Team0_id = results[m][0]
-                        stat.Team1_id = results[n][0]
+                        stat.Team0_id = round_one_results[m][1]
+                        stat.Team1_id = round_one_results[n][1]
                         stat.round_two = True
                         db.session.add(stat)
                     m+=1
-                    n-=1
+                    n+=1
+
+                # Remove losing teams from League
+                db.session.query(League).filter(League.id == current_league_id, League.team_id.in_([round_one_results[2][2], season_results[4][2]])).update({"isActive": False})
+                
                 db.session.commit()
                 flash("Results submitted!", category="success")
                 return redirect(url_for('views.team', team_id=team_id))
@@ -330,8 +391,8 @@ def submitScore():
                 last_series_id = db.session.query(func.coalesce(func.max(Series.id), 0)).scalar()
 
                 # Count the number of wins each Team.id appears in Stats.winningTeam with the matching League.id and round_two = True
-                results = db.session.query(
-                    Stats.winningTeam, Stats.Series_id, func.count()
+                round_two_results = db.session.query(
+                    Stats.Series_id, Stats.winningTeam, Stats.losingTeam, func.count()
                 ).filter(
                     Stats.League_id == current_league_id,
                     Stats.winningTeam.isnot(None),
@@ -353,13 +414,33 @@ def submitScore():
                         stat = Stats()
                         stat.League_id = current_league_id
                         stat.Series_id = series.id
-                        stat.Team0_id = results[0][0]
-                        stat.Team1_id = results[1][0]
+                        stat.Team0_id = round_two_results[0][1]
+                        stat.Team1_id = round_two_results[1][1]
                         stat.round_three = True
                         db.session.add(stat)
+
+                # Remove losing teams from League
+                db.session.query(League).filter(League.id == current_league_id, League.team_id.in_([round_two_results[0][2], season_results[1][2]])).update({"isActive": False})
+                    
                 db.session.commit()
                 flash("Results submitted!", category="success")
                 return redirect(url_for('views.team', team_id=team_id))
+            
+            # Check to see if playoff bracket is complete
+            roundThreeQuery = text(f'''
+                SELECT DISTINCT Team0_id, Team1_id, winningTeam
+                    FROM Stats 
+                    WHERE League_id = {current_league_id} AND round_three = 1
+                    GROUP BY Team0_id, Team1_id;
+            ''')
+            with db.engine.connect() as conn:
+                roundThreeSeries = conn.execute(roundThreeQuery).fetchall()
+
+            playoffsComplete = all(series.winningTeam is not None for series in roundThreeSeries)
+
+            if playoffsComplete:
+                # Remove both teams from the League
+                db.session.query(League).filter(League.id == current_league_id, League.team_id.in_([round_two_results[0][0], season_results[0][1]])).update({"isActive": False})
 
             else:
                 flash("Results submitted!", category="success")

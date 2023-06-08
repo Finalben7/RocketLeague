@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 from sqlalchemy import or_
+from datetime import datetime, timedelta
 
 
 auth = Blueprint('auth', __name__)
@@ -69,3 +70,26 @@ def sign_up():
             return redirect(url_for('views.home'))
                        
     return render_template('signup.html', user=current_user)
+
+################# Reset Password #################
+@auth.route('/resetPassword', methods=['GET', 'POST'])
+def resetPassword():
+    print("Reset Password Has Been Called!")
+    if request.method == 'POST':
+        # Get email address entered into form
+        email = request.form.get('email')
+
+        # Get User object associated with email address from form
+        user = User.query.filter(User.email == email).first()
+
+        if user:
+            reset_token = generate_password_hash(user.email + str(datetime.now()))
+            reset_token_expiration = datetime.now() + timedelta(hours=1)
+            db.session.commit()
+            print(reset_token)
+            print(reset_token_expiration)
+        else:
+            flash('Email address not found.', category='error')
+            return redirect(url_for('resetPassword.html'))
+    
+    return render_template('resetPassword.html')

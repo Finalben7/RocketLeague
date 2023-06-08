@@ -126,7 +126,7 @@ def team():
         recordQuery = text(f'''
             SELECT
                 (SELECT
-                    SUM(CASE WHEN seriesWinner = {team.id} THEN 1 ELSE 0 END)
+                    SUM(CASE WHEN seriesWinner = {team.id} THEN 1 END)
                     FROM Series
                     WHERE id IN (
                         SELECT DISTINCT Series_id
@@ -134,7 +134,7 @@ def team():
                         WHERE League_id = {league.id})
                 ) AS seriesWins,
                 (SELECT
-                    SUM(CASE WHEN seriesLoser = {team.id} THEN 1 ELSE 0 END)
+                    SUM(CASE WHEN seriesLoser = {team.id} THEN 1 END)
                     FROM Series
                     WHERE id IN (
                         SELECT DISTINCT Series_id
@@ -553,7 +553,7 @@ def league():
     # Get the League object associated with the current_team
     league = League.query.filter(League.team_id == team_id, League.isActive == True).first()
 
-    # Query to get Team Users and their respective info
+    # Query to get Teams and their regular season wins/losses by League.id
     query = text(f'''
         SELECT * FROM (
         SELECT ROW_NUMBER() OVER (ORDER BY subquery.wins DESC, subquery3.gameWins DESC) AS place,
@@ -567,25 +567,25 @@ def league():
         LEFT JOIN (
             SELECT s.seriesWinner, COUNT(s.seriesWinner) AS wins
             FROM Series s
-            WHERE s.id IN (SELECT Series_id FROM Stats WHERE League_id = {league.id})
+            WHERE s.id IN (SELECT Series_id FROM Stats WHERE League_id = {league.id} AND round_one = 0 AND round_two = 0 AND round_three = 0)
             GROUP BY s.seriesWinner
         ) AS subquery ON l.team_id = subquery.seriesWinner
         LEFT JOIN (
             SELECT s.seriesLoser, COUNT(s.seriesLoser) AS losses
             FROM Series s
-            WHERE s.id IN (SELECT Series_id FROM Stats WHERE League_id = {league.id})
+            WHERE s.id IN (SELECT Series_id FROM Stats WHERE League_id = {league.id} AND round_one = 0 AND round_two = 0 AND round_three = 0)
             GROUP BY s.seriesLoser
         ) AS subquery2 ON l.team_id = subquery2.seriesLoser
         LEFT JOIN (
             SELECT s.winningTeam, COUNT(s.winningTeam) AS gameWins
             FROM Stats s
-            WHERE s.League_id = {league.id}
+            WHERE s.League_id = {league.id} AND round_one = 0 AND round_two = 0 AND round_three = 0
             GROUP BY s.winningTeam
         ) AS subquery3 ON l.team_id = subquery3.winningTeam
         LEFT JOIN (
             SELECT s.losingTeam, COUNT(s.losingTeam) AS gameLosses
             FROM Stats s
-            WHERE s.League_id = {league.id}
+            WHERE s.League_id = {league.id} AND round_one = 0 AND round_two = 0 AND round_three = 0
             GROUP BY s.losingTeam
         ) AS subquery4 ON l.team_id = subquery4.losingTeam
         JOIN Team t ON l.team_id = t.id

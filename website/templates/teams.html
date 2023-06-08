@@ -37,10 +37,8 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="flex w-full justify-evenly col-span-8">
-                <a href="/team?team_id={{ team_id }}"><button type="submit" class="button">Team Page</button></a>
-                <a href="/league?team_id={{ team_id }}"><button type="submit" class="button">League Page</button></a>
-            </div>
+                
+            <a href="/team?team_id={{ team_id }}" class="lg:col-span-8"><button type="submit" class="button">Team Page</button></a>
         {% endfor %}
         <a href="/createTeam" class="lg:col-span-8"><button type="submit" class="button">Create New Team</button></a>
     </div>

@@ -19,10 +19,10 @@
         {% endif %}
 
         {% if current_league is none and current_team.isQueued %}
-        <div class="text-center items-center row-start-4 lg:col-span-9">
+        <div class="text-center items-center row-start-4 lg:col-span-8">
             <h1 class="lg:col-span-8 lg:items-center">Queue: {{ numberInQueue }} / 8</h1>
-            <h1 class="lg:col-span-8 lg:items-center pt-4">Your team is in the queue, you will be notified when your league is generated.</h1>
-            <a href="/leaveQueue?current_team={{ current_team.id }}" class="pt-4 lg:col-span-8"><button type="submit" class="button">Leave Queue</button></a>     
+            <h1 class="lg:col-span-8 lg:items-center py-4">Your team is in the queue, you will be notified when your league is generated.</h1>
+            <a href="/leaveQueue?current_team={{ current_team.id }}" class="lg:col-span-8"><button type="submit" class="button">Leave Queue</button></a>
         </div>
         
         {% endif %}
@@ -38,14 +38,20 @@
                         <h3>Goals</h3>
                         {% if user.goals %}
                         <h4>{{ user.goals }}</h4>
+                        {% else %}
+                        <h4>0</h4>
                         {% endif %}
                         <h3>Saves</h3>
                         {% if user.saves %}
                         <h4>{{ user.saves }}</h4>
+                        {% else %}
+                        <h4>0</h4>
                         {% endif %}
                         <h3>Assists</h3>
                         {% if user.assists %}
                         <h4>{{ user.assists }}</h4>
+                        {% else %}
+                        <h4>0</h4>
                         {% endif %}
                     </div>
             </div>
@@ -56,27 +62,40 @@
                 <div class="flex justify-evenly">
                 <div class="team-stat-row">
                     <h3>Series Record</h3>
+                    {% if current_team.seriesWins or current_team.seriesLosses %}
                     <h4>{{ current_team.seriesWins }} - {{ current_team.seriesLosses }}</h4>
+                    {% else %}
+                    <h4>0 - 0</h4>
+                    {% endif %}
                     <h3>Goals</h3>
-                    {% if players[0].total_goals %}
+                    {% if players[0].total_goals or players[1].total_goals %}
                     {% set teamGoals = ((players[0].total_goals + players[1].total_goals) / players[0].games_played) | round(1)  %}
                     <h4>{{ teamGoals }}</h4>
+                    {% else %}
+                    <h4>0</h4>
                     {% endif %}
                 </div>
     
                 <div class="team-stat-row">
                     <h3>Match Record</h3>
+                    {% if current_team.gameWins or current_team.gameLosses %}
                     <h4>{{ current_team.gameWins }} - {{ current_team.gameLosses }}</h4>
+                    {% else %}
+                    <h4>0 - 0</h4>
+                    {% endif %}
                     <h3>Saves</h3>
-                    {% if players[0].total_saves %}
+                    {% if players[0].total_saves or players[1].total_saves%}
                     {% set teamSaves = ((players[0].total_saves + players[1].total_saves) / players[0].games_played) | round(1)  %}
                     <h4>{{ teamSaves }}</h4>
+                    {% else %}
+                    <h4>0</h4>
                     {% endif %}
                 </div>
             </div>
             </div>
 
         {% if current_league.isActive and current_league.isPlayoffs == 0 %}
+        <a href="/league?team_id={{ team_id }}" class="lg:col-span-8"><button type="submit" class="button">League Page</button></a>
         {% for series_id, match_details in matchups.items() %}
         <h1 class="text-3xl lg:col-span-8">Match {{ match_details['Match_num'] }}</h1>
         <div class="flex w-3/4 justify-between gap-5 lg:col-span-8">
@@ -104,7 +123,9 @@
         {% endfor %}
         {% endif %}
 
-        {% if current_league.isPlayoffs %} 
+        {% if current_league.isPlayoffs %}
+        <a href="/league?team_id={{ team_id }}" class="lg:col-span-8"><button type="submit" class="button">League Page</button></a>
+        
         <h1 class="lg:col-span-8 lg:items-center">It's playoff time!</h1>
 
         <div class="teams-card">

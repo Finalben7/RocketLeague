@@ -14,8 +14,10 @@ class User(db.Model,  UserMixin):
     platform = db.Column(db.String(150))
     discord = db.Column(db.String(150))
     region = db.Column(db.String(150))
-    rank = db.Column(db.Numeric(2, 0), default=15)
+    rank = db.Column(db.Numeric(2, 0))
     profile_image = db.Column(db.String(150))
+    reset_token = db.Column(db.String(150))
+    reset_token_expiration = db.Column(db.DateTime)
     Index("userIdIndex", "id", "email", "username" )
 
 class Team(db.Model):
