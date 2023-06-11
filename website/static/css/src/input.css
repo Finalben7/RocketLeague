@@ -66,7 +66,7 @@ a:hover {
 }
 
 .teams-card {
-  @apply rounded-xl w-3/4 text-center lg:col-span-8 lg:items-center;
+  @apply rounded-xl text-center w-screen h-5/6 sm:h-full sm:w-3/4 lg:col-span-8 lg:items-center;
 }
 
 .player-card {
@@ -123,7 +123,7 @@ a:hover {
 }
 
 .profile-image {
-  @apply rounded-full border-4 h-20 w-20;
+  @apply rounded-full border-4 h-10 w-10 sm:h-20 sm:w-20;
 }
 
 .split-bg {

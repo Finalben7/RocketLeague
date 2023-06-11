@@ -5,11 +5,11 @@
         <h1 class="uppercase lg:col-span-8 lg:items-center p-5">{{ user.username }}'s Teams</h1>
         {% for team_id, team in teams.items() %}
             {% if team.team_banner %}
-            <div class="teams-card p-5 h-96" style="background-repeat: no-repeat; background-size: 100% 100%; background-image:url({{ url_for('static', filename='uploads/' + team.team_banner) }}) ;">
+            <div class="teams-card p-10 h-96" style="background-repeat: no-repeat; background-size: 100% 100%; background-image:url({{ url_for('static', filename='uploads/' + team.team_banner) }}) ;">
             {% else %}
-            <div class="teams-card p-5 h-96" style="background-repeat: no-repeat; background-size: 100% 100%; background-image:url(../static/assets/images/bannerBG.png);">
+            <div class="teams-card p-10 h-96" style="background-repeat: no-repeat; background-size: 100% 100%; background-image:url(../static/assets/images/bannerBG.png);">
             {% endif %}
-                <div class="grid grid-cols-2 pb-20">
+                <div class="grid grid-cols-2 lg:pb-20">
                     <div class="flex items-center">
                         {% if team.team_logo %}
                         <img src="{{ url_for('static', filename='uploads/' + team.team_logo) }}" alt="Team logo" class="profile-image">
@@ -26,13 +26,13 @@
                 </div>
                 <div class="flex justify-evenly">
                     {% for user in team.users %}
-                        <div class="flex flex-col items-center">
+                        <div class="flex flex-row sm:flex-col items-center">
                             {% if user.profile_image %}
                             <img src="{{ url_for('static', filename='uploads/' + user.profile_image) }}" alt="Profile Image" class="profile-image">
                             {% else %}
                             <img src="../static/assets/images/placeholder.png" alt="Profile Image" class="profile-image">
                             {% endif %}
-                            <h2 class="pt-5">{{ user.username }}</h2>
+                            <h2 class="lg:pt-5">{{ user.username }}</h2>
                         </div>
                     {% endfor %}
                 </div>

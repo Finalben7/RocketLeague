@@ -127,17 +127,34 @@
         <a href="/league?team_id={{ team_id }}" class="lg:col-span-8"><button type="submit" class="button">League Page</button></a>
         
         <h1 class="lg:col-span-8 lg:items-center">It's playoff time!</h1>
-
-        <div class="teams-card">
-            <h1 class="pb-8 text-3xl lg:col-span-8">{{ round_name }}</h1>
-            <div class="flex justify-between gap-5">
+        
+        {% if playoffSeries %}
+            <h1 class="text-3xl lg:col-span-8">{{ round_name }}</h1>
+            <div class="flex w-3/4 justify-between gap-5 lg:col-span-8">
                 <h2>{{ playoffSeries['Team0_name'] }}</h2>
                 <h2>{{ playoffSeries['Team1_name'] }}</h2>
             </div>
-        </div>
+            <div class="teams-card">
+                {% if playoffSeries['Team1_banner'] %}
+                <img src="{{ url_for('static', filename='uploads/' + playoffSeries['Team1_banner']) }}" class="split-bg float-right"/>
+                {% else %}
+                <img src="../static/assets/images/bannerBG.png" class="split-bg float-right"/>
+                {% endif %}
+                {% if playoffSeries['Team0_banner'] %}
+                <img src="{{ url_for('static', filename='uploads/' + playoffSeries['Team0_banner']) }}" class="split-bg"/>
+                {% else %}
+                <img src="../static/assets/images/bannerBG.png" class="split-bg"/>
+                {% endif %}
+            </div>
+        {% else %}
+        <p class="pb-8 text-3xl lg:col-span-8">You have a round one <b>BYE</b>.</p>
+        <i class="pb-8 text-3xl lg:col-span-8">Please wait for round one scores to be submitted.</i>
+        {% endif %}
 
         <div class="flex gap-8 lg:col-span-8">
+            {% if playoffSeries %}
             <a href ="/match?current_league={{ current_league.id }}&series_id={{ playoffSeries['Series_id'] }}&team_id={{ team_id }}" class="lg:col-span-8"><button type="submit" class="button">Match Page</button></a>
+            {% endif %}
             <a href="/bracket?league_id={{ current_league.id }}" class="lg:col-span-8"><button type="submit" class="button">View Bracket</button></a>
         </div>
         {% endif %}

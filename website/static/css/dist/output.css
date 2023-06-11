@@ -513,10 +513,6 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
-.invisible {
-  visibility: hidden;
-}
-
 .static {
   position: static;
 }
@@ -587,10 +583,6 @@ video {
   margin-right: 1rem;
 }
 
-.mt-8 {
-  margin-top: 2rem;
-}
-
 .block {
   display: block;
 }
@@ -657,6 +649,10 @@ video {
 
 .grid-cols-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.flex-row {
+  flex-direction: row;
 }
 
 .flex-col {
@@ -800,10 +796,6 @@ video {
 
 .pt-5 {
   padding-top: 1.25rem;
-}
-
-.pt-8 {
-  padding-top: 2rem;
 }
 
 .text-left {
@@ -1004,9 +996,17 @@ a:hover {
 }
 
 .teams-card {
-  width: 75%;
+  height: 83.333333%;
+  width: 100vw;
   border-radius: 0.75rem;
   text-align: center;
+}
+
+@media (min-width: 640px) {
+  .teams-card {
+    height: 100%;
+    width: 75%;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -1141,10 +1141,17 @@ a:hover {
 }
 
 .profile-image {
-  height: 5rem;
-  width: 5rem;
+  height: 2.5rem;
+  width: 2.5rem;
   border-radius: 9999px;
   border-width: 4px;
+}
+
+@media (min-width: 640px) {
+  .profile-image {
+    height: 5rem;
+    width: 5rem;
+  }
 }
 
 .split-bg {
@@ -1376,6 +1383,16 @@ a:hover {
   transition: max-height 0.2s ease-out;
 }
 
+@media (min-width: 640px) {
+  .sm\:flex-col {
+    flex-direction: column;
+  }
+
+  .sm\:p-5 {
+    padding: 1.25rem;
+  }
+}
+
 @media (min-width: 768px) {
   .md\:col-span-1 {
     grid-column: span 1 / span 1;
@@ -1469,6 +1486,14 @@ a:hover {
   .lg\:py-36 {
     padding-top: 9rem;
     padding-bottom: 9rem;
+  }
+
+  .lg\:pb-20 {
+    padding-bottom: 5rem;
+  }
+
+  .lg\:pt-5 {
+    padding-top: 1.25rem;
   }
 
   .lg\:text-xl {

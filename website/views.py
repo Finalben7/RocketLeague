@@ -100,6 +100,13 @@ def team():
     # Get the League object associated with the current_team
     league = League.query.filter(League.team_id == team.id, League.isActive == True).first()
     # Get the average stats of the current roster for the current league
+
+    # Display stored message if any
+    if team.message:
+        flash(team.message, category="success")
+        team.message = None
+        db.session.commit()
+
     if league:
         playersQuery = text(f'''
                 SELECT us.User_id, u.username, round(avg(goals), 1) as goals, round(avg(assists), 1) as assists, round(avg(saves), 1) as saves, sum(goals) as total_goals, sum(saves) as total_saves, count(*) as games_played, u.profile_image
@@ -175,6 +182,7 @@ def team():
 
         # Render the team page template and pass in the team and players objects
         return render_template('team.html', user=current_user, team_id=team_id, current_team=team, numberInQueue=numberInQueue, current_league=league, players=players)
+    
     if league.isPlayoffs == 0:
 
         # Get all season matchups from Stats table associated with the League.id and Team.id
@@ -228,11 +236,11 @@ def team():
 
             # Get round_one playoff matchup
             query = text(f'''
-                SELECT DISTINCT s.Series_id, s.Team0_id, s.Team1_id, t1.teamName AS Team0_name, t2.teamName AS Team1_name, winningTeam
+                SELECT DISTINCT s.Series_id, s.Team0_id, t1.teamName AS Team0_name, t1.team_logo AS Team0_logo, t1.team_banner AS Team0_banner, s.Team1_id, t2.teamName AS Team1_name, t2.team_logo AS Team1_logo, t2.team_banner AS Team1_banner, winningTeam
                     FROM Stats s 
                     JOIN Team t1 ON s.Team0_id = t1.id 
                     JOIN Team t2 ON s.Team1_id = t2.id 
-                    WHERE s.League_id = {league.id} AND round_one = 1 AND (s.Team0_id = {team.id} OR s.Team1_id = {team.id});
+                    WHERE s.League_id = {league.id} AND round_one = 1 AND (s.Team0_id = {team.id} OR s.Team1_id = {team.id})
             ''')
             with db.engine.connect() as conn:
                 playoffSeries = conn.execute(query).first()

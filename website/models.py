@@ -30,6 +30,7 @@ class Team(db.Model):
     isQueued = db.Column(db.Boolean, default=0)
     team_logo = db.Column(db.String(150))
     team_banner = db.Column(db.String(150))
+    message = db.Column(db.String(300))
 
 class League(db.Model):
     __tablename__ = 'League'
