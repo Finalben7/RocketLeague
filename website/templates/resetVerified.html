@@ -1,0 +1,21 @@
+{% extends "base.html" %} {% block title %}Set New Password{% endblock %} {% block content %}
+<div class="grid gap-8 lg:grid-cols-9 justify-items-center lg:text-xl lg:py-36 xl:text-2xl 2xl:text-4xl"><!-- Main content goes inside this div -->
+  <form class="lg:col-span-8 py-5" method="POST">
+      <div class="py-2">
+      <label for="password">New Password</label>
+      <input
+          type="password"
+          class="select"
+          id="password"
+          name="password"
+          placeholder="Enter New Password"
+          required
+      />
+      </div>
+      <br />
+      <div class="flex justify-center justify-items-center">
+      <button type="submit" class="button buttonBG">Reset</button>
+      </div>
+  </form>
+</div>
+{% endblock %}

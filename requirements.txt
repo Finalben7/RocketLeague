@@ -2,4 +2,6 @@ flask
 flask-sqlalchemy
 flask-login
 flask_mysqldb
-Flask-Reuploaded
+flask-Reuploaded
+flask-mail
+pyJWT
