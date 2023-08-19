@@ -99,12 +99,12 @@
         {% for series_id, match_details in matchups.items() %}
         <h1 class="text-3xl lg:col-span-8">Match {{ match_details['Match_num'] }}</h1>
         <div class="flex w-3/4 justify-between gap-5 lg:col-span-8">
-            <h2>{{ match_details['Team0_name'] }}</h2>
+            <a href="/team?team_id={{ match_details['Team0_id'] }}"><h2>{{ match_details['Team0_name'] }}</h2></a>
             {% if match_details['Team0_wins'] != 0 or match_details['Team1_wins'] != 0 %}
             <h3>{{ match_details['Team0_wins'] }}</h3>
             <h3>{{ match_details['Team1_wins'] }}</h3>
             {% endif %}
-            <h2>{{ match_details['Team1_name'] }}</h2>
+            <a href="/team?team_id={{ match_details['Team1_id'] }}"><h2>{{ match_details['Team1_name'] }}</h2></a>
         </div>
         <div class="teams-card">
             {% if match_details['Team1_banner'] %}

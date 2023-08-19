@@ -337,7 +337,7 @@ def match():
     ''')
     
     userQuery = text(f'''
-        SELECT tp.teamId, u.username, u.profile_image
+        SELECT tp.teamId, u.id,u.username, u.profile_image
         FROM TeamPlayers tp
         JOIN Team t ON tp.teamId = t.id
         JOIN User u ON tp.userId = u.id
@@ -379,6 +379,7 @@ def match():
     for user in users:
         teamId = user.teamId
         user_data = {
+            'id': user.id,
             'username': user.username,
             'profile_image': user.profile_image
         }
@@ -388,7 +389,12 @@ def match():
     second_team_id = list(team_stats.keys())[1]
     teamNames = [team_stats[first_team_id]['teamName'], team_stats[second_team_id]['teamName']]
 
-    return render_template('match.html', user=current_user, current_league_id=current_league_id, series=series, team_stats=team_stats, stats=stats, teamNames=teamNames, team_id=team_id)
+    activeUser = False
+    for id in users:
+        if current_user.id == id['id']:
+            activeUser = True
+
+    return render_template('match.html', user=current_user, current_league_id=current_league_id, series=series, team_stats=team_stats, stats=stats, teamNames=teamNames, team_id=team_id, activeUser=activeUser)
 
 @views.route('/bracket')
 def bracket():

@@ -127,7 +127,7 @@ a:hover {
 }
 
 .split-bg {
-  @apply relative -z-50 h-full w-1/2;
+  @apply relative -z-50 h-48 w-1/2;
 }
 
 .overlay {

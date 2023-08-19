@@ -1,5 +1,5 @@
 {% extends "base.html" %} {% block title %} {{ teamNames[0] }} VS {{ teamNames[1] }} {% endblock %} {% block content %}
-<div class="py-6 text-3xl justify-items-center grid gap-8 lg:grid-cols-9 lg:text-xl xl:text-2xl 2xl:text-4x">            
+<div class="py-6 text-3xl justify-items-center grid gap-8 lg:grid-cols-9 lg:text-xl xl:text-2xl 2xl:text-4x">     
     {% for team_id, team_data in team_stats.items() %}
     {% if team_data.team_banner %}
     <div class="teams-card p-5 h-96" style="background-repeat: no-repeat; background-size: 100% 100%; background-image:url({{ url_for('static', filename='uploads/' + team_data.team_banner) }}) ;">
@@ -8,7 +8,7 @@
     {% endif %}
         <div class="flex pb-20">
             <h1>({{ team_data.seriesWins }} - {{ team_data.seriesLosses }})</h1>
-            <h1 class="pl-5">{{ team_data.teamName }}</h1>
+            <a href="/team?team_id={{ team_id }}"><h1 class="pl-5">{{ team_data.teamName }}</h1></a>
         </div>
 
         <div class="flex justify-evenly">
@@ -197,7 +197,9 @@
     {% else %}
     {% endif %}
     {% else %}
-    <a href="/submitScore?current_league_id={{ current_league_id }}&series_id={{ series.id }}&team_id={{ team_id }}" class="lg:col-span-8 p-10"><button type="submit" class="button">Submit Score</button></a>
+        {% if activeUser %}
+        <a href="/submitScore?current_league_id={{ current_league_id }}&series_id={{ series.id }}&team_id={{ team_id }}" class="lg:col-span-8 p-10"><button type="submit" class="button">Submit Score</button></a>   
+        {% endif %}
     {% endif %}
 </div>
 {% endblock %}
