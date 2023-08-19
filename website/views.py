@@ -390,9 +390,10 @@ def match():
     teamNames = [team_stats[first_team_id]['teamName'], team_stats[second_team_id]['teamName']]
 
     activeUser = False
-    for id in users:
-        if current_user.id == id['id']:
+    for user in users:
+        if current_user.id == user['id']:
             activeUser = True
+            break
 
     return render_template('match.html', user=current_user, current_league_id=current_league_id, series=series, team_stats=team_stats, stats=stats, teamNames=teamNames, team_id=team_id, activeUser=activeUser)
 
