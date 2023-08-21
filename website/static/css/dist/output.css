@@ -623,8 +623,8 @@ video {
   height: 5rem;
 }
 
-.h-1\/4 {
-  height: 25%;
+.max-h-96 {
+  max-height: 24rem;
 }
 
 .w-32 {

@@ -197,9 +197,15 @@
     {% else %}
     {% endif %}
     {% else %}
-        {% if activeUser %}
-        <a href="/submitScore?current_league_id={{ current_league_id }}&series_id={{ series.id }}&team_id={{ team_id }}" class="lg:col-span-8 p-10"><button type="submit" class="button">Submit Score</button></a>   
-        {% endif %}
+        {% set onRoster = false %}
+        {% for team_id, team_data in team_stats.items() %}
+            {% for user in team_data.users %}
+                {% if current_user.id == user.id %}
+                    {% set onRoster = true %}
+                    <a href="/submitScore?current_league_id={{ current_league_id }}&series_id={{ series.id }}&team_id={{ team_id }}" class="lg:col-span-8 p-10"><button type="submit" class="button">Submit Score</button></a>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
     {% endif %}
 </div>
 {% endblock %}
