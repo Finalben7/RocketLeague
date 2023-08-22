@@ -7,10 +7,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-      'eleventh-blue': '#0ACCFF',
-      'eleventh-orange': '#F7AA4F',
-      'eleventh-grey': '#313537',
-      'eleventh-bg' : 'rgba(41, 43, 45, 0.5)'
+        'eleventh-blue': '#0ACCFF',
+        'eleventh-orange': '#F7AA4F',
+        'eleventh-grey': '#313537',
+        'eleventh-bg' : 'rgba(41, 43, 45, 0.5)'
       }
     },
     screens: {

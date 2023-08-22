@@ -72,37 +72,67 @@
 
         <div class="league-highlights scorer">
             <h3>Top Scorer</h3>
-            {% if userStats[0].profile_image %}
-            <img src="{{ url_for('static', filename='uploads/' + userStats[0].profile_image) }}" class="profile-image">
+            {% if userStats[0].goals %}
+                {% if userStats[0].profile_image %}
+                <img src="{{ url_for('static', filename='uploads/' + userStats[0].profile_image) }}" class="profile-image">
+                {% else %}
+                <img src="../static/assets/images/logo.png" class="profile-image">
+                {% endif %}
+                <h3>{{ userStats[0].username }}</h3>
+                {% if userStats[0].goals %}
+                {% set avg_goals = (userStats[0].goals / userStats[0].games_played) | round(1) %}
+                <h3>{{ avg_goals }}</h3>
+                {% else %}
+                <h3>-</h3>
+                {% endif %}
             {% else %}
             <img src="../static/assets/images/logo.png" class="profile-image">
+            <h3>-</h3>
+            <h3>-</h3>
             {% endif %}
-            <h3>{{ userStats[0].username }}</h3>
-            {% set avg_goals = (userStats[0].goals / userStats[0].games_played) | round(1) %}
-            <h3>{{ avg_goals }}</h3>
         </div>
 
         <div class="league-highlights saves">
             <h3>Top Goalkeeper</h3>
-            {% if most_saves.profile_image %}
-            <img src="{{ url_for('static', filename='uploads/' + most_saves.profile_image) }}" class="profile-image">
+            {% if most_saves.saves %}
+                {% if most_saves.profile_image %}
+                <img src="{{ url_for('static', filename='uploads/' + most_saves.profile_image) }}" class="profile-image">
+                {% else %}
+                <img src="../static/assets/images/logo.png" class="profile-image">
+                {% endif %}
+                <h3>{{ most_saves.username }}</h3>
+                {% if most_saves.saves %}
+                {% set avg_saves = (most_saves.saves / most_saves.games_played) | round(1) %}
+                <h3>{{ avg_saves }}</h3>
+                {% else %}
+                <h3>-</h3>
+                {% endif %}
             {% else %}
             <img src="../static/assets/images/logo.png" class="profile-image">
+            <h3>-</h3>
+            <h3>-</h3>
             {% endif %}
-            <h3>{{ most_saves.username }}</h3>
-            {% set avg_saves = (most_saves.saves / most_saves.games_played) | round(1) %}
-            <h3>{{ avg_saves }}</h3>
         </div>
 
         <div class="league-highlights assists">
             <h3>Tactician</h3>
-            {% if most_assists.profile_image %}
-            <img src="{{ url_for('static', filename='uploads/' + most_assists.profile_image) }}" class="profile-image">
+            {% if most_assists.assists %}
+                {% if most_assists.profile_image %}
+                <img src="{{ url_for('static', filename='uploads/' + most_assists.profile_image) }}" class="profile-image">
+                {% else %}
+                <img src="../static/assets/images/logo.png" class="profile-image">
+                {% endif %}
+                <h3>{{ most_assists.username }}</h3>
+                {% if  most_assists.assists%}
+                {% set avg_assists = (most_assists.assists / most_assists.games_played) | round(1) %}
+                <h3>{{ avg_assists }}</h3>
+                {% else %}
+                <h3>-</h3>
+                {% endif %}
             {% else %}
             <img src="../static/assets/images/logo.png" class="profile-image">
+            <h3>-</h3>
+            <h3>-</h3>
             {% endif %}
-            <h3>{{ most_assists.username }}</h3>
-            {% set avg_assists = (most_assists.assists / most_assists.games_played) | round(1) %}
-            <h3>{{ avg_assists }}</h3>
         </div>
 {% endblock %}

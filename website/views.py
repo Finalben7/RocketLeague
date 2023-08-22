@@ -337,7 +337,7 @@ def match():
     ''')
     
     userQuery = text(f'''
-        SELECT tp.teamId, u.username, u.profile_image
+        SELECT tp.teamId, u.id,u.username, u.profile_image
         FROM TeamPlayers tp
         JOIN Team t ON tp.teamId = t.id
         JOIN User u ON tp.userId = u.id
@@ -379,6 +379,7 @@ def match():
     for user in users:
         teamId = user.teamId
         user_data = {
+            'id': user.id,
             'username': user.username,
             'profile_image': user.profile_image
         }

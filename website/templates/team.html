@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block title %} {{ current_team.teamName }} {% endblock %} {% block content %}
     <div class="grid gap-8 relative lg:grid-cols-9 justify-items-center lg:text-xl xl:text-2xl 2xl:text-4x">
         {% if current_team.team_banner %}<!-- Check for team banner, render placeholder if none -->
-        <img src="{{ url_for('static', filename='uploads/' + current_team.team_banner) }}" class="rounded-xl mb-5 w-full lg:col-span-8"/>
+        <img src="{{ url_for('static', filename='uploads/' + current_team.team_banner) }}" class="rounded-xl mb-5 w-full max-h-96 lg:col-span-8"/>
         {% else %}
         <img src="../static/assets/images/bannerBG.png" class="rounded-xl mb-5 w-full lg:col-span-8"/>
         {% endif %}
@@ -36,23 +36,11 @@
                         {% endif %}
                         <h1 class="w-48 mr-4 text-3xl">{{ user.username }}</h1>
                         <h3>Goals</h3>
-                        {% if user.goals %}
-                        <h4>{{ user.goals }}</h4>
-                        {% else %}
-                        <h4>0</h4>
-                        {% endif %}
+                        <h4>{{ user.goals or "0" }}</h4>
                         <h3>Saves</h3>
-                        {% if user.saves %}
-                        <h4>{{ user.saves }}</h4>
-                        {% else %}
-                        <h4>0</h4>
-                        {% endif %}
+                        <h4>{{ user.saves or "0"}}</h4>
                         <h3>Assists</h3>
-                        {% if user.assists %}
-                        <h4>{{ user.assists }}</h4>
-                        {% else %}
-                        <h4>0</h4>
-                        {% endif %}
+                        <h4>{{ user.assists or "0"}}</h4>
                     </div>
             </div>
             {% endfor %}
@@ -62,15 +50,11 @@
                 <div class="flex justify-evenly">
                 <div class="team-stat-row">
                     <h3>Series Record</h3>
-                    {% if current_team.seriesWins or current_team.seriesLosses %}
-                    <h4>{{ current_team.seriesWins }} - {{ current_team.seriesLosses }}</h4>
-                    {% else %}
-                    <h4>0 - 0</h4>
-                    {% endif %}
+                    <h4>{{ current_team.seriesWins or "0" }} - {{ current_team.seriesLosses or "0" }}</h4>
                     <h3>Goals</h3>
                     {% if players[0].total_goals or players[1].total_goals %}
                     {% set teamGoals = ((players[0].total_goals + players[1].total_goals) / players[0].games_played) | round(1)  %}
-                    <h4>{{ teamGoals }}</h4>
+                    <h4>{{ teamGoals or "0" }}</h4>
                     {% else %}
                     <h4>0</h4>
                     {% endif %}
@@ -78,11 +62,7 @@
     
                 <div class="team-stat-row">
                     <h3>Match Record</h3>
-                    {% if current_team.gameWins or current_team.gameLosses %}
-                    <h4>{{ current_team.gameWins }} - {{ current_team.gameLosses }}</h4>
-                    {% else %}
-                    <h4>0 - 0</h4>
-                    {% endif %}
+                    <h4>{{ current_team.gameWins or "0" }} - {{ current_team.gameLosses or "0" }}</h4>
                     <h3>Saves</h3>
                     {% if players[0].total_saves or players[1].total_saves%}
                     {% set teamSaves = ((players[0].total_saves + players[1].total_saves) / players[0].games_played) | round(1)  %}
@@ -99,12 +79,12 @@
         {% for series_id, match_details in matchups.items() %}
         <h1 class="text-3xl lg:col-span-8">Match {{ match_details['Match_num'] }}</h1>
         <div class="flex w-3/4 justify-between gap-5 lg:col-span-8">
-            <h2>{{ match_details['Team0_name'] }}</h2>
+            <a href="/team?team_id={{ match_details['Team0_id'] }}"><h2>{{ match_details['Team0_name'] }}</h2></a>
             {% if match_details['Team0_wins'] != 0 or match_details['Team1_wins'] != 0 %}
             <h3>{{ match_details['Team0_wins'] }}</h3>
             <h3>{{ match_details['Team1_wins'] }}</h3>
             {% endif %}
-            <h2>{{ match_details['Team1_name'] }}</h2>
+            <a href="/team?team_id={{ match_details['Team1_id'] }}"><h2>{{ match_details['Team1_name'] }}</h2></a>
         </div>
         <div class="teams-card">
             {% if match_details['Team1_banner'] %}
