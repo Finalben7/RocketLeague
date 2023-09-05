@@ -469,7 +469,7 @@ def submitScore():
             playoffsComplete = all(series.winningTeam is not None for series in roundThreeSeries)
 
             print(playoffsComplete)
-            if playoffsComplete:
+            if roundThreeSeries and playoffsComplete:
                 # Count the number of wins each Team.id appears in Stats.winningTeam with the matching League.id and round_two = True
                 round_three_results = db.session.query(
                     Stats.Series_id, Stats.winningTeam, Stats.losingTeam, func.count()

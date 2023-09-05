@@ -1102,11 +1102,11 @@ a:hover {
     grid-row-start: 1;
   }
 
-  .saves {
+  .assists {
     grid-row-start: 2;
   }
 
-  .assists {
+  .saves {
     grid-row-start: 3;
   }
 }

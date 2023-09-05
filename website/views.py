@@ -204,7 +204,7 @@ def team():
         match_num = 1
         matchups = {}
         for row in matchList:
-            series_id = row[0]  # Use integer index instead of string index
+            series_id = row[0]
             matchups[series_id] = {
                 "Match_num": match_num,
                 "Team0_id": row[1],
@@ -606,27 +606,34 @@ def league():
     # Query to get Users for the specific League.id along with a sum of all of their UserStats and a count of how many games they've played
     userStatsQuery = text(f'''
         SELECT tp.teamId, tp.userId, u.username, u.profile_image,
-            (SELECT COALESCE(SUM(us.score), 0) FROM UserStats us WHERE us.User_id = tp.userId AND us.Series_id IN (SELECT Series_id FROM Stats WHERE League_id = {league.id})) AS score,
-            (SELECT COALESCE(SUM(us.goals), 0) FROM UserStats us WHERE us.User_id = tp.userId AND us.Series_id IN (SELECT Series_id FROM Stats WHERE League_id = {league.id})) AS goals,
-            (SELECT COALESCE(SUM(us.assists), 0) FROM UserStats us WHERE us.User_id = tp.userId AND us.Series_id IN (SELECT Series_id FROM Stats WHERE League_id = {league.id})) AS assists,
-            (SELECT COALESCE(SUM(us.saves), 0) FROM UserStats us WHERE us.User_id = tp.userId AND us.Series_id IN (SELECT Series_id FROM Stats WHERE League_id = {league.id})) AS saves,
-            (SELECT COALESCE(SUM(us.shots), 0) FROM UserStats us WHERE us.User_id = tp.userId AND us.Series_id IN (SELECT Series_id FROM Stats WHERE League_id = {league.id})) AS shots,
-            (SELECT COUNT(*) FROM UserStats us WHERE us.User_id = tp.userId AND us.Series_id IN (SELECT Series_id FROM Stats WHERE League_id = {league.id})) AS games_played
-            FROM League l
-            JOIN TeamPlayers tp ON l.team_id = tp.teamId
-            JOIN User u ON tp.userId = u.id
-            WHERE l.id = {league.id}
-            ORDER BY goals DESC;
+            SUM(us.score) AS score, SUM(us.goals) AS goals, SUM(us.assists) AS assists, SUM(us.saves) AS saves, SUM(us.shots) AS shots,
+            COUNT(*) AS games_played,
+            ROUND(SUM(us.score) / COUNT(*), 0) AS score_per_game, ROUND(SUM(us.goals) / COUNT(*), 1) AS goals_per_game, ROUND(SUM(us.assists) / COUNT(*), 1) AS assists_per_game,
+            ROUND(SUM(us.saves) / COUNT(*), 1) AS saves_per_game, ROUND(SUM(us.shots) / COUNT(*), 1) AS shots_per_game
+        FROM 
+            League l
+        JOIN 
+            TeamPlayers tp ON l.team_id = tp.teamId
+        JOIN 
+            User u ON tp.userId = u.id
+        JOIN
+            UserStats us ON us.User_id = tp.userId AND us.Series_id IN (SELECT Series_id FROM Stats WHERE League_id = {league.id})
+        WHERE 
+            l.id = {league.id}
+        GROUP BY 
+            tp.teamId, tp.userId, u.username, u.profile_image
+        ORDER BY 
+            goals_per_game DESC;
     ''')
 
     with db.engine.connect() as conn:
         league = conn.execute(query).fetchall()
         userStats = conn.execute(userStatsQuery).fetchall()
 
-    saves_sort = sorted(userStats, key=lambda x: x.saves, reverse=True)
+    saves_sort = sorted(userStats, key=lambda x: x.saves_per_game, reverse=True)
     most_saves = saves_sort[0]
 
-    assists_sort = sorted(userStats, key=lambda x: x.assists, reverse=True)
+    assists_sort = sorted(userStats, key=lambda x: x.assists_per_game, reverse=True)
     most_assists = assists_sort[0]
 
     # Create team dictionaries and nest respective User dictionaries inside
@@ -658,7 +665,8 @@ def league():
             'assists': user.assists,
             'saves': user.saves,
             'shots': user.shots,
-            'games_played': user.games_played
+            'games_played': user.games_played,
+            'goals_per_game': user.goals_per_game
         }
         team_stats[team_id]['users'].append(user_data)
 

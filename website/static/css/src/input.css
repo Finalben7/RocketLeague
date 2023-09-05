@@ -97,11 +97,11 @@ a:hover {
   @apply lg:row-start-1;
 }
 
-.saves {
+.assists {
   @apply lg:row-start-2;
 }
 
-.assists {
+.saves {
   @apply lg:row-start-3;
 }
 
