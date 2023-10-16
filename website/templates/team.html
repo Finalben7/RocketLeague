@@ -104,7 +104,10 @@
         {% endif %}
 
         {% if current_league.isPlayoffs %}
-        <a href="/league?team_id={{ team_id }}" class="lg:col-span-8"><button type="submit" class="button">League Page</button></a>
+        <div class="flex gap-8 lg:col-span-8">
+            <a href="/league?team_id={{ team_id }}" class="lg:col-span-4"><button type="submit" class="button">League Page</button></a>
+            <a href="/bracket?league_id={{ current_league.id }}" class="lg:col-span-4"><button type="submit" class="button">View Bracket</button></a>
+        </div>
         
         <h1 class="lg:col-span-8 lg:items-center">It's playoff time!</h1>
         
@@ -131,12 +134,9 @@
         <i class="pb-8 text-3xl lg:col-span-8">Please wait for round one scores to be submitted.</i>
         {% endif %}
 
-        <div class="flex gap-8 lg:col-span-8">
-            {% if playoffSeries %}
-            <a href ="/match?current_league={{ current_league.id }}&series_id={{ playoffSeries['Series_id'] }}&team_id={{ team_id }}" class="lg:col-span-8"><button type="submit" class="button">Match Page</button></a>
-            {% endif %}
-            <a href="/bracket?league_id={{ current_league.id }}" class="lg:col-span-8"><button type="submit" class="button">View Bracket</button></a>
-        </div>
+        {% if playoffSeries %}
+        <a href ="/match?current_league={{ current_league.id }}&series_id={{ playoffSeries['Series_id'] }}&team_id={{ team_id }}" class="lg:col-span-8"><button type="submit" class="button">Match Page</button></a>
         {% endif %}
-    </div>
+    {% endif %}
+</div>
 {% endblock %}

@@ -1,5 +1,0 @@
-Run these two lines of code to enable tailwind css for developing
-
-npm run build-css
-
-npx tailwindcss -i ./src/styles.css -o ./public/styles.css --watch
